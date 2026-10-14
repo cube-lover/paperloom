@@ -399,7 +399,9 @@ var PaperLoomGraphics;
       const cachedEntry=(s.paintedMasks||=new Map()).get(maskKey);
       const cachedMask=cachedEntry&&typeof cachedEntry==='object'?cachedEntry.url:cachedEntry;
       if(cachedMask)mask=cachedMask;
-      if(!mask&&s.replace&&!nativePatch&&row.directionVerified!==false&&typeof CubeGraphicInk!=='undefined'&&(pv?.pdfPage||pv?.page)?.render&&canvas?.width){
+      // 斜排/旋转的行页要给掩膜：它们以前只能靠四周取样的渐变，那条轴标签上会
+      // 留下没擦掉的英文。高清掩膜是按 quad 的包围盒裁剪的，镜像问题不存在。
+      if(!mask&&s.replace&&!nativePatch&&typeof CubeGraphicInk!=='undefined'&&(pv?.pdfPage||pv?.page)?.render&&canvas?.width){
         // 屏幕像素不够：按 4 倍重绘这一页再抠墨迹，异步算好后重画一次。
         const pending=(s.pendingMasks||=new Set());
         if(pending.has(maskKey))box.dataset.maskResult='mask-pending';
