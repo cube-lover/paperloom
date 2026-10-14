@@ -7,3 +7,20 @@ test('fingerprint identity distinguishes replacement PDFs for the same item',asy
 test('automatic restore uses exact checkpoint, pauses, and never dispatches translation',async t=>{const {app}=await setup(t),s=session();s.reader._internalReader._primaryView={_iframeWindow:{PDFViewerApplication:{pdfDocument:s.pdf,pdfViewer:{currentPageNumber:1}},document:{querySelector:()=>null}}};s.pdf.getPageData=()=>{};await app.saveInPlaceCheckpoint(s);let calls=0,restored;app.inplace=new Map();app.translateInPlace=async(r,o)=>{calls++;assert.equal(o.startPaused,true);assert.equal(o.restoredRecords[0].target,'用户校订');restored={...s,repaint(){},rescan(){}};app.inplace.set(r,restored);return restored;};app.scheduleReaderRestore(s.reader);await new Promise(r=>setTimeout(r,1350));assert.equal(calls,1);assert.equal(restored.restoredFromCheckpoint.previousDone,1);await app.flushCheckpoints();});
 
 test('graphics checkpoint persists completed/failed pages and restores only same-engine progress',async t=>{const {app}=await setup(t),s=session();app.version='fixture-engine';s.pdf.numPages=3;s.pdf.getPageData=()=>{};s.graphicJob={completed:new Set([0]),failed:new Map([[1,'retry']]),pending:new Set([2])};s.reader._internalReader._primaryView={_iframeWindow:{PDFViewerApplication:{pdfDocument:s.pdf,pdfViewer:{currentPageNumber:1}},document:{querySelector:()=>null}}};await app.saveInPlaceCheckpoint(s);app.inplace=new Map();let restored;app.translateInPlace=async(r)=>{restored={...s,repaint(){},rescan(){},graphicJob:{completed:new Set(),failed:new Map(),pending:new Set([0,1,2])}};app.inplace.set(r,restored);return restored;};app.scheduleReaderRestore(s.reader);await new Promise(r=>setTimeout(r,1350));assert.deepEqual([...restored.graphicJob.completed],[0]);assert.deepEqual([...restored.graphicJob.pending],[2]);assert.equal(restored.graphicJob.failed.get(1),'retry');await app.flushCheckpoints();});
+
+// 版面解析缓存：指纹/页数/解析器版本都对得上才复用，否则必须重新解析。
+test('layout cache is reused only for the same fingerprint, page count and parser version',async t=>{
+  const {app}=await setup(t);
+  const identity={fingerprint:'FP1',pages:3,file:'layout/abc.json'};
+  assert.equal(await app.readLayoutCache(identity,3),null);
+  const layouts=[1,2,3].map(i=>({index:i-1,lines:[],blocks:[]}));
+  await app.writeLayoutCache(identity,3,layouts);
+  const back=await app.readLayoutCache(identity,3);
+  assert.equal(back.length,3);assert.equal(back[2].index,2);
+  assert.equal(await app.readLayoutCache({...identity,fingerprint:'FP2'},3),null);
+  assert.equal(await app.readLayoutCache(identity,4),null);
+  const previous=app.layoutCacheVersion;app.layoutCacheVersion='pl-layout-cache-2';
+  assert.equal(await app.readLayoutCache(identity,3),null);app.layoutCacheVersion=previous;
+  await app.clearLayoutCache();
+  assert.equal(await app.readLayoutCache(identity,3),null);
+});

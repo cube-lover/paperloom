@@ -5,6 +5,28 @@ var CubeCheckpoint;
  function attach(app){
   app.checkpointTimers=new Map();app.restoreTimers=new Map();app.restorePending=new Set();
   app.checkpointIdentity=async function(reader,pdf){const fingerprint=pdf?.fingerprints?.[0]||pdf?.fingerprint;if(!fingerprint)return null;return {fingerprint:String(fingerprint),file:'sessions/'+await this.hash(String(reader.itemID)+'|'+fingerprint)+'.json'};};
+  // 版面解析结果落盘复用：解析一页要跑 PDF worker 取数据 + 版面分析，很贵，
+  // 指纹没变、解析器版本没变就直接读回来用（这就是"明明解析过还要再解析一遍"的修法）。
+  app.layoutCacheVersion='pl-layout-cache-1';
+  app.layoutCacheFile=async function(reader,pdf){
+   const fingerprint=pdf?.fingerprints?.[0]||pdf?.fingerprint;if(!fingerprint)return null;
+   const layoutVersion=this.C?.layout?.VERSION||'0';
+   return {fingerprint:String(fingerprint),pages:pdf.numPages,file:'layout/'+await this.hash(String(reader.itemID)+'|'+fingerprint+'|'+layoutVersion+'|'+this.layoutCacheVersion)+'.json'};
+  };
+  app.readLayoutCache=async function(identity,pages){
+   if(!identity)return null;
+   const saved=await this.readJSON(identity.file,null).catch(()=>null);
+   if(!saved||saved.version!==1||saved.layoutVersion!==(this.C?.layout?.VERSION||'0')||saved.cacheVersion!==this.layoutCacheVersion)return null;
+   if(saved.fingerprint!==identity.fingerprint||saved.pages!==pages||!Array.isArray(saved.layouts)||saved.layouts.length!==pages)return null;
+   if(saved.layouts.some(p=>!p||!Array.isArray(p.lines)||!Array.isArray(p.blocks)))return null;
+   return saved.layouts;
+  };
+  app.writeLayoutCache=async function(identity,pages,layouts){
+   if(!identity||!Array.isArray(layouts)||layouts.length!==pages)return null;
+   await IOUtils.makeDirectory(PathUtils.join(this.dir,'layout'),{ignoreExisting:true}).catch(()=>{});
+   return this.writeJSON(identity.file,{version:1,at:new Date().toISOString(),layoutVersion:this.C?.layout?.VERSION||'0',cacheVersion:this.layoutCacheVersion,fingerprint:identity.fingerprint,pages,layouts}).catch(()=>null);
+  };
+  app.clearLayoutCache=async function(){const dir=PathUtils.join(this.dir,'layout');for(const p of await IOUtils.getChildren(dir).catch(()=>[]))await IOUtils.remove(p,{ignoreAbsent:true}).catch(()=>{});};
   app.saveInPlaceCheckpoint=async function(s,{active=true}={}){
    if(!s||s.stage!=='ready'||s.checkpointDisabled)return null;
    const records=[...s.records.values()].map(r=>({id:r.id,text:r.text,target:r.target,status:r.status==='running'?'pending':r.status,edited:!!r.edited,pageIndex:r.layout.pageIndex,inkRect:r.layout.inkRect,rect:r.layout.rect,alignment:r.alignment||null}));

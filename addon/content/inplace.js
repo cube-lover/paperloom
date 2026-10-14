@@ -246,8 +246,13 @@ var PaperLoomInPlace;
         s.cleanup.push(()=>{visibility.remove();s.doc.querySelector('#viewer')?.classList.remove('pl-hide-translations');});
         this.mountInPlaceControls(s);s.update();
         const unload=()=>this.clearInPlace(reader);win.addEventListener('unload',unload,{once:true});s.cleanup.push(()=>win.removeEventListener('unload',unload));
-        const layouts=[],outline=await wait(pdf.getOutline().catch(()=>[]));
-        for(let i=0;i<pdf.numPages;i++){
+        const layouts=[];
+        // 先看有没有可用的解析缓存（同一份 PDF + 同一版解析器），有就直接复用，不重跑版面分析。
+        const cacheIdentity=this.layoutCacheFile?await this.layoutCacheFile(reader,pdf).catch(()=>null):null;
+        const cached=cacheIdentity&&this.readLayoutCache?await this.readLayoutCache(cacheIdentity,pdf.numPages).catch(()=>null):null;
+        if(cached){layouts.push(...cached);s.parsed=layouts.length;s.fromLayoutCache=true;s.update();}
+        const outline=layouts.length?[]:await wait(pdf.getOutline().catch(()=>[]));
+        for(let i=layouts.length;i<pdf.numPages;i++){
           if(!s.alive())return s;
           // Firefox's worker postMessage rejects privileged-realm object wrappers.
           // Clone only this numeric request into the owning PDF iframe realm.
@@ -265,6 +270,8 @@ var PaperLoomInPlace;
         }
         if(!s.alive())return s;
         if(s.graphicsWarning)throw new Error('PDF 图形解析未完成，已保留原文。请重新打开此 PDF 后重试。');
+        // 全部页都是这次真解析出来的才写缓存；用缓存跑起来的这一轮不重写。
+        if(cacheIdentity&&!cached&&layouts.length===pdf.numPages)this.writeLayoutCache(cacheIdentity,pdf.numPages,layouts).catch(()=>{});
         s.layout=L.finalize(layouts,cfg);s.stage='ready';
         // Consume each archived record once. Exact source + page/ink identity
         // prevents repeated headings on different pages from sharing corrections.
