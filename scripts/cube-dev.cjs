@@ -12,6 +12,14 @@ async function main(){
  if(['native-page','inspect-page','refresh-page','translate-page','repair-flow-page'].includes(action)){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;}
  if(['resume-article','open-reader','audit-interaction','inspect-reader-ui'].includes(action))req.itemID=Number(process.argv[3]);
  if(['region-translate','region-shortcut'].includes(action)){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;if(process.argv[5])req.rect=process.argv.slice(5,9).map(Number);}
+ if(action==='ocr-install-folder')req.path=process.argv[3]||'';
+ if(action==='graphics-rows'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;}
+ if(action==='graphics-forget'){req.itemID=Number(process.argv[3]);req.rect=process.argv.slice(4).join(',');}
+ if(action==='graphics-purge-page'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;req.rect=process.argv[5]||'';}
+ if(action==='graphics-preview'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;req.rect=process.argv[5]||'';}
+ if(action==='region-badge'){req.itemID=Number(process.argv[3]);}
+ if(action==='region-select'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;req.rect=process.argv.slice(5).join(' ');}
+ if(action==='region-badge-demo'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;}
  validateRequest(req,session.sessionId);
  const lock=await fs.open(path.join(dir,'cli.lock'),'wx').catch(()=>{throw Error('Another CLI request is active; inspect it before removing cli.lock');});
  const temp=path.join(dir,id+'.request.tmp'),request=path.join(dir,'request.json');

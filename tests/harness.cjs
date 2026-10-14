@@ -34,11 +34,12 @@ async function createHarness(t, options = {}) {
   };
   const IOUtils = {
     exists: async p => { try { await fs.access(p); return true; } catch { return false; } },
-    makeDirectory: (p) => fs.mkdir(p, { recursive: true }),
+    makeDirectory: (p, opts = {}) => fs.mkdir(p, { recursive: true, ...opts }),
     readUTF8: p => fs.readFile(p, 'utf8'), read: p => fs.readFile(p), stat: p => fs.stat(p),
     writeUTF8: async (p, text, opts = {}) => { await fs.mkdir(path.dirname(p), { recursive: true }); if (opts.tmpPath) { await fs.writeFile(opts.tmpPath, text, 'utf8'); await fs.rename(opts.tmpPath, p); } else await fs.writeFile(p, text, 'utf8'); },
     write: (p, bytes) => fs.writeFile(p, bytes), copy: (a, b) => fs.copyFile(a, b), move: (a, b) => fs.rename(a, b),
-    remove: (p, opts = {}) => fs.rm(p, { force: !!opts.ignoreAbsent }), getChildren: async p => (await fs.readdir(p)).map(x => path.join(p, x))
+    remove: (p, opts = {}) => fs.rm(p, { force: !!opts.ignoreAbsent, recursive: !!opts.recursive }),
+    getChildren: async p => (await fs.readdir(p)).map(x => path.join(p, x))
   };
   class FakeXHR {
     constructor() { this.headers = {}; }
@@ -72,7 +73,7 @@ async function createHarness(t, options = {}) {
     modifyLogin: (old, value) => { if (state.failCredentialUpdate) throw new Error('storage failed'); logins.splice(logins.indexOf(old), 1, value); } } };
   const context = vm.createContext({ Zotero, IOUtils, PathUtils: { join: path.join, filename: path.basename }, Services, Components,
     ChromeUtils: { importESModule: () => ({ FilePicker }) }, XMLHttpRequest: FakeXHR, crypto, URL, TextEncoder, TextDecoder,
-    setTimeout: (f, ms) => setTimeout(f, Math.min(ms, 1)), clearTimeout, rootURI: 'file:///mock-addon/', pluginID: 'paperloom@local.research' });
+    setTimeout: (f, ms) => setTimeout(f, Math.min(ms, 1)), clearTimeout, setInterval: (f, ms) => setInterval(f, Math.min(ms, 1)), clearInterval, rootURI: 'file:///mock-addon/', pluginID: 'paperloom@local.research' });
   for (const file of ['core.js', 'providers.js', 'app.js', 'ai.js', 'reader-progress.js']) vm.runInContext(await fs.readFile(path.resolve(__dirname, '../addon/content', file), 'utf8'), context, { filename: file });
   const app = context.PaperLoom, C = context.PaperLoomCore;
   context.PaperLoomAI.attach(app, C);

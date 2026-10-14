@@ -3,17 +3,25 @@
  */
 var CubeDevChannel;
 (function(root){'use strict';
- const ACTIONS=Object.freeze(['status','pause-archive','prepare-native','native-page','inspect-page','audit-layout','update-build','resume-article','open-reader','refresh-page','translate-page','repair-flow-page','inspect-reader-ui','audit-interaction','ocr-selftest','region-translate','region-shortcut','stop']);
+ const ACTIONS=Object.freeze(['status','pause-archive','prepare-native','native-page','inspect-page','audit-layout','update-build','resume-article','open-reader','refresh-page','translate-page','repair-flow-page','inspect-reader-ui','audit-interaction','ocr-selftest','ocr-install-state','ocr-install','ocr-uninstall','ocr-install-folder','graphics-rows','graphics-forget','graphics-purge-page','graphics-preview','region-badge','region-badge-demo','region-select','region-translate','region-shortcut','stop']);
  function validateRequest(r,sessionId,now=Date.now()){
   if(!r||r.version!==1||r.sessionId!==sessionId)throw Error('Invalid development session');
   if(typeof r.id!=='string'||!/^job-[a-f0-9]{32}$/.test(r.id))throw Error('Invalid job id');
   if(!ACTIONS.includes(r.action))throw Error('Unknown development action');
   if(!Number.isFinite(r.createdAt)||Math.abs(now-r.createdAt)>30000)throw Error('Stale request');
-  if(Object.keys(r).some(k=>!['version','sessionId','id','action','createdAt','itemID','pageIndex','rect'].includes(k)))throw Error('Unexpected request fields');
+  if(Object.keys(r).some(k=>!['version','sessionId','id','action','createdAt','itemID','pageIndex','rect','path'].includes(k)))throw Error('Unexpected request fields');
   if(['native-page','inspect-page','refresh-page','translate-page','repair-flow-page'].includes(r.action)){
    if(!Number.isInteger(r.itemID)||r.itemID<1||!Number.isInteger(r.pageIndex)||r.pageIndex<0)throw Error('Native page requires valid itemID and pageIndex');
   }else if(['resume-article','open-reader','audit-interaction','inspect-reader-ui'].includes(r.action)){if(!Number.isInteger(r.itemID)||r.itemID<1||r.pageIndex!==undefined)throw Error('Item action requires itemID only');}
   else if(['region-translate','region-shortcut'].includes(r.action)){if(!Number.isInteger(r.itemID)||r.itemID<1)throw Error('Region action requires itemID');}
+  else if(r.action==='ocr-install-folder'&&!r.path)throw Error('Folder action requires path');
+  else if(r.action==='graphics-rows'){if(!Number.isInteger(r.itemID)||r.itemID<1||!Number.isInteger(r.pageIndex)||r.pageIndex<0)throw Error('graphics-rows needs itemID and pageIndex');}
+  else if(r.action==='graphics-forget'){if(!Number.isInteger(r.itemID)||r.itemID<1||!r.rect)throw Error('graphics-forget needs itemID and ids in rect');}
+  else if(r.action==='graphics-purge-page'){if(!Number.isInteger(r.itemID)||r.itemID<1||!Number.isInteger(r.pageIndex)||r.pageIndex<0)throw Error('graphics-purge-page needs itemID and pageIndex');}
+  else if(r.action==='graphics-preview'){if(!Number.isInteger(r.itemID)||r.itemID<1||!Number.isInteger(r.pageIndex)||r.pageIndex<0)throw Error('graphics-preview needs itemID and pageIndex');}
+  else if(r.action==='region-badge'){if(!Number.isInteger(r.itemID)||r.itemID<1)throw Error('region-badge needs itemID');}
+  else if(r.action==='region-select'){if(!Number.isInteger(r.itemID)||r.itemID<1||!Number.isInteger(r.pageIndex)||r.pageIndex<0||!r.rect)throw Error('region-select needs itemID, pageIndex and rect');}
+  else if(r.action==='region-badge-demo'){if(!Number.isInteger(r.itemID)||r.itemID<1||!Number.isInteger(r.pageIndex)||r.pageIndex<0)throw Error('region-badge-demo needs itemID and pageIndex');}
   else if(r.itemID!==undefined||r.pageIndex!==undefined)throw Error('Unexpected page parameters');
   return r;
  }
@@ -38,6 +46,156 @@ var CubeDevChannel;
   // Verify the shortcut preference round-trips in the real host and that the
   // synthetic key press installs the region covers on the page.
   // 识别只有本地 Python 一条路：用一张合成图把它端到端跑一遍，安装是否可用就看这个。
+  // 单页图内行清单：排查用。id 是确定性的，所以同一条文字重复识别会落在同一行上。
+  app.devGraphicsRows=async function(itemID,pageIndex){
+    const reader=(Zotero.Reader._readers||[]).find(x=>x.itemID===itemID)||(Zotero.Reader._readers||[])[0];
+    if(!reader)throw Error('No reader open');
+    const s=await this.openGraphics(reader);if(s.ready)await s.ready;
+    const rows=(s.rows||[]).filter(r=>r.pageIndex===pageIndex);
+    return {page:pageIndex+1,total:rows.length,rows:rows.map(r=>({id:r.id,text:String(r.text||'').slice(0,60),target:String(r.target||'').slice(0,40),origin:r.origin||'',edited:!!r.edited,score:r.score}))};
+  };
+  // 删除指定的图内行（用于清掉早前错误引擎留下的错译文/错角度残留）。
+  app.devGraphicsForget=async function(itemID,ids){
+    const reader=(Zotero.Reader._readers||[]).find(x=>x.itemID===itemID)||(Zotero.Reader._readers||[])[0];
+    if(!reader)throw Error('No reader open');
+    const wanted=new Set(String(ids||'').split(',').map(s=>s.trim()).filter(Boolean));
+    if(!wanted.size)throw Error('graphics-forget needs ids');
+    const s=await this.openGraphics(reader);if(s.ready)await s.ready;
+    const dropped=[],keep=[];
+    for(const row of s.rows){
+      if(wanted.has(row.id))dropped.push({id:row.id,text:String(row.text||'').slice(0,60),page:row.pageIndex+1});
+      else keep.push(row);
+    }
+    s.rows=keep;s.hidden=false;s.replace=true;await this.saveGraphics(s);s.paint();
+    return {dropped:dropped.length,droppedRows:dropped,remaining:(s.rows||[]).length};
+  };
+  // 整页清空图内行（可按 origin 过滤）。用于清掉早前错误引擎留下的整批残留。
+  app.devGraphicsPurgePage=async function(itemID,pageIndex,origin){
+    const reader=(Zotero.Reader._readers||[]).find(x=>x.itemID===itemID)||(Zotero.Reader._readers||[])[0];
+    if(!reader)throw Error('No reader open');
+    const s=await this.openGraphics(reader);if(s.ready)await s.ready;
+    const keep=[],dropped=[];
+    for(const row of s.rows||[]){
+      const hit=row.pageIndex===pageIndex&&(!origin||row.origin===origin);
+      if(hit&&row.edited){keep.push(row);continue;}
+      if(hit)dropped.push({id:row.id,text:String(row.text||'').slice(0,40),origin:row.origin||''});
+      else keep.push(row);
+    }
+    s.rows=keep;s.hidden=false;s.replace=true;await this.saveGraphics(s);s.paint();
+    return {page:pageIndex+1,origin:origin||'*',dropped:dropped.length,remaining:(s.rows||[]).filter(x=>x.pageIndex===pageIndex).length,sample:dropped.slice(0,10)};
+  };
+  // 把真实覆盖层（底色/掩膜/字号/位置都取计算样式）合成成 PNG：用来核对原文有没有擦干净，
+  // 不需要阅读器窗口可见，也不依赖截图权限。
+  app.devGraphicsPreview=async function(itemID,pageIndex,scale){
+    const reader=(Zotero.Reader._readers||[]).find(x=>x.itemID===itemID)||(Zotero.Reader._readers||[])[0];
+    if(!reader)throw Error('No reader open');
+    const s=await this.openGraphics(reader);if(s.ready)await s.ready;
+    const ir=reader._internalReader;
+    const win=ir?._secondaryView?._iframeWindow||ir?._primaryView?._iframeWindow||reader._iframeWindow,doc=win.document;
+    // 等异步的高分辨率掩膜算完，否则预览看到的是还没换上去的兜底底色。
+    for(let i=0;i<60&&(s.pendingMasks?.size||0)>0;i++)await new Promise(resolve=>setTimeout(resolve,250));
+    const viewer=win.PDFViewerApplication?.pdfViewer;
+    // 目标页可能还没渲染（PDF.js 只渲染视口附近）：先翻到那一页并等它渲染完。
+    if(viewer&&viewer.currentPageNumber!==pageIndex+1){viewer.currentPageNumber=pageIndex+1;for(let i=0;i<120;i++){await new Promise(resolve=>setTimeout(resolve,100));const pv=viewer.getPageView(pageIndex);if(pv?.renderingState===3&&pv.canvas?.width)break;}}
+    const pageEl=doc.querySelector('.page[data-page-number="'+(pageIndex+1)+'"]');if(!pageEl)throw Error('Page not found');
+    const canvas=pageEl.querySelector('.canvasWrapper canvas');if(!canvas?.width)throw Error('Page canvas not rendered');
+    const k=Math.max(1,Math.min(3,scale||2));
+    const out=doc.createElement('canvas');out.width=Math.round(canvas.width*k);out.height=Math.round(canvas.height*k);
+    const cx=out.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,out.width,out.height);
+    cx.imageSmoothingEnabled=true;cx.drawImage(canvas,0,0,out.width,out.height);
+    const pb=pageEl.getBoundingClientRect();
+    const anchors=[...pageEl.querySelectorAll('.pl-graphic-anchor')],rows=[];
+    for(const box of anchors){
+      const cs=win.getComputedStyle(box),rect=box.getBoundingClientRect();
+      const x=(rect.left-pb.left)*k,y=(rect.top-pb.top)*k,w=Math.max(1,rect.width*k),h=Math.max(1,rect.height*k);
+      if(cs.backgroundColor&&cs.backgroundColor!=='rgba(0, 0, 0, 0)'){cx.fillStyle=cs.backgroundColor;cx.fillRect(x,y,w,h);}
+      const bg=cs.backgroundImage;
+      if(bg&&bg.startsWith('url(')){
+        const url=bg.slice(4,bg.lastIndexOf(')')).replace(/^["']|["']$/g,'');
+        try{const img=await new Promise((resolve,reject)=>{const im=doc.createElement('img');im.onload=()=>resolve(im);im.onerror=reject;im.src=url;});cx.drawImage(img,x,y,w,h);}catch(e){}
+      }
+      const body=box.firstElementChild;
+      if(body?.textContent){
+        const bcs=win.getComputedStyle(body),br=body.getBoundingClientRect();
+        const m=String(bcs.transform||'').match(/matrix\(([^)]+)\)/),factor=m?Math.abs(Number(m[1].split(',')[0])||1):1;
+        const fs=Math.max(6,(parseFloat(bcs.fontSize)||12)*factor);
+        const tx=(br.left-pb.left)*k,ty=(br.top-pb.top)*k,tw=Math.max(1,br.width*k||w),th=Math.max(1,br.height*k||h);
+        cx.save();cx.beginPath();cx.rect(tx,ty,tw,th);cx.clip();cx.fillStyle=bcs.color||'#111';cx.font='400 '+fs+'px '+bcs.fontFamily;cx.textBaseline='alphabetic';
+        cx.fillText(String(body.textContent),tx+1,ty+fs*.92,tw-2);cx.restore();
+      }
+      rows.push({id:box.dataset.labelId,mode:box.dataset.mode,cover:box.dataset.cover||'',confidence:box.dataset.patchConfidence||'',mask:(box.dataset.maskResult||'')+'|'+(box.dataset.mask||''),text:String(body?.textContent||'').slice(0,30)});
+    }
+    const dir=PathUtils.join(this.dir,'previews');await IOUtils.makeDirectory(dir,{ignoreExisting:true});
+    const file=PathUtils.join(dir,'page-'+(pageIndex+1)+'-'+Date.now()+'.png');
+    const base64=out.toDataURL('image/png').split(',')[1];
+    await IOUtils.write(file,Uint8Array.from(Zotero.getMainWindow().atob(base64),c=>c.charCodeAt(0)));
+    out.width=out.height=0;
+    const counts={};for(const row of rows)counts[row.cover||'(none)']=(counts[row.cover||'(none)']||0)+1;
+    return {page:pageIndex+1,file,scale:k,replaced:rows.filter(r=>r.mode==='replace').length,total:rows.length,covers:counts,rows};
+  };
+  // 框选翻译的小圆点状态（含列表内容），用于核对它是不是只在框选后出现。
+  app.devRegionBadge=async function(itemID){
+    const reader=(Zotero.Reader._readers||[]).find(x=>x.itemID===itemID)||(Zotero.Reader._readers||[])[0];
+    if(!reader)throw Error('No reader open');
+    const s=await this.openGraphics(reader,{panel:false});
+    const badge=s.badge;
+    return {badgeError:s.badgeError||null,views:!!this.readerButtons?.get(s.reader),docHasBody:!!(this.readerButtons?.get(s.reader)?[...this.readerButtons.get(s.reader)][0]?.doc?.body:false),visible:!!badge?.root?.isConnected,state:badge?.root?.dataset?.state||null,count:badge?.count?.textContent||null,
+      title:badge?.root?.title||null,listOpen:badge?.popover?.style?.display==='block',
+      regionList:(s.lastRegionList||[]).length,panelHidden:!!s.panel?.hidden,lastRegion:s.lastRegion||null};
+  };
+  // 走真实的框选路径（真的拖一次），用来验证小圆点状态机与框选后的自动翻译。
+  app.devRegionSelect=async function(itemID,pageIndex,rect){
+    const reader=(Zotero.Reader._readers||[]).find(x=>x.itemID===itemID)||(Zotero.Reader._readers||[])[0];
+    if(!reader)throw Error('No reader open');
+    const box=String(rect||'').split(/[ ,]+/).filter(Boolean).map(Number);
+    for(const view of [reader._internalReader?._primaryView,reader._internalReader?._secondaryView])for(const old of view?._iframeWindow?.document?.querySelectorAll('.pl-graphic-select')||[])old.remove();
+    if(box.length!==4||!box.every(Number.isFinite))throw Error('region-select needs x0 y0 x1 y1');
+    let selectError=null;const open=this.selectGraphicRegion(reader).catch(e=>{selectError=String(e.message||e).slice(0,300);});
+    const ir=reader._internalReader;
+    let hit=null;
+    for(let i=0;i<80&&!hit;i++){
+      await new Promise(resolve=>setTimeout(resolve,100));
+      for(const view of [ir?._primaryView,ir?._secondaryView]){
+        const win=view?._iframeWindow;if(!win?.PDFViewerApplication)continue;
+        const pageEl=win.document.querySelector('.page[data-page-number="'+(pageIndex+1)+'"]');
+        const cover=pageEl?.querySelector('.pl-graphic-select');
+        if(cover)hit={win,pageEl,cover};
+      }
+    }
+    if(!hit){await open.catch(()=>{});throw Error('框选覆盖层没有出现');}
+    const {win,pageEl,cover}=hit;
+    const viewer=win.PDFViewerApplication.pdfViewer,pv=viewer.getPageView(pageIndex);
+    const canvas=pageEl.querySelector('.canvasWrapper canvas'),cr=canvas.getBoundingClientRect(),vp=pv.viewport;
+    const toClient=([x,y])=>({clientX:cr.left+x*cr.width/vp.width,clientY:cr.top+y*cr.height/vp.height,button:0,pointerId:1,bubbles:true,cancelable:true,isPrimary:true,pointerType:'mouse'});
+    const fire=(type,point)=>cover.dispatchEvent(new win.PointerEvent(type,{...toClient(point),buttons:type==='pointerup'?0:1}));
+    fire('pointerdown',[box[0],box[1]]);await new Promise(r=>setTimeout(r,60));
+    fire('pointermove',[box[2],box[3]]);await new Promise(r=>setTimeout(r,60));
+    fire('pointerup',[box[2],box[3]]);
+    const badge=s=>s.badge?{visible:!!s.badge.root.isConnected,state:s.badge.root.dataset.state,count:s.badge.count.textContent}:null;
+    const states=[];const session=this.graphicSessions.get(reader);
+    states.push(badge(session));
+    await open.catch(()=>{});
+    for(let i=0;i<300;i++){await new Promise(r=>setTimeout(r,200));states.push(badge(session));const cur=states.at(-1);if(cur&&cur.state==='done')break;}
+    const fresh=[...hit.pageEl.querySelectorAll('.pl-graphic-select')].length;
+    return {covers:fresh,alive:this.graphicSessions.has(reader),stopped:!!session?.control?.stopped,selectError,badgeError:session?.badgeError||null,badgeTrace:(session?.badgeTrace||[]).map(x=>x.state),badgeKeys:Object.keys(session||{}).filter(k=>k.toLowerCase().includes('badge')),message:session?.message||null,hasSelection:typeof session?.selection==='function',steps:states.slice(0,3).concat(states.slice(-2)),regions:(session?.lastRegionList||[]).length,lastRegion:session?.lastRegion||null,badge:badge(session),panelHidden:!!session?.panel?.hidden};
+  };
+  // 直接把圆点的四个状态跑一遍（含真实识别结果列表），验证它在阅读器里能被创建、定位、展开。
+  app.devRegionBadgeDemo=async function(itemID,pageIndex){
+    const reader=(Zotero.Reader._readers||[]).find(x=>x.itemID===itemID)||(Zotero.Reader._readers||[])[0];
+    if(!reader)throw Error('No reader open');
+    const s=await this.openGraphics(reader,{panel:false});
+    const snap=()=>s.badge?{visible:!!s.badge.root.isConnected,state:s.badge.root.dataset.state,count:s.badge.count.textContent,title:s.badge.root.title,left:s.badge.root.getBoundingClientRect().left,top:s.badge.root.getBoundingClientRect().top,listOpen:s.badge.popover.style.display==='block'}:null;
+    const out={};
+    this.showRegionBadge(s,'armed');out.armed=snap();
+    this.showRegionBadge(s,'busy');out.busy=snap();
+    this.finishRegionBadge(s,pageIndex);out.done=snap();
+    this.toggleRegionList(s);out.opened=snap();
+    out.rows=(s.lastRegionList||[]).length;
+    out.listText=(s.badge?.popover?.textContent||'').slice(0,160);
+    out.listRect=(()=>{const r=s.badge?.popover?.getBoundingClientRect();return r?{w:Math.round(r.width),h:Math.round(r.height),left:Math.round(r.left),top:Math.round(r.top)}:null;})();
+    this.hideRegionBadge(s);out.hidden=!!s.badge;
+    return out;
+  };
   app.devOCRSelftest=async function(){
     const cfg=this.graphicRuntime(),paths={python:!!cfg.python,runtime:!!cfg.runtime,models:!!cfg.models};
     for(const [k,v] of Object.entries(paths))if(!v)return {ok:false,reason:'未配置 '+k+' 路径',paths};
@@ -61,9 +219,10 @@ var CubeDevChannel;
    let error='';
    try{w.document.dispatchEvent(event);await new Promise(resolve=>setTimeout(resolve,400));}
    catch(e){error=e.message||String(e);}
-   const covers=w.document.querySelectorAll('.pl-graphic-select').length;
+   const covers=w.document.querySelectorAll('.pl-graphic-select').length;const target0=w.document;
+   const diag={hits:this.readerShortcutHits||0,gate:this.readerShortcutMatches||0,isPrimary:w===reader._internalReader?._primaryView?._iframeWindow,isSecondary:w===reader._internalReader?._secondaryView?._iframeWindow,active:String(w.document.activeElement?.tagName||'')+'#'+(w.document.activeElement?.id||''),boundDocs:[...(this.readerButtons?.get(reader)||[])].length};
    s.selection?.();await new Promise(resolve=>setTimeout(resolve,100));
-   return {itemID:reader.itemID,before,set,read,restore,matched,negative,defaultPrevented:event.defaultPrevented,covers,error,cleaned:w.document.querySelectorAll('.pl-graphic-select').length};
+   return {itemID:reader.itemID,before,set,read,restore,matched,negative,defaultPrevented:event.defaultPrevented,covers,error,cleaned:w.document.querySelectorAll('.pl-graphic-select').length,diag};
   };
   // Exercise the manual box-selection pipeline without a physical mouse: crop the
   // given PDF rect (or the stored graphic bounds) and run recognise + translate.
@@ -161,6 +320,17 @@ var CubeDevChannel;
    const execute=async r=>{
     if(r.action==='status')return await this.devStatus();
     if(r.action==='ocr-selftest')return this.devOCRSelftest();
+    if(r.action==='graphics-rows')return this.devGraphicsRows(r.itemID,r.pageIndex);
+    if(r.action==='graphics-forget')return this.devGraphicsForget(r.itemID,String(r.rect||''));
+    if(r.action==='graphics-purge-page')return this.devGraphicsPurgePage(r.itemID,r.pageIndex,String(r.rect||''));
+    if(r.action==='graphics-preview')return this.devGraphicsPreview(r.itemID,r.pageIndex,Number(r.rect)||2);
+    if(r.action==='region-badge')return this.devRegionBadge(r.itemID);
+    if(r.action==='region-select')return this.devRegionSelect(r.itemID,r.pageIndex,String(r.rect||''));
+    if(r.action==='region-badge-demo')return this.devRegionBadgeDemo(r.itemID,r.pageIndex);
+    if(r.action==='ocr-install-state')return this.ocrInstallState();
+    if(r.action==='ocr-install')return this.installOCREngine({});
+    if(r.action==='ocr-uninstall')return this.uninstallOCREngine();
+    if(r.action==='ocr-install-folder'){if(!r.path)throw Error('ocr-install-folder needs path');return this.ocrInstallFromFolder(r.path);}
     if(r.action==='region-translate')return this.devRegionTranslate(r);
     if(r.action==='region-shortcut')return this.devRegionShortcut(r);
     if(r.action==='open-reader'){const existing=(Zotero.Reader._readers||[]).find(x=>x.itemID===r.itemID);let dead=false;try{dead=!!existing&&!existing._internalReader?._primaryView?._iframeWindow?.document;}catch{dead=true;}await Zotero.Reader.open(r.itemID,undefined,{allowDuplicate:dead});return {opened:r.itemID,replacedStaleTab:dead};}

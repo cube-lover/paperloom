@@ -42,7 +42,7 @@ var PaperLoom = (() => {
       const session=this.inplace?.get(reader), action=this.inplaceActions?.get(reader);
       let state='idle', label='Cube 翻译', hint='左右分屏原位翻译；下方直接显示处理位置';
       if(error){state='error';label='Cube · 重试';hint=error;}
-      else if(session?.stage==='parsing'){state='parsing';label='解析 '+session.parsed+'/'+session.pdf.numPages;hint='正在解析版面，再次点击取消';}
+      else if(session?.stage==='parsing'){state='parsing';label='解析 '+session.parsed+'/'+session.pdf.numPages;hint=session.fromLayoutCache?'使用已解析的版面，正在排版':'正在解析版面，再次点击取消';}
       else if(!session&&(action||this.inplaceStarting?.has(reader))){state='starting';label='准备中';hint='正在准备阅读器，再次点击取消';}
       else if(session){
         if(session.hidden){state='hidden';label='Cube · 显示译文';hint='立即显示已有译文，不改变暂停状态或重新请求翻译';}
@@ -132,12 +132,23 @@ var PaperLoom = (() => {
       const escape=e=>{if(e.key==='Escape'){close();caret.focus();}};
       const close=()=>{menu.style.display='none';caret.setAttribute('aria-expanded','false');doc.removeEventListener('pointerdown',outside,true);doc.removeEventListener('keydown',escape,true);doc.defaultView.removeEventListener('resize',position);};
       const toggle=()=>{if(menu.style.display!=='none'){close();return;}position();menu.style.display='block';caret.setAttribute('aria-expanded','true');doc.addEventListener('pointerdown',outside,true);doc.addEventListener('keydown',escape,true);doc.defaultView.addEventListener('resize',position);};
+      // 用最近一次状态结果给菜单起名；同时后台刷新一次，避免阻塞菜单弹出。
+      void this._ocrReadyState;
+      if(this.ocrInstallState)this.ocrInstallState().catch(()=>{});
       const item=(text,fn)=>{const node=doc.createElement('button');node.type='button';node.textContent=text;node.setAttribute('role','menuitem');
         node.style.cssText='display:block;width:100%;text-align:left;padding:8px 10px;border:0;background:transparent;color:inherit;font:13px system-ui;cursor:pointer;';
         node.addEventListener('mouseenter',()=>{node.style.background='#7b9ad622';});node.addEventListener('mouseleave',()=>{node.style.background='transparent';});
         commandCleanup.push(this.bindReaderCommand(node,async()=>{close();try{await fn();}catch(error){this.refreshReaderButton(reader,error.message||'操作失败');}}));menu.appendChild(node);return node;
       };
       item('显示原文 / 译文',()=>{if(!this.inplace?.has(reader))throw Error('本篇还没有原位译文');this.toggleInPlace(reader);});
+      // 识别引擎是本机能力：菜单里一眼能看到，装完自动自检。
+      const ocrMode=this._ocrReadyMode;
+      item(ocrMode==='none'?'安装识别引擎（一键）…':ocrMode==='managed'?'识别引擎已就绪（插件安装）· 修复安装':ocrMode==='external'?'识别引擎已就绪（已配置的 Python）· 修复安装':'安装 / 修复识别引擎（一键）…',async()=>{
+        this.openGraphicsPanel?.(reader);
+        const panel=this._graphicPanels?.get(reader);
+        const result=await this.ocrInstallInteractive();
+        if(panel){panel.message=result.ok?'识别引擎已就绪，可框选翻译图表文字。':'安装失败：'+result.error;panel.update();}
+      });
       item('补译当前页图表',()=>this.requestCurrentGraphics(reader));
       item('框选翻译（补漏）…'+(this.readerShortcut?.()?'  '+this.readerShortcut():''),async()=>{
         // Same region pipeline as the figure panel's advanced entry, surfaced here
@@ -151,13 +162,37 @@ var PaperLoom = (() => {
       const syncItem=item('同步选区：开',()=>{const s=this.inplace?.get(reader);if(!s)return;s.syncEnabled=!s.syncEnabled;s.selectionSync?.update();s.update();});syncItem.dataset.action='selection-sync';syncItem.setAttribute('role','menuitemcheckbox');
       // Reader-level shortcut for the region workflow; ignored while typing.
       const shortcutKey=e=>{
+        this.readerShortcutHits=(this.readerShortcutHits||0)+1;
         if(e.defaultPrevented||e.repeat||e.isComposing)return;const t=e.target;
-        if(t&&(t.closest?.('input,textarea,select,button,[contenteditable]')||t.isContentEditable))return;
+        const tag=String(t?.tagName||'').toLowerCase();
+        // 只有真正的输入控件才该屏蔽快捷键；工具栏按钮拿到焦点后 Alt+R 仍然要能用。
+        if(t&&!t.closest?.('button')&&(tag==='input'||tag==='textarea'||tag==='select'||t.isContentEditable||t.closest?.('[contenteditable]')))return;
+        this.readerShortcutMatches=(this.readerShortcutMatches||0)+1;
         if(!this.matchShortcut?.(this.readerShortcut?.(),e))return;
         e.preventDefault();e.stopPropagation();
         Promise.resolve().then(()=>this.selectGraphicRegion(reader)).catch(error=>this.refreshReaderButton(reader,error.message||'\u6846\u9009\u5931\u8d25'));
       };
-      doc.addEventListener('keydown',shortcutKey,true);commandCleanup.push(()=>doc.removeEventListener('keydown',shortcutKey,true));
+      // 阅读器是多层 iframe：工具栏一个文档、主/次 PDF 各一个文档，按键事件**不会**冒泡到父文档；
+      // 只挂外层 doc 时，焦点在 PDF 页面上按 Alt+R 永远收不到。每个可能持焦点的文档都要挂，
+      // 并在新视图出现后补挂（视图是异步创建的）。
+      const boundDocs=new Set();
+      const bindShortcutDoc=target=>{
+        const d=target?.document;
+        if(!d||boundDocs.has(d))return;
+        try{d.addEventListener('keydown',shortcutKey,true);boundDocs.add(d);}catch(e){ /* 文档已销毁 */ }
+      };
+      const bindShortcutDocs=()=>{
+        bindShortcutDoc(reader._iframeWindow);bindShortcutDoc(doc.defaultView);
+        const ir=reader._internalReader;
+        for(const view of [ir?._primaryView,ir?._secondaryView,...(ir?._views||[])])bindShortcutDoc(view?._iframeWindow);
+        try{for(const win of [ir?._primaryView?._iframeWindow,ir?._secondaryView?._iframeWindow])for(const frame of win?.document?.querySelectorAll('iframe')||[])bindShortcutDoc(frame.contentWindow);}catch(e){}
+      };
+      bindShortcutDocs();
+      // 用递归 setTimeout 而不是 setInterval：与插件其余部分一致，权限作用域里都可用。
+      let shortcutTimer=null;
+      const scheduleShortcutBind=()=>{shortcutTimer=setTimeout(()=>{bindShortcutDocs();scheduleShortcutBind();},1500);};
+      scheduleShortcutBind();
+      commandCleanup.push(()=>{clearTimeout(shortcutTimer);for(const d of boundDocs)try{d.removeEventListener('keydown',shortcutKey,true);}catch(e){}boundDocs.clear();});
       commandCleanup.push(this.bindReaderCommand(btn,()=>{close();this.activateReaderButton(reader);}));
       commandCleanup.push(this.bindReaderCommand(caret,toggle));
       caret.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();if(menu.style.display==='none')toggle();menu.firstChild?.focus();}});
@@ -584,6 +619,8 @@ var PaperLoom = (() => {
       if (!this.confirm('清理缓存', '只清理 Cube 翻译与总结缓存；任务记录、原始 PDF、笔记保持不变。之后重译可能重新计费。')) return;
       const dir = PathUtils.join(this.dir, 'cache');
       for (const path of await IOUtils.getChildren(dir)) await IOUtils.remove(path);
+      // 版面解析缓存一起清掉，下次打开会重新解析（正常使用不需要清）。
+      await this.clearLayoutCache?.();
       return true;
     },
     async shutdown() {

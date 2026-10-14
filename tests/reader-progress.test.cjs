@@ -15,9 +15,9 @@ test('pause, no graph, unmounted page and failed page never claim complete cover
  p=P.model({article:a,graphics:g,pageIndex:20,painted:new Map()});assert.match(p.coverage,/图表待检查/);
  a.hidden=true;assert.match(P.model({article:a,graphics:g}).coverage,/译文已收起/);
 });
-test('reader menu exposes five in-place actions and no translation workbench or popup entry',async t=>{
+test('reader menu exposes the in-place actions plus the one-click engine installer, and no workbench or popup entry',async t=>{
  const {app,C,Zotero}=await createHarness(t);I.attach(app,C,L);G.attach(app,C,L);const dom=new JSDOM('<div class="toolbar"></div>');t.after(()=>dom.window.close());const reader={itemID:5,_iframeWindow:dom.window},doc=dom.window.document;
- app.buildReaderButton(doc,reader,n=>doc.querySelector('.toolbar').appendChild(n));const menu=doc.querySelector('.pl-reader-menu');assert.equal(menu.querySelectorAll('button').length,5);assert.doesNotMatch(menu.textContent,/面板|工作台|选文|清除|导出|图表进度/);assert.match(menu.textContent,/框选翻译/);assert.equal(doc.querySelector('.pl-auto-graphics'),null);assert.equal(doc.querySelectorAll('.pl-reader-action button').length,2);assert.equal(app.readerPopup,undefined);
+ app.buildReaderButton(doc,reader,n=>doc.querySelector('.toolbar').appendChild(n));const menu=doc.querySelector('.pl-reader-menu');assert.equal(menu.querySelectorAll('button').length,6);assert.doesNotMatch(menu.textContent,/面板|工作台|选文|清除|导出|图表进度/);assert.match(menu.textContent,/框选翻译/);assert.match(menu.textContent,/安装 \/ 修复识别引擎/);assert.equal(doc.querySelector('.pl-auto-graphics'),null);assert.equal(doc.querySelectorAll('.pl-reader-action button').length,2);assert.equal(app.readerPopup,undefined);
  let call=0;app.requestCurrentGraphics=r=>{assert.equal(r,reader);call++;};[...menu.children].find(n=>n.textContent==='补译当前页图表').click();assert.equal(call,1);
  app.selectGraphicRegion=async()=>{};[...menu.children].find(n=>n.textContent.startsWith('框选翻译')).click();await new Promise(r=>setTimeout(r,5));app.addWindow({document:doc});assert.equal(doc.querySelector('[id="paperloom-keyset"]'),null);for(const v of [...app.readerButtons.get(reader)])v.dispose();
 });

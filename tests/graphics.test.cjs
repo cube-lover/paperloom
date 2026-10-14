@@ -156,7 +156,7 @@ test('verified native background artifacts persist separately from source and ta
 test('fallback is invisible at rest but retains reason, tooltip and keyboard access',async t=>{
  const {app,C}=await createHarness(t);G.attach(app,C);app.measureInPlaceText=()=>({fits:true});const dom=new JSDOM('<div></div><section></section>');t.after(()=>dom.window.close());const other={...row(),id:'g2',text:'Precision recall'},r={...row(),approved:false,background:null},s={rows:[r,other],replace:true,panel:dom.window.document.querySelector('section'),update(){}};
  const box=app.paintGraphicLabel(s,r,dom.window.document.querySelector('div'),{transform:transforms[0]});assert.equal(box.dataset.mode,'hotspot');assert.ok(box.dataset.fallback);assert.equal(box.style.borderBottom,'0px');assert.equal(box.tabIndex,0);assert.match(box.title,/已有译文/);
- const shown={...other,id:'g3',background:null,quad:G.quad([10,60,70,72])};s.rows.push(shown);const replaced=app.paintGraphicLabel(s,shown,dom.window.document.querySelector('div'),{transform:transforms[0]});assert.equal(replaced.dataset.mode,'replace');assert.equal(replaced.dataset.cover,'translucent-fallback');
+ const shown={...other,id:'g3',background:null,quad:G.quad([10,60,70,72])};s.rows.push(shown);const replaced=app.paintGraphicLabel(s,shown,dom.window.document.querySelector('div'),{transform:transforms[0]});assert.equal(replaced.dataset.mode,'replace');assert.equal(replaced.dataset.cover,'paper-fallback');assert.match(replaced.style.background,/^(?:#ffffff|rgb\(255, 255, 255\))$/);
 });
 
 test('audited closed node ignores only tiny exterior low-confidence punctuation padding',()=>{
@@ -180,4 +180,29 @@ test('every stored translation on a real chart page is displayable after review 
  const title=rows.find(r=>/^Three-layer energy infrastru/i.test(r.text));assert.ok(title&&title.review===true&&title.directionVerified===false);assert.equal(G.replacementReason(title,rows.filter(x=>x.id!==title.id)),'');
  const vertical=rows.filter(r=>r.rotation===270&&r.text.length>=18).filter(r=>!reasonFor(r));assert.ok(vertical.length>=2);assert.ok(vertical.every(r=>/Resilien/.test(r.text)));
  const identical=rows.filter(r=>r.target.replace(/\s/g,'')===r.text.replace(/\s/g,''));assert.ok(identical.length>=4);for(const r of identical)assert.match(G.replacementReason(r,[]),/译文与原文相同/);
+});
+
+// 原位擦除必须永远不透明：0.9 半透明白压在原文上就是"灰影 + 脏"，这是用户明确反馈过的问题。
+test('in-place erasure never paints a translucent patch and prefers real background samples',async t=>{
+  const {app,C}=await createHarness(t);G.attach(app,C);
+  const p={width:60,height:12,matrix:[1,0,0,1,10,20]};
+  const maskFill=app.graphicPatchFill({nativePatch:{url:'data:image/png;base64,AAA'},mask:null,row:{},canvas:null,p,cw:60,ch:12});
+  assert.equal(maskFill.url,'data:image/png;base64,AAA');assert.equal(maskFill.cover,'native-removal');
+  const glyph=app.graphicPatchFill({nativePatch:null,mask:'data:image/png;base64,BBB',row:{},canvas:null,p,cw:60,ch:12});
+  assert.equal(glyph.cover,'glyph-mask');assert.equal(glyph.color,undefined);
+  const sampled=app.graphicPatchFill({nativePatch:null,mask:null,row:{origin:'OCR'},canvas:null,p,cw:60,ch:12});
+  assert.equal(sampled.color,'#ffffff');assert.equal(sampled.cover,'paper-fallback');
+  // 存过的"纸面底色"不能压过现场取样：地图上那块白就是脏的来源。
+  const stored=app.graphicPatchFill({nativePatch:null,mask:null,row:{background:'#ffffff'},canvas:null,p,cw:60,ch:12});
+  assert.equal(stored.cover,'verified-paper');
+  for(const fill of [maskFill,glyph,sampled])assert.ok(!/rgba\(/.test(String(fill.color||'')),'不能半透明');
+  // 画布可读时按框内出现最多的颜色取样，并给出占比（近似底色要能被状态条报出来）。
+  const canvas={width:200,height:120,getContext:()=>({getImageData:(x,y,w,h)=>({data:(()=>{const d=new Uint8ClampedArray(w*h*4);for(let i=0;i<w*h;i++){d[i*4]=200;d[i*4+1]=50;d[i*4+2]=50;d[i*4+3]=255;}return d;})()})})};
+  const real=app.graphicPatchFill({nativePatch:null,mask:null,row:{origin:'OCR'},canvas,p,cw:200,ch:120});
+  assert.equal(real.cover,'sampled-flat');assert.equal(real.color,'#c83030');assert.equal(real.confidence,1);
+  const half={width:200,height:120,getContext:()=>({getImageData:(x,y,w,h)=>({data:(()=>{const d=new Uint8ClampedArray(w*h*4);for(let i=0;i<w*h;i++){const on=(i%2)===0;d[i*4]=on?200:20;d[i*4+1]=on?50:20;d[i*4+2]=20;d[i*4+3]=255;}return d;})()})})};
+  const mixed=app.graphicPatchFill({nativePatch:null,mask:null,row:{},canvas:half,p,cw:200,ch:120});
+  assert.notEqual(mixed.cover,'translucent-fallback');
+  assert.ok(mixed.url===undefined||/^data:image\/png/.test(String(mixed.url)),'渐变补丁要么是图，要么是不透明色');
+  assert.equal(app.graphicSampleBackground(null,p,null,60,12),null);
 });

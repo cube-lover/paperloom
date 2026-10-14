@@ -36,6 +36,9 @@ var CubeReaderProgress;
     // paints no overlay at all; report it as such instead of as missing.
     const noop=local.filter(r=>r.target&&!paintOf(r)&&norm(r.target)===norm(r.text)),unverified=done-shown.length-hidden.length-noop.length;
     coverage+=' · 已原位显示 '+shown.length+' 处';
+    // 近似底色的补丁要报出来：它们不是"擦干净"，只是不脏。
+    const approx=shown.filter(r=>{const c=paintOf(r)?.cover;return c==='sampled-flat'||c==='paper-fallback';});
+    if(approx.length)coverage+='（其中 '+approx.length+' 处为近似底色）';
     if(hidden.length){const why=[...new Set(hidden.map(r=>paintOf(r)?.reason||'待核对定位框'))];coverage+=' · 未显示 '+hidden.length+' 处（'+why.slice(0,2).join('；')+(why.length>2?' 等':'')+'）';}
     if(noop.length)coverage+=' · 原文即译文 '+noop.length+' 处';
     if(unverified)coverage+=' · 待显示核验 '+unverified+' 处';}

@@ -214,9 +214,9 @@ var PaperLoomGraphics;
       try{return await s.ready;}catch(e){this.closeGraphics(reader);throw e;}
     };
     app.saveGraphics=function(s){return this.writeJSON(s.file,{version:1,fingerprint:s.fingerprint,replace:!!s.replace,hidden:!!s.hidden,lastLocation:s.lastLocation||null,nativeBackgrounds:[...s.nativeBackgrounds||[]],rows:s.rows.map(({element,...r})=>r)});};
-    app.openGraphics=async function(reader){this.bindNativeOverlayInput?.(reader)?.bind();const s=await this.graphicSession(reader);await s.ready;s.panel.hidden=false;s.update();return s;};
+    app.openGraphics=async function(reader,{panel=true}={}){this.bindNativeOverlayInput?.(reader)?.bind();const s=await this.graphicSession(reader);await s.ready;if(panel)s.panel.hidden=false;s.update();return s;};
     app.toggleGraphics=async function(reader){const s=await this.graphicSession(reader);await s.ready;s.hidden=!s.hidden;s.paint();s.update();await this.saveGraphics(s);};
-    app.closeGraphics=function(reader){const s=this.graphicSessions.get(reader);if(!s)return;this.closeNativeBackgrounds?.(s);this.graphicSessions.delete(reader);s.control.stopped=true;s.control.process?.kill();s.control.renderTask?.cancel();clearTimeout(s.paintTimer);for(const xhr of [...s.control.requests])xhr.abort();s.selection?.();for(const clean of s.cleanup.splice(0))clean();s.panel?.remove();};
+    app.closeGraphics=function(reader){const s=this.graphicSessions.get(reader);if(!s)return;this.closeNativeBackgrounds?.(s);this.graphicSessions.delete(reader);s.control.stopped=true;s.control.process?.kill();s.control.renderTask?.cancel();clearTimeout(s.paintTimer);for(const v of s.hiRes?.values()||[])try{v.canvas.width=v.canvas.height=0;}catch(e){}s.hiRes?.clear();for(const xhr of [...s.control.requests])xhr.abort();s.selection?.();for(const clean of s.cleanup.splice(0))clean();s.panel?.remove();};
     app.bindGraphicPages=function(s){
       const bound=new Set(),paint=()=>{if(this.stopped||!this.graphicSessions.has(s.reader))return;
         // The primary pane is always the unmodified source, even after split
@@ -230,11 +230,11 @@ var PaperLoomGraphics;
           for(const pageEl of win.document.querySelectorAll('.page[data-page-number]')){
             const index=Number(pageEl.dataset.pageNumber)-1,pv=viewer.getPageView(index);if(!pv?.viewport)continue;
             if(pv.renderingState!==3){s.paintKeys?.delete(pageEl);for(const old of pageEl.querySelectorAll('.pl-graphic-anchor')){old.plDispose?.();old.remove();}continue;}
-            const key=JSON.stringify([this.nativeArtifactRevision||0,s.hidden,s.replace,Array.from(pv.viewport.transform),pageEl.clientWidth,pageEl.clientHeight,s.rows.filter(r=>r.pageIndex===index).map(r=>[r.id,r.legacyLayout,r.preserveSource,r.preserveLiterals,r.text,r.target,r.approved,r.autoValidated,r.review,r.warnings,r.quad,r.directionVerified,r.background,r.fontSize,r.score,r.inkPatch?.quad])]);
+            const key=JSON.stringify([this.nativeArtifactRevision||0,s.maskRevision||0,s.hidden,s.replace,Array.from(pv.viewport.transform),pageEl.clientWidth,pageEl.clientHeight,s.rows.filter(r=>r.pageIndex===index).map(r=>[r.id,r.legacyLayout,r.preserveSource,r.preserveLiterals,r.text,r.target,r.approved,r.autoValidated,r.review,r.warnings,r.quad,r.directionVerified,r.background,r.fontSize,r.score,r.inkPatch?.quad])]);
             if(s.paintKeys?.get(pageEl)===key)continue;(s.paintKeys||=new WeakMap()).set(pageEl,key);
             for(const old of pageEl.querySelectorAll('.pl-graphic-anchor')){old.plDispose?.();old.remove();}
             if(s.hidden)continue;
-            for(const row of s.rows.filter(r=>r.pageIndex===index&&r.target&&!r.legacyLayout))this.paintGraphicLabel(s,row,pageEl,pv.viewport);
+            for(const row of s.rows.filter(r=>r.pageIndex===index&&r.target&&!r.legacyLayout))this.paintGraphicLabel(s,row,pageEl,pv.viewport,pv);
           }
         }
       };s.paint=paint;
@@ -242,7 +242,140 @@ var PaperLoomGraphics;
       const onUnload=()=>this.closeGraphics(s.reader);s.doc.defaultView.addEventListener('unload',onUnload,{once:true});s.cleanup.push(()=>s.doc.defaultView.removeEventListener('unload',onUnload));
       s.cleanup.push(()=>{for(const win of bound)try{for(const node of win.document.querySelectorAll('.pl-graphic-anchor')){node.plDispose?.();node.remove();}}catch{}});paint();
     };
-    app.paintGraphicLabel=function(s,row,pageEl,viewport){
+    // 在原文框内统计出现最多的颜色（=背景）与占比：地图/色块上用它做不透明补丁。
+    // 高分辨率页面缓存：整页按 ~4 倍只渲一次，之后每一行从它上面裁自己的框。
+    // 键里不含滚动/偏移，所以滚动不会触发重渲；缩放或旋转变化才失效。
+    app.graphicHiResPage=function(s,pv,index){
+      let scale=4;while(scale>2&&(pv.viewport.width*scale)*(pv.viewport.height*scale)>12e6)scale--;
+      const key=index+'|'+scale.toFixed(2)+'|'+(pv.viewport.rotation||0);
+      s.hiRes||=new Map();
+      const hit=s.hiRes.get(key);if(hit)return hit.promise?hit.promise:null;
+      const entry={canvas:null,viewport:null,promise:null};s.hiRes.set(key,entry);
+      const busy=()=>{try{entry.canvas.width=entry.canvas.height=0;}catch(e){}};
+      for(const [k,v] of [...s.hiRes])if(s.hiRes.size>2&&(k!==key||v===entry)){try{v.canvas.width=v.canvas.height=0;}catch(e){}s.hiRes.delete(k);}
+      entry.promise=(async()=>{
+      const page=unwrap(pv.pdfPage||pv.page);
+      if(!page?.render||!page?.getViewport)throw Error('页面还在加载，稍后重试');
+      // pdf.js 只在页面自己的 realm 里认这些参数：跨 realm 传对象会丢掉 canvasContext。
+      const win=pv.div?.ownerDocument?.defaultView||s.doc?.defaultView;
+      const local=v=>typeof Components!=='undefined'&&Components.utils?.cloneInto?Components.utils.cloneInto(v,win,{wrapReflectors:true}):v;
+      const viewport=unwrap(page.getViewport(local({scale:pv.viewport.scale*scale}))),canvas=win.document.createElement('canvas');
+      canvas.width=Math.max(1,Math.ceil(viewport.width));canvas.height=Math.max(1,Math.ceil(viewport.height));
+      const args=new win.Object();args.canvas=canvas;args.canvasContext=canvas.getContext('2d',{willReadFrequently:true});args.viewport=viewport;args.annotationMode=0;args.intent='print';
+      const task=unwrap(page.render(args));
+      try{await task.promise;}catch(e){busy();s.hiRes.delete(key);throw e;}
+      entry.canvas=canvas;entry.viewport=viewport;return entry;
+      })();
+      entry.promise.catch(()=>s.hiRes.delete(key));
+      return entry.promise;
+    };
+    app.buildGraphicMaskHiRes=async function(s,row,pv,index,maskKey){
+      const page=pv?.pdfPage||pv?.page;
+      if(!page?.render||!row?.quad)return null;
+      const hi=await this.graphicHiResPage(s,pv,index);
+      const q=project(row.quad,Array.from(hi.viewport.transform));
+      const x=Math.max(0,Math.floor(q.matrix[4])),y=Math.max(0,Math.floor(q.matrix[5]));
+      const w=Math.min(hi.canvas.width-x,Math.max(1,Math.round(q.width))),h=Math.min(hi.canvas.height-y,Math.max(1,Math.round(q.height)));
+      if(w<5||h<5)return null;
+      const cv=s.doc.createElement('canvas');cv.width=w;cv.height=h;
+      const cx=cv.getContext('2d',{willReadFrequently:true});
+      cx.drawImage(hi.canvas,x,y,w,h,0,0,w,h);
+      const pixels=cx.getImageData(0,0,w,h);
+      const m=CubeGraphicInk.mask(pixels)||CubeGraphicInk.mask(pixels,{edgeDashes:true});
+      let url=null,kind='none';
+      if(m?.uniform||m?.complete){
+        cx.setTransform(1,0,0,1,0,0);
+        const out=cx.createImageData(m.width,m.height);
+        out.data.set(typeof Components!=='undefined'&&Components.utils?.cloneInto?Components.utils.cloneInto(m.data,s.doc.defaultView):m.data);
+        cx.putImageData(out,0,0);kind='glyph-mask';
+      }else{
+        // 抠不出独立字形（例如文字压在彩条上）时，退成这块框里最亮的那个众数颜色，
+        // 纯色不透明地盖住原文——比四周取样的渐变干净得多，也不会留半透明灰影。
+        const flat=this.graphicFlatPaperColor(pixels);
+        if(!flat){cv.width=cv.height=0;return null;}
+        cx.setTransform(1,0,0,1,0,0);cx.fillStyle=flat;cx.fillRect(0,0,cv.width,cv.height);kind='glyph-fill';
+      }
+      url=cv.toDataURL('image/png');cv.width=cv.height=0;
+      (s.paintedMasks||=new Map()).set(maskKey,{url,kind});
+      // 一次框选会同时落很多块掩膜：合并成一次重画，别每块都重排整页。
+      s.maskRevision=(s.maskRevision||0)+1;
+      clearTimeout(s.maskPaintTimer);
+      s.maskPaintTimer=setTimeout(()=>{s.maskPaintTimer=null;if(this.graphicSessions?.get(s.reader)===s)s.paint();},300);
+      return url;
+    };
+    // 这块框里最亮的那个众数颜色（纸面底色）。深色字形/彩条按亮度排除，所以不会被染上颜色。
+    app.graphicFlatPaperColor=function(pixels){
+      const data=pixels?.data;if(!data?.length)return null;
+      let max=0;const greys=new Uint8Array(data.length/4);
+      for(let i=0,j=0;i<data.length;i+=4,j++){const g=(data[i]*299+data[i+1]*587+data[i+2]*114)/1000;greys[j]=Math.round(g);if(g>max)max=g;}
+      const floor=max-14,counts=new Map();
+      for(let i=0,j=0;i<data.length;i+=4,j++){
+        if(greys[j]<floor)continue;
+        const key=(data[i]<<16)|(data[i+1]<<8)|data[i+2];
+        const hit=counts.get(key);if(hit)hit.n++;else counts.set(key,{n:1,r:data[i],g:data[i+1],b:data[i+2]});
+      }
+      let best=null;for(const v of counts.values())if(!best||v.n>best.n)best=v;
+      if(!best||best.n<greys.length*.12)return null;
+      return 'rgb('+best.r+','+best.g+','+best.b+')';
+    };
+    app.graphicSampleBackground=function(canvas,p,viewport,cw,ch){
+      if(!canvas?.width||!p)return null;
+      const kx=canvas.width/(cw||viewport?.width||canvas.width),ky=canvas.height/(ch||viewport?.height||canvas.height);
+      const x=Math.max(0,Math.min(canvas.width-1,Math.floor(p.matrix[4]*kx))),y=Math.max(0,Math.min(canvas.height-1,Math.floor(p.matrix[5]*ky)));
+      const w=Math.min(canvas.width-x,Math.max(1,Math.round(p.width*kx))),h=Math.min(canvas.height-y,Math.max(1,Math.round(p.height*ky)));
+      if(w<2||h<2)return null;
+      let data;try{data=canvas.getContext('2d',{willReadFrequently:true}).getImageData(x,y,w,h).data;}catch(e){return null;}
+      const counts=new Map();let total=0;
+      for(let i=0;i+3<data.length;i+=4){const key=((data[i]>>3)<<10)|((data[i+1]>>3)<<5)|(data[i+2]>>3);counts.set(key,(counts.get(key)||0)+1);total++;}
+      let best=null;for(const entry of counts)if(!best||entry[1]>best[1])best=entry;
+      if(!best)return null;
+      const color=[((best[0]>>10)&31)<<3,((best[0]>>5)&31)<<3,(best[0]&31)<<3];
+      return {rgb:color,color:'#'+color.map(v=>v.toString(16).padStart(2,'0')).join(''),share:best[1]/Math.max(1,total),pixels:[w,h]};
+    };
+    // 非纯色底色（地图、色块、跨边界）：用框四周的环带取色做成 2x2 渐变补丁再放大铺满，
+    // 比一个平铺色更像"原本就是这层底"，也不会像半透明那样透出原文。
+    app.graphicRingPatch=function(canvas,p,viewport,cw,ch,doc){
+      if(!canvas?.width||!p||!doc)return null;
+      const kx=canvas.width/(cw||viewport?.width||canvas.width),ky=canvas.height/(ch||viewport?.height||canvas.height);
+      const bx=Math.floor(p.matrix[4]*kx),by=Math.floor(p.matrix[5]*ky),bw=Math.max(2,Math.round(p.width*kx)),bh=Math.max(2,Math.round(p.height*ky));
+      const x=Math.max(0,Math.min(canvas.width-1,bx)),y=Math.max(0,Math.min(canvas.height-1,by));
+      const w=Math.min(canvas.width-x,bw),h=Math.min(canvas.height-y,bh);
+      if(w<4||h<4)return null;
+      let data;try{data=canvas.getContext('2d',{willReadFrequently:true}).getImageData(x,y,w,h).data;}catch(e){return null;}
+      const at=(px,py)=>{const i=(py*w+px)*4;return [data[i],data[i+1],data[i+2]];};
+      const dominant=list=>{
+        const counts=new Map();for(const c of list){const key=((c[0]>>3)<<10)|((c[1]>>3)<<5)|(c[2]>>3);counts.set(key,(counts.get(key)||0)+1);}
+        let best=null;for(const entry of counts)if(!best||entry[1]>best[1])best=entry;
+        return [(best[0]>>10&31)<<3,(best[0]>>5&31)<<3,(best[0]&31)<<3];
+      };
+      const edge=2,left=[],right=[],top=[],bottom=[];
+      for(let py=0;py<h;py++){for(let d=0;d<edge;d++){left.push(at(Math.min(w-1,d),py));right.push(at(Math.max(0,w-1-d),py));}}
+      for(let px=0;px<w;px++){for(let d=0;d<edge;d++){top.push(at(px,Math.min(h-1,d)));bottom.push(at(px,Math.max(0,h-1-d)));}}
+      const cols=[dominant(left),dominant(right),dominant(top),dominant(bottom)];
+      const mix=(a,b)=>[Math.round((a[0]+b[0])/2),Math.round((a[1]+b[1])/2),Math.round((a[2]+b[2])/2)];
+      const corners=[mix(cols[0],cols[2]),mix(cols[1],cols[2]),mix(cols[0],cols[3]),mix(cols[1],cols[3])];
+      const cv=doc.createElement('canvas');cv.width=2;cv.height=2;
+      const cx=cv.getContext('2d');
+      cx.putImageData((()=>{const im=cx.createImageData(2,2);[[0,0,0],[1,0,1],[0,1,2],[1,1,3]].forEach(([px,py,i])=>{const o=(py*2+px)*4;im.data[o]=corners[i][0];im.data[o+1]=corners[i][1];im.data[o+2]=corners[i][2];im.data[o+3]=255;});return im;})(),0,0);
+      const url=cv.toDataURL('image/png');const size=cv.width;cv.width=cv.height=0;
+      return {url,corners,edge:cols,size};
+    };
+    // 原位擦除的补丁决策。**任何情况都不半透明**：半透明白压在原文上就是那层灰影。
+    app.graphicPatchFill=function({nativePatch,mask,row,canvas,p,viewport,cw,ch,doc}){
+      if(nativePatch)return {url:nativePatch.url,cover:'native-removal',confidence:1};
+      if(mask)return {url:mask,cover:'glyph-mask',confidence:1};
+      // 现场取样优先于存过的底色：地图上的标签也可能被记成"纸面底色"，
+      // 那块白就正好压在色块/线条上，看着就是脏。
+      const sample=this.graphicSampleBackground(canvas,p,viewport,cw,ch);
+      if(sample&&sample.share>=.85)return {color:sample.color,cover:'sampled-flat',confidence:+sample.share.toFixed(2),sample};
+      // 底色不纯（地图、色块、跨边界）：铺一层从四周环带插出来的渐变，胜过一块错色矩形。
+      try{const ring=this.graphicRingPatch(canvas,p,viewport,cw,ch,doc);if(ring)return {url:ring.url,cover:'ring-gradient',confidence:sample?+sample.share.toFixed(2):undefined};}catch(e){ /* 取样失败就退回平铺色 */ }
+      if(row.inkPatch?.version===5&&row.inkPatch?.uniform)return {color:'rgb('+Array(3).fill(row.inkPatch.background).join(',')+')',cover:'sampled-flat',confidence:1};
+      if(row.background)return {color:row.background,cover:'verified-paper',confidence:1};
+      if(sample)return {color:sample.color,cover:'sampled-flat',confidence:+sample.share.toFixed(2),sample};
+      return {color:'#ffffff',cover:'paper-fallback',confidence:0};
+    };
+    app.paintGraphicLabel=function(s,row,pageEl,viewport,pv){
       const doc=pageEl.ownerDocument,transform=Array.from(viewport.transform);
       if(row.legacyLayout)return null;
       // Nothing to show when the stored target is identical to the source; an
@@ -260,8 +393,20 @@ var PaperLoomGraphics;
       box.style.width=p.width+'px';box.style.height=p.height+'px';box.style.transform='matrix('+p.matrix.join(',')+')';
       box.title=row.text+' → '+row.target+' · Alt+单击打开校订';box.setAttribute('aria-label',box.title);
       const nativePatch=this.nativeBackgroundFor?.(s,row);let mask=row.inkPatch?.version===5&&row.inkPatch?.quad===JSON.stringify(row.quad)?row.inkPatch.url:null;if(mask)box.dataset.maskResult='verified-high-resolution-mask';const peers=s.rows.filter(r=>r.pageIndex===row.pageIndex&&!r.legacyLayout);
-      if(s.replace&&!mask&&!nativePatch&&!row.background&&canvas?.width/(cw||viewport.width)>=1.5&&row.origin==='OCR'&&row.directionVerified!==false&&typeof CubeGraphicInk!=='undefined'&&canvas?.width){
-       try{const scale=Math.max(4,Math.min(8,Math.max(canvas.width/(cw||viewport.width),canvas.height/(ch||viewport.height))*Math.hypot(p.matrix[0],p.matrix[1]))),cv=doc.createElement('canvas');cv.width=Math.ceil(p.width*scale);cv.height=Math.ceil(p.height*scale);const cx=cv.getContext('2d',{willReadFrequently:true}),inv=inverse(p.matrix),sx=canvas.width/(cw||viewport.width),sy=canvas.height/(ch||viewport.height);cx.setTransform(cv.width/p.width*inv[0]/sx,cv.height/p.height*inv[1]/sx,cv.width/p.width*inv[2]/sy,cv.height/p.height*inv[3]/sy,cv.width/p.width*inv[4],cv.height/p.height*inv[5]);cx.drawImage(canvas,0,0);const sourcePixels=cx.getImageData(0,0,cv.width,cv.height),m=CubeGraphicInk.mask(sourcePixels)||CubeGraphicInk.mask(sourcePixels,{edgeDashes:true});if(m?.uniform||m?.complete){cx.setTransform(1,0,0,1,0,0);const pixels=cx.createImageData(m.width,m.height);pixels.data.set(typeof Components!=='undefined'&&Components.utils?.cloneInto?Components.utils.cloneInto(m.data,doc.defaultView):m.data);cx.putImageData(pixels,0,0);mask=cv.toDataURL();}box.dataset.maskResult=mask?'glyph-mask-ready':'no-isolated-glyphs';}catch(e){box.dataset.maskResult='mask-error: '+e.message;}
+      // 掩膜是「抠掉墨迹、留下真实底色」的补丁，比任何平铺色都干净，所以只要有画布就做；
+      // 原先要求 1.5 倍像素密度，结果 100% 缩放下的标签全部落到半透明兜底，看着就是脏。
+      const maskKey=row.id+'|'+JSON.stringify(row.quad);
+      const cachedEntry=(s.paintedMasks||=new Map()).get(maskKey);
+      const cachedMask=cachedEntry&&typeof cachedEntry==='object'?cachedEntry.url:cachedEntry;
+      if(cachedMask)mask=cachedMask;
+      if(!mask&&s.replace&&!nativePatch&&row.directionVerified!==false&&typeof CubeGraphicInk!=='undefined'&&(pv?.pdfPage||pv?.page)?.render&&canvas?.width){
+        // 屏幕像素不够：按 4 倍重绘这一页再抠墨迹，异步算好后重画一次。
+        const pending=(s.pendingMasks||=new Set());
+        if(pending.has(maskKey))box.dataset.maskResult='mask-pending';
+        else{
+          pending.add(maskKey);
+          this.buildGraphicMaskHiRes(s,row,pv,row.pageIndex,maskKey).then(url=>{box.dataset.maskResult=url?(s.paintedMasks?.get(maskKey)?.kind||'glyph-mask'):'no-isolated-glyphs';}).catch(e=>{box.dataset.maskResult='mask-error: '+(e.message||e);}).finally(()=>pending.delete(maskKey));
+        }
       }
       const reason=replacementReason(nativePatch?{...row,nativeValidated:true}:mask?{...row,inkValidated:true}:row,peers.filter(r=>r!==row));box.dataset.fallback=reason||(!s.replace?'点选对照':'');
       if(s.replace&&!reason&&!(canvas&&doc.defaultView.getComputedStyle(canvas).filter!=='none')){
@@ -280,7 +425,7 @@ var PaperLoomGraphics;
         for(;;size=Math.max(floor,size-.25*unit)){body.style.fontSize=size+'px';const m=this.measureInPlaceText(box,body);box.dataset.fitMetrics=JSON.stringify(m);if(m.fits){fits=true;break;}if(size<=floor)break;}
         box.style.width=p.width+'px';box.style.height=p.height+'px';box.style.transform=screenTransform;
         if(unit!==1){body.style.width=p.width*unit+'px';body.style.transformOrigin='0 0';body.style.transform='scale('+1/unit+')';}
-        if(fits){box.dataset.cover=nativePatch?'native-removal':row.background?'verified-paper':'translucent-fallback';box.style.background=nativePatch?'transparent':row.background||'rgba(255,255,255,.9)';if(!nativePatch&&row.inkPatch?.version===5&&row.inkPatch?.uniform&&mask){box.style.background='rgb('+Array(3).fill(row.inkPatch.background).join(',')+')';box.dataset.cover='verified-paper';mask=null;}if(nativePatch||mask){box.style.backgroundImage='url("'+(nativePatch?.url||mask)+'")';box.style.backgroundSize='100% 100%';box.dataset.mask=nativePatch?'native-text-removed':'glyph-only';box.dataset.cover=nativePatch?'native-removal':'glyph-mask';}box.style.color='#111';box.dataset.mode='replace';}
+        if(fits){const fill=this.graphicPatchFill({nativePatch,mask,row,canvas,p,viewport,cw,ch,doc});box.style.background=fill.url?'transparent':fill.color;if(fill.url){box.style.backgroundImage='url("'+fill.url+'")';box.style.backgroundSize='100% 100%';box.dataset.mask=nativePatch?'native-text-removed':'glyph-only';}else box.style.boxShadow='0 0 0 1.5px '+fill.color;box.dataset.cover=fill.cover;if(fill.confidence!==undefined&&fill.confidence!==1)box.dataset.patchConfidence=String(fill.confidence);box.style.color='#111';box.dataset.mode='replace';}
         else{body.remove();box.dataset.fallback='译文放不下，保留原图';}
       }
       if(box.dataset.mode!=='replace'){box.dataset.mode='hotspot';if(!box.dataset.fallback)box.dataset.fallback='页面颜色滤镜待适配';}
@@ -423,14 +568,112 @@ var PaperLoomGraphics;
     // A manual box selection must never be silently dropped because the background
     // page scan happens to be running; wait briefly for it instead.
     app.waitGraphicIdle=async function(s,timeout=25000){const end=Date.now()+timeout;while(s.busy&&Date.now()<end&&!this.stopped)await new Promise(resolve=>setTimeout(resolve,120));return !s.busy;};
+    // 框选翻译的轻量提示：平时不占地方，只在框选后出现一个小圆点；
+    // 识别/翻译时转圈，结束后停下并显示条数，点一下才展开这次识别到的文字。
+    app.regionBadge=function(s){
+      const views=this.readerButtons?.get(s.reader),view=views?[...views][0]:null;
+      const doc=view?.doc||s.doc;
+      if(s.badge&&s.badge.doc===doc&&s.badge.root.isConnected)return s.badge;
+      if(s.badge){try{s.badge.root.remove();s.badge.popover.remove();}catch(e){}clearTimeout(s.badge.timer);}
+      if(!doc.getElementById('pl-region-badge-style')){
+        const style=doc.createElement('style');style.id='pl-region-badge-style';
+        style.textContent='.pl-region-badge{position:fixed;z-index:2147483645;width:26px;height:26px;border-radius:50%;border:1px solid #2f6bff;background:Canvas;color:#2f6bff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px #14285a33;font:600 12px/1 system-ui;padding:0}'
+          +'.pl-region-badge[data-state="busy"]{cursor:progress}'
+          +'.pl-region-badge .pl-region-ring{position:absolute;width:22px;height:22px;border-radius:50%;border:2px solid #2f6bff33;border-top-color:#2f6bff;animation:pl-region-spin .9s linear infinite;display:none}'
+          +'.pl-region-badge[data-state="busy"] .pl-region-ring{display:block}'
+          +'.pl-region-badge[data-state="busy"] .pl-region-count{opacity:0}'
+          +'.pl-region-badge[data-state="error"]{border-color:#c0392b;color:#c0392b}'
+          +'.pl-region-list{position:fixed;z-index:2147483646;width:390px;max-width:92vw;max-height:46vh;overflow:auto;background:Canvas;color:CanvasText;border:1px solid #b8c3d6;border-radius:8px;box-shadow:0 8px 24px #14285a2e;padding:8px 10px;font:12px/1.5 system-ui;display:none}'
+          +'.pl-region-list header{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-weight:600}'
+          +'.pl-region-list header button{margin-left:auto;border:0;background:transparent;cursor:pointer;font:13px system-ui;color:inherit}'
+          +'.pl-region-row{display:flex;gap:8px;padding:3px 0;border-top:1px solid rgba(0,0,0,.06)}'
+          +'.pl-region-row span{flex:1;min-width:0;overflow-wrap:anywhere}'
+          +'.pl-region-row .pl-region-src{color:#5b6b82}'
+          +'.pl-region-list footer{display:flex;gap:8px;margin-top:8px}'
+          +'.pl-region-list footer button{border:1px solid #b8c3d6;background:transparent;color:inherit;border-radius:5px;padding:3px 8px;cursor:pointer;font:12px system-ui}'
+          +'@keyframes pl-region-spin{to{transform:rotate(360deg)}}';
+        doc.body.appendChild(style);
+      }
+      const root=doc.createElement('button');root.type='button';root.className='pl-region-badge';root.dataset.state='armed';
+      const ring=doc.createElement('span');ring.className='pl-region-ring';
+      const count=doc.createElement('span');count.className='pl-region-count';count.textContent='择';
+      root.append(ring,count);
+      const popover=doc.createElement('div');popover.className='pl-region-list';popover.setAttribute('role','dialog');
+      doc.body.append(root,popover);
+      const place=()=>{
+        const rect=view?.wrap?.isConnected?view.wrap.getBoundingClientRect():null;
+        const left=rect?Math.round(rect.left+4):Math.round(doc.defaultView.innerWidth-64);
+        const top=rect?Math.round(rect.bottom+4):48;
+        root.style.left=left+'px';root.style.top=top+'px';
+        popover.style.left=Math.max(8,Math.min(left,doc.defaultView.innerWidth-400))+'px';popover.style.top=(top+30)+'px';
+      };
+      root.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();this.toggleRegionList(s);});
+      root.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();this.toggleRegionList(s);}});
+      s.badge={doc,root,count,popover,place,timer:null};
+      doc.addEventListener('pointerdown',e=>{if(s.badge&&!root.contains(e.target)&&!popover.contains(e.target))this.hideRegionBadge(s);},true);
+      doc.defaultView.addEventListener('resize',place);
+      place();return s.badge;
+    };
+    app.showRegionBadge=function(s,state,{count,title}={}){
+      (s.badgeTrace||=[]).push({state,at:Date.now()});
+      let badge;try{badge=this.regionBadge(s);s.badgeError=null;}catch(e){s.badgeError=String(e.message||e);return null;}
+      badge.root.dataset.state=state;
+      badge.root.title=title||(state==='busy'?'框选翻译：正在识别…':state==='error'?'框选翻译失败':'框选翻译：点这里看识别结果');
+      if(Number.isFinite(count))badge.count.textContent=String(count);
+      else if(state==='armed')badge.count.textContent='择';
+      else if(state==='error')badge.count.textContent='!';
+      clearTimeout(badge.timer);
+      if(state==='done'||state==='error')badge.timer=setTimeout(()=>this.hideRegionBadge(s),120000);
+      badge.place();
+      return badge;
+    };
+    app.hideRegionBadge=function(s){
+      const badge=s.badge;if(!badge)return;
+      clearTimeout(badge.timer);try{badge.root.remove();badge.popover.remove();}catch(e){}
+      s.badge=null;
+    };
+    app.toggleRegionList=function(s){
+      const badge=this.regionBadge(s),open=badge.popover.style.display==='block';
+      if(open){badge.popover.style.display='none';return;}
+      const list=s.lastRegionList||[];
+      badge.popover.replaceChildren();
+      const header=badge.doc.createElement('header');
+      const title=badge.doc.createElement('span');
+      title.textContent='本次框选：识别 '+list.length+' 条 · 已译 '+list.filter(r=>r.target).length+' 条';
+      const close=badge.doc.createElement('button');close.type='button';close.textContent='✕';close.title='关闭';
+      close.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();this.hideRegionBadge(s);});
+      header.append(title,close);badge.popover.appendChild(header);
+      for(const row of list){
+        const line=badge.doc.createElement('div');line.className='pl-region-row';
+        const src=badge.doc.createElement('span');src.className='pl-region-src';src.textContent=row.text||'';
+        const dst=badge.doc.createElement('span');dst.textContent=row.target||'（未翻译）';
+        line.append(src,dst);badge.popover.appendChild(line);
+      }
+      const footer=badge.doc.createElement('footer');
+      const full=badge.doc.createElement('button');full.type='button';full.textContent='打开图表面板';
+      full.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();this.hideRegionBadge(s);if(s.panel)s.panel.hidden=false;s.update();});
+      const again=badge.doc.createElement('button');again.type='button';again.textContent='再框一次';
+      again.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();this.hideRegionBadge(s);Promise.resolve().then(()=>this.selectGraphicRegion(s.reader)).catch(()=>{});});
+      footer.append(full,again);badge.popover.appendChild(footer);
+      badge.place();badge.popover.style.display='block';
+    };
+    app.finishRegionBadge=function(s,pageIndex,error){
+      if(error){this.showRegionBadge(s,'error',{title:'框选翻译失败：'+String(error).slice(0,80)});return;}
+      const list=(s.lastRegionList||[]).filter(r=>r.pageIndex===pageIndex);
+      const translated=list.filter(r=>r.target).length;
+      this.showRegionBadge(s,'done',{count:translated||list.length,title:'框选翻译：识别 '+list.length+' 条 · 已译 '+translated+' 条（点击查看）'});
+    };
     app.selectGraphicRegion=async function(reader){
-      const s=await this.openGraphics(reader);
+      const s=await this.openGraphics(reader,{panel:false});
       if(s.busy){s.message='\u6b63\u5728\u5b8c\u6210\u5f53\u524d\u9875\u8bc6\u522b\uff0c\u968f\u540e\u5f00\u59cb\u6846\u9009\u2026';s.update();await this.waitGraphicIdle(s)||(()=>{throw Error('\u540e\u53f0\u8bc6\u522b\u4ecd\u672a\u7ed3\u675f\uff0c\u8bf7\u7a0d\u5019\u518d\u6846\u9009');})();}
       s.selection?.();
-      const clean=[],covers=[];s.message='在左侧或右侧当前 PDF 页上拖框选图；Esc 取消。框选只做本地识别。';s.panel.hidden=true;
-      const finish=()=>{for(const f of clean.splice(0))f();for(const n of covers)n.remove();s.selection=null;s.panel.hidden=false;s.update();};s.selection=finish;
+      const clean=[],covers=[];s.message='在左侧或右侧当前 PDF 页上拖框选图；Esc 取消。框选只做本地识别。';s.update();
+      this.showRegionBadge(s,'armed');
+      const finish=({keepBadge=false}={})=>{for(const f of clean.splice(0))f();for(const n of covers)n.remove();s.selection=null;if(!keepBadge)this.hideRegionBadge(s);s.update();};s.selection=()=>finish();
       for(const view of [reader._internalReader?._primaryView,reader._internalReader?._secondaryView]){
         const win=view?._iframeWindow;if(!win?.PDFViewerApplication)continue;
+        // 插件重新加载后可能留下旧的覆盖层，先清掉，避免框到失效的那一层。
+        for(const old of win.document.querySelectorAll('.pl-graphic-select'))old.remove();
         const esc=e=>{if(e.key==='Escape'){e.preventDefault();finish();}};win.document.addEventListener('keydown',esc,true);clean.push(()=>win.document.removeEventListener('keydown',esc,true));
         for(const pageEl of win.document.querySelectorAll('.page[data-page-number]')){
           const r=pageEl.getBoundingClientRect();if(r.bottom<0||r.top>win.innerHeight)continue;
@@ -440,20 +683,25 @@ var PaperLoomGraphics;
           const box=win.document.createElement('div');box.style.cssText='position:absolute;border:1px solid #1684bb;background:#1684bb15;pointer-events:none;';cover.appendChild(box);
           let start=null,version=null;
           const loc=e=>{const cr=canvas.getBoundingClientRect();return [Math.max(0,Math.min(pv.viewport.width,(e.clientX-cr.left)*pv.viewport.width/cr.width)),Math.max(0,Math.min(pv.viewport.height,(e.clientY-cr.top)*pv.viewport.height/cr.height))];};
-          cover.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();e.stopPropagation();start=loc(e);version=Array.from(pv.viewport.transform).join(',');cover.setPointerCapture(e.pointerId);});
+          cover.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();e.stopPropagation();start=loc(e);version=Array.from(pv.viewport.transform).join(',');try{cover.setPointerCapture(e.pointerId);}catch(err){ /* 合成事件没有真实指针，忽略 */ }});
           cover.addEventListener('pointermove',e=>{if(!start)return;e.preventDefault();e.stopPropagation();const p=loc(e),cr=canvas.getBoundingClientRect(),pr=cover.getBoundingClientRect();box.style.left=(cr.left-pr.left+Math.min(start[0],p[0])*cr.width/pv.viewport.width)+'px';box.style.top=(cr.top-pr.top+Math.min(start[1],p[1])*cr.height/pv.viewport.height)+'px';box.style.width=Math.abs(start[0]-p[0])*cr.width/pv.viewport.width+'px';box.style.height=Math.abs(start[1]-p[1])*cr.height/pv.viewport.height+'px';});
           cover.addEventListener('pointercancel',finish);
           cover.addEventListener('pointerup',e=>{if(!start)return;e.preventDefault();e.stopPropagation();const end=loc(e),a=start;start=null;
             const changed=version!==Array.from(pv.viewport.transform).join(',');finish();
             if(changed){s.message='框选期间页面缩放或旋转，请重新框选';s.update();return;}
             if(Math.abs(a[0]-end[0])<10||Math.abs(a[1]-end[1])<10)return;
-            this.recognizeGraphicRegion(s,win,pv,canvas,index,[Math.min(a[0],end[0]),Math.min(a[1],end[1]),Math.max(a[0],end[0]),Math.max(a[1],end[1])],{manual:true,article:this.inplace?.get(reader)}).catch(e=>{s.message=e.message;s.paint();s.update();});
+            s.lastRegionList=null;this.showRegionBadge(s,'busy');
+            this.recognizeGraphicRegion(s,win,pv,canvas,index,[Math.min(a[0],end[0]),Math.min(a[1],end[1]),Math.max(a[0],end[0]),Math.max(a[1],end[1])],{manual:true,article:this.inplace?.get(reader)})
+              .then(()=>this.finishRegionBadge(s,index))
+              .catch(e=>{s.message=e.message;s.paint();s.update();this.finishRegionBadge(s,index,e.message||String(e));});
           });
         }
       }
       if(!covers.length){finish();throw Error('当前页尚未绘制完成，请稍后再框选');}
     };
     app.recognizeGraphicRegion=async function(s,win,pv,canvas,pageIndex,rect,options={}){
+      // 上一次的 OCR 失败不该挂在这一次的结果上（否则面板一直显示旧报错）。
+      if(!options.keepOcrError)s.lastOcrError='';
       if(s.busy&&!options.control){if(options.manual)throw Error('\u5f53\u524d\u9875\u6b63\u5728\u540e\u53f0\u8bc6\u522b\uff0c\u8bf7\u7a0d\u5019\u518d\u6846\u9009');return;}s.busy=true;s.control=options.control||{stopped:false,requests:new Set()};s.message='本地识别图内文字…';s.update();
       const control=s.control;
       try{
@@ -580,6 +828,7 @@ var PaperLoomGraphics;
           s.message='识别到 '+rows.length+' 个文字块'+warning+'；正在翻译 '+selected.length+' 个…';s.update();
           await this.translateGraphics(s,{control,rows:selected,cfg:this.config,article:options.article,ignorePause:true});
           s.replace=true;s.hidden=false;if(warning)s.message=String(s.message||'')+warning;await this.saveGraphics(s);s.paint();s.update();
+          s.lastRegionList=owned.map(r=>({id:r.id,pageIndex:r.pageIndex,text:String(r.text||'').slice(0,200),target:String(r.target||'').slice(0,200)}));
           s.lastRegion={localTargets:selected.filter(r=>r.target).length,sessionTargets:s.rows.filter(r=>r.pageIndex===pageIndex&&r.target).length,identity:selected.every(r=>s.rows.includes(r)),selected:selected.length,pageIndex};
         }else{
           await this.saveGraphics(s);
