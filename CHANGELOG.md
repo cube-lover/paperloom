@@ -1,4 +1,46 @@
-# 0.8.38（已安装开发版）
+## 0.9.0（未发布，续）
+
+### 修复：右侧擦除（用户反馈"英文没擦干净/更脏"）
+- 擦除掩膜改为**按页高分辨率重绘**（4 倍，按页缓存、随缩放失效、并发只渲一次）后抠墨迹；
+  之前用屏幕像素，1x 下只能抓到半个笔画，所以英文几乎擦不掉。
+- pdf.js 的 `render` 参数必须在**页面自己的 realm** 里构造（`new win.Object()` +
+  `cloneInto`），否则 `canvasContext` 丢失、渲染直接失败——这是"高分辨率重绘没生效"的根因。
+- 抠不出独立字形时（例如文字压在彩条上）退成**框内最亮众数颜色的不透明纯色**，
+  不再用四周取样的渐变（那是"脏"和色斑的来源）；删掉 `rgba(255,255,255,.9)` 半透明兜底。
+- 掩膜落盘后要**真的重画**：`paintKeys` 里加入掩膜版本号，并且合并成一次重画（防抖 300ms），
+  否则每块掩膜都重排整页。
+
+### 新增：框选翻译的小圆点（不再弹大面板）
+- 框选松手后不再自动打开大面板，改在工具栏按钮旁显示一个小圆点：
+  `择`（已就绪）→ 转圈（识别/翻译中）→ 数字（已译条数）。
+- 点小圆点才展开紧凑列表（原文 → 译文、条数统计、打开完整面板、再框一次）；
+  点击别处/✕/2 分钟无操作自动消失，**平时不常驻**。
+- 旧版本遗留的框选覆盖层会在开始框选前清掉，避免框到失效的那一层。
+
+### 修复：Alt+R 无反应
+- 阅读器是多层 iframe，按键不会冒泡到外层文档；现在给工具栏、主/次 PDF、子 iframe
+  每个可能持焦点的文档都挂 keydown，并在新视图出现后每 1.5 秒补挂。
+- 屏蔽条件放宽为"只有真正的输入控件"，工具栏按钮持焦时 Alt+R 仍可用。
+- 短横线面板的快捷键输入框可改键（默认 Alt+R）。
+
+### 新增：版面解析结果落盘复用
+- 每次进正文流程都重新解析 PDF（PDF worker 取数据 + 版面分析）很贵；现在按
+  `itemID + PDF 指纹 + 解析器版本` 落盘 `layout/<hash>.json`，命中就直接读回来。
+- 指纹/页数/解析器版本任一变化即重解；设置页「清理缓存」会连同版面缓存一起清掉。
+
+# 0.9.0（本机 Python 识别引擎 + 一键安装）
+
+- **移除内置推理引擎**：删除 0.8.38 引入的 onnxruntime-web 内核与内置引擎代码（`ocr-wasm.js`、`ocr-runtime.js`、`ort.min.js`、`ort-wasm-simd.wasm`）以及面板/设置页里的「识别引擎」下拉。原因：内置的 PP-OCRv4 mobile 在低分辨率图内小字上错误率不可接受，且它不是用户已经验证过的那条路线。识别现在只有一条路：**本机 Python**（`rapidocr` + onnxruntime + PP-OCRv4），也就是此前验证过的流程。
+- **一键安装识别引擎**：阅读器菜单新增「安装识别引擎（一键）…」（已就绪时显示「识别引擎已就绪 · 修复安装」），设置页「识别引擎（本机 Python）」区块与图表面板高级项里有同一套控件。安装 = 下载一个离线整包（Python 3.12.10 embedded + rapidocr 3.10.0 + onnxruntime 1.31.0 + opencv/numpy/Pillow/shapely/pyclipper + PP-OCRv4 模型，约 101MB），校验 SHA256，**在插件内解包**（`DecompressionStream('deflate-raw')`，不需要 pip、不需要管理员权限、不调用系统解压工具），写入 python/runtime/models 三个路径，然后用一张合成图自检，识别不出文字就报失败。安装前的三个路径会记进 `install.json`，卸载时原样还回。
+- 离线路线：整包解开的目录、或现成的 python + deps + models 目录都可以用「从文件夹导入…」直接指定，不走网络。
+- 整包发布在 GitHub Release（`ocr-runtime-1.0.0`），清单 `addon/ocr-runtime.json` 里带体积与 sha256；`scripts/build-ocr-bundle.py` 可重新构建整包（含许可与来源清点）。
+- 模型（PP-OCRv4 mobile det/rec/cls，Apache-2.0）仍随 XPI 分发，安装时按 `det.onnx / rec.onnx / cls.onnx` 就位到运行时 `models/`，因此安装只需下载 Python 与依赖。
+- 框选翻译保留本轮修复：松手即识别并翻译、后台忙时排队而不是静默丢弃、不受全局暂停影响、识别结果翻译在会话持有的行对象上（否则永远画不出来）、缺失多边形字段不再崩、低缩放时先高分辨率重绘再识别。
+- 开发动作新增 `ocr-install-state` / `ocr-install` / `ocr-uninstall` / `ocr-install-folder`；`ocr-selftest` 改为跑本机 Python 路线。测试 247 项通过（新增 7 项安装器测试：zip 解析/解包、安装激活、校验失败、状态与卸载、路径回滚、文件夹导入、清单校验）。
+
+# 0.8.38（已撤回：内置引擎质量不合格，见 0.9.0）
+
+# 0.8.38（内置引擎版本，已被 0.9.0 取代）
 
 - `addon/models/` 随 XPI 分发 PP-OCRv4 检测/识别/方向模型、字符字典与 onnxruntime-web 1.14.0（`ort.min.js`、`ort-wasm-simd.wasm`），解包约 31.5MB；`NOTICE.txt` 标注 Apache-2.0 / MIT 出处。装完即可识别，不需要 Python、不需要联网、不需要填路径。
 - 宿主实测：`status` → ocr `{engine:"builtin", bundled:6, missing:[]}`；`ocr-selftest` → `ok:true text:"Figure 8 Power Grid"`；`inspect-page 428 18` → graphics 13 / overflow 0（与 0.8.37 一致）。

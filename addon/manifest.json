@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Cube Translation · Cube 翻译",
-  "version": "0.8.38",
+  "version": "0.9.0",
   "description": "正文与图表一体翻译：后台识别、双语对照、术语一致性、质量检查与人工校订。",
   "author": "Cube Translation",
   "icons": {
