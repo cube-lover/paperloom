@@ -1,0 +1,10 @@
+[
+  { "source": "density functional theory", "target": "密度泛函理论", "caseSensitive": false },
+  { "source": "band gap", "target": "带隙", "caseSensitive": false },
+  { "source": "formation energy", "target": "形成能", "caseSensitive": false },
+  { "source": "Fermi level", "target": "费米能级", "caseSensitive": false },
+  { "source": "charge transition level", "target": "电荷转变能级", "caseSensitive": false },
+  { "source": "point defect", "target": "点缺陷", "caseSensitive": false },
+  { "source": "first-principles", "target": "第一性原理", "caseSensitive": false },
+  { "source": "Brillouin zone", "target": "布里渊区", "caseSensitive": false }
+]

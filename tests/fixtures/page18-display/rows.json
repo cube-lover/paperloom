@@ -1,0 +1,998 @@
+[
+  {
+    "text": "Electric transmissionnetwork",
+    "quad": [
+      [
+        168.95876288659795,
+        700.6082474226803
+      ],
+      [
+        243.83505154639175,
+        700.6082474226803
+      ],
+      [
+        243.83505154639175,
+        691.9793814432987
+      ],
+      [
+        168.95876288659795,
+        691.9793814432987
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.99425,
+    "review": false,
+    "directionVerified": true,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "sourceQuad": [
+      [
+        169.51546391752578,
+        700.0515463917525
+      ],
+      [
+        243.27835051546393,
+        700.0515463917525
+      ],
+      [
+        243.27835051546393,
+        692.5360824742266
+      ],
+      [
+        169.51546391752578,
+        692.5360824742266
+      ]
+    ],
+    "inkMarginPixels": 2,
+    "background": "#fff",
+    "id": "g39c9c93005f72f7d2e4b",
+    "pageIndex": 17,
+    "target": "电力输电网络",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": true,
+    "warnings": [],
+    "inkRefined": true,
+    "geometryRevision": 4,
+    "flowNode": false,
+    "flowEvidence": null,
+    "members": null,
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Gas transmission network",
+    "quad": [
+      [
+        366.5876288659794,
+        700.6082474226803
+      ],
+      [
+        432.27835051546396,
+        700.6082474226803
+      ],
+      [
+        432.27835051546396,
+        691.9793814432987
+      ],
+      [
+        366.5876288659794,
+        691.9793814432987
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.98845,
+    "review": false,
+    "directionVerified": true,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "sourceQuad": [
+      [
+        367.1443298969072,
+        700.0515463917525
+      ],
+      [
+        431.7216494845361,
+        700.0515463917525
+      ],
+      [
+        431.7216494845361,
+        692.5360824742266
+      ],
+      [
+        367.1443298969072,
+        692.5360824742266
+      ]
+    ],
+    "inkMarginPixels": 2,
+    "background": "#fff",
+    "id": "g6cc67cf3b89d56a7cbf7",
+    "pageIndex": 17,
+    "target": "燃气输送网络",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": true,
+    "warnings": [],
+    "inkRefined": true,
+    "geometryRevision": 2,
+    "flowNode": false,
+    "flowEvidence": null,
+    "members": null,
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "1 Resilience",
+    "quad": [
+      [
+        308.75,
+        627
+      ],
+      [
+        308.75,
+        657.25
+      ],
+      [
+        316.25,
+        657.25
+      ],
+      [
+        316.25,
+        627
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.89047,
+    "review": true,
+    "directionVerified": true,
+    "rotation": 270,
+    "recognitionPass": "local-upscale",
+    "previousText": "1Resilience",
+    "background": null,
+    "id": "g7b7c3571a81dc9a5be73",
+    "pageIndex": 17,
+    "target": "1 弹性",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Physieal Resilienee",
+    "quad": [
+      [
+        115,
+        605.5
+      ],
+      [
+        115,
+        657
+      ],
+      [
+        124,
+        657
+      ],
+      [
+        124,
+        605.5
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.92612,
+    "review": true,
+    "directionVerified": true,
+    "rotation": 270,
+    "recognitionPass": "local-upscale",
+    "previousText": "1 Resilience | Physieal",
+    "background": null,
+    "id": "g272e9b2df0d18194ce7c",
+    "pageIndex": 17,
+    "target": "体能韧性",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Physieal",
+    "quad": [
+      [
+        308.25,
+        605.5
+      ],
+      [
+        308.25,
+        630.25
+      ],
+      [
+        317.75,
+        630.25
+      ],
+      [
+        317.75,
+        605.5
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.92739,
+    "review": true,
+    "directionVerified": true,
+    "rotation": 270,
+    "recognitionPass": "local-upscale",
+    "previousText": "Physical",
+    "background": null,
+    "id": "g7b92d9d81df7d0a7f75d",
+    "pageIndex": 17,
+    "target": "物理的",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "prMF.19",
+    "quad": [
+      [
+        344,
+        589.75
+      ],
+      [
+        363.25,
+        593.5
+      ],
+      [
+        364.75,
+        585
+      ],
+      [
+        345.5,
+        581.5
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.64506,
+    "review": true,
+    "directionVerified": false,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "pMR.19",
+    "background": null,
+    "id": "g5da95efed72a013d3764",
+    "pageIndex": 17,
+    "target": "prMF.19",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "AMF19",
+    "quad": [
+      [
+        151.25,
+        589.75
+      ],
+      [
+        170.5,
+        592.75
+      ],
+      [
+        171.75,
+        585
+      ],
+      [
+        152.5,
+        582
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.5993,
+    "review": true,
+    "directionVerified": false,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "HR.19",
+    "background": null,
+    "id": "g961d9962cf889aa1468a",
+    "pageIndex": 17,
+    "target": "AMF19",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Time step",
+    "quad": [
+      [
+        193.17525773195877,
+        566.0257731958761
+      ],
+      [
+        219.61855670103094,
+        566.0257731958761
+      ],
+      [
+        219.61855670103094,
+        556.7010309278348
+      ],
+      [
+        193.17525773195877,
+        556.7010309278348
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.99187,
+    "review": false,
+    "directionVerified": true,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "background": "#fff",
+    "id": "gfd451678f90f006f08d8",
+    "pageIndex": 17,
+    "target": "时间步",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": true,
+    "warnings": [],
+    "sourceQuad": [
+      [
+        193.7319587628866,
+        565.4690721649483
+      ],
+      [
+        219.0618556701031,
+        565.4690721649483
+      ],
+      [
+        219.0618556701031,
+        557.2577319587627
+      ],
+      [
+        193.7319587628866,
+        557.2577319587627
+      ]
+    ],
+    "inkRefined": true,
+    "geometryRevision": 2,
+    "flowNode": false,
+    "flowEvidence": null,
+    "members": null,
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Time step",
+    "quad": [
+      [
+        386.07216494845363,
+        566.0257731958761
+      ],
+      [
+        412.5154639175258,
+        566.0257731958761
+      ],
+      [
+        412.5154639175258,
+        556.7010309278348
+      ],
+      [
+        386.07216494845363,
+        556.7010309278348
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.99197,
+    "review": false,
+    "directionVerified": true,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "background": "#fff",
+    "id": "g14b24f1f8e462afb4ab2",
+    "pageIndex": 17,
+    "target": "时间步",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": true,
+    "warnings": [],
+    "sourceQuad": [
+      [
+        386.62886597938143,
+        565.4690721649483
+      ],
+      [
+        411.9587628865979,
+        565.4690721649483
+      ],
+      [
+        411.9587628865979,
+        557.2577319587627
+      ],
+      [
+        386.62886597938143,
+        557.2577319587627
+      ]
+    ],
+    "inkRefined": true,
+    "geometryRevision": 4,
+    "flowNode": false,
+    "flowEvidence": null,
+    "members": null,
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Three-layer energy infrastrueture network",
+    "quad": [
+      [
+        346,
+        556
+      ],
+      [
+        453,
+        555.5
+      ],
+      [
+        453,
+        546.5
+      ],
+      [
+        346,
+        547
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.9709,
+    "review": true,
+    "directionVerified": false,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "background": "#fff",
+    "id": "g71827257116234ded5d5",
+    "pageIndex": 17,
+    "target": "三层能源基础设施网络",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Oiltransmissionnetwork",
+    "quad": [
+      [
+        175.36082474226805,
+        555.5876288659792
+      ],
+      [
+        237.43298969072168,
+        555.5876288659792
+      ],
+      [
+        237.43298969072168,
+        548.0721649484535
+      ],
+      [
+        175.36082474226805,
+        548.0721649484535
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.9759,
+    "review": false,
+    "directionVerified": true,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "background": null,
+    "id": "gebb5918bc13eab39f34a",
+    "pageIndex": 17,
+    "target": "油传输网络",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "sourceQuad": [
+      [
+        175.36082474226805,
+        554.7525773195875
+      ],
+      [
+        237.43298969072168,
+        554.7525773195875
+      ],
+      [
+        237.43298969072168,
+        548.9072164948452
+      ],
+      [
+        175.36082474226805,
+        548.9072164948452
+      ]
+    ],
+    "inkRefined": true,
+    "geometryRevision": 2,
+    "flowNode": false,
+    "flowEvidence": null,
+    "members": null,
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Physieal Resilienee",
+    "quad": [
+      [
+        115,
+        461
+      ],
+      [
+        115,
+        512.5
+      ],
+      [
+        124,
+        512.5
+      ],
+      [
+        124,
+        461
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.94085,
+    "review": false,
+    "directionVerified": true,
+    "rotation": 270,
+    "recognitionPass": "local-upscale",
+    "previousText": "Physical Resilience",
+    "background": null,
+    "id": "g87b259147a80a4f9944a",
+    "pageIndex": 17,
+    "target": "体能韧性",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Physieal Resilience",
+    "quad": [
+      [
+        308,
+        461
+      ],
+      [
+        308,
+        512.5
+      ],
+      [
+        317,
+        512.5
+      ],
+      [
+        317,
+        461
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.93077,
+    "review": true,
+    "directionVerified": true,
+    "rotation": 270,
+    "recognitionPass": "local-upscale",
+    "previousText": "Physical Resilience",
+    "background": "#fff",
+    "id": "gfabdf8037db6f7a274f5",
+    "pageIndex": 17,
+    "target": "物理韧性",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "AHR19",
+    "quad": [
+      [
+        150.5,
+        445.5
+      ],
+      [
+        171,
+        449
+      ],
+      [
+        172.5,
+        440.5
+      ],
+      [
+        152,
+        436.5
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.55799,
+    "review": true,
+    "directionVerified": false,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "background": null,
+    "id": "gd5deac5b25ecb3e9aa9a",
+    "pageIndex": 17,
+    "target": "AHR19",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "prR19",
+    "quad": [
+      [
+        344,
+        445.5
+      ],
+      [
+        364,
+        449
+      ],
+      [
+        365.5,
+        440.5
+      ],
+      [
+        345.5,
+        436.5
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.67851,
+    "review": true,
+    "directionVerified": false,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "background": null,
+    "id": "g9f0fdc7e903bd30d8950",
+    "pageIndex": 17,
+    "target": "prR19",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": false,
+    "warnings": [],
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Time step",
+    "quad": [
+      [
+        193.17525773195877,
+        421.63144329896886
+      ],
+      [
+        219.61855670103094,
+        421.63144329896886
+      ],
+      [
+        219.61855670103094,
+        412.2371134020617
+      ],
+      [
+        193.17525773195877,
+        412.2371134020617
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.98887,
+    "review": false,
+    "directionVerified": true,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "background": "#fff",
+    "id": "g8dcd300e3d021c6abb11",
+    "pageIndex": 17,
+    "target": "时间步",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": true,
+    "warnings": [],
+    "sourceQuad": [
+      [
+        193.7319587628866,
+        421.0747422680411
+      ],
+      [
+        219.0618556701031,
+        421.0747422680411
+      ],
+      [
+        219.0618556701031,
+        412.79381443298956
+      ],
+      [
+        193.7319587628866,
+        412.79381443298956
+      ]
+    ],
+    "inkRefined": true,
+    "geometryRevision": 4,
+    "flowNode": false,
+    "flowEvidence": null,
+    "members": null,
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  },
+  {
+    "text": "Time step",
+    "quad": [
+      [
+        386.07216494845363,
+        421.52706185566984
+      ],
+      [
+        412.5154639175258,
+        421.52706185566984
+      ],
+      [
+        412.5154639175258,
+        412.2371134020617
+      ],
+      [
+        386.07216494845363,
+        412.2371134020617
+      ]
+    ],
+    "origin": "OCR",
+    "score": 0.99688,
+    "review": false,
+    "directionVerified": true,
+    "rotation": 0,
+    "recognitionPass": "detect",
+    "previousText": "",
+    "background": "#fff",
+    "id": "ge363952d7128f4ea1821",
+    "pageIndex": 17,
+    "target": "时间步",
+    "selected": true,
+    "approved": false,
+    "autoDetected": true,
+    "autoValidated": true,
+    "warnings": [],
+    "sourceQuad": [
+      [
+        386.62886597938143,
+        420.9703608247421
+      ],
+      [
+        411.9587628865979,
+        420.9703608247421
+      ],
+      [
+        411.9587628865979,
+        412.79381443298956
+      ],
+      [
+        386.62886597938143,
+        412.79381443298956
+      ]
+    ],
+    "inkRefined": true,
+    "geometryRevision": 2,
+    "flowNode": false,
+    "flowEvidence": null,
+    "members": null,
+    "graphicRegion": {
+      "index": 1,
+      "total": 1,
+      "label": "图 10",
+      "title": "Fig. 10. GTA three-layer infrastructure network dynamic physical resilience. pr is physical resilience of the GTA three-layer energy infras",
+      "rect": [
+        113.368,
+        410.608,
+        480.135,
+        702.152
+      ]
+    }
+  }
+]

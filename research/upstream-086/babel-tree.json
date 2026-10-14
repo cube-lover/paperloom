@@ -1,0 +1,3588 @@
+{
+  "sha": "38d3896dcde9b5a940c62cf5563cadea673a64d3",
+  "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/38d3896dcde9b5a940c62cf5563cadea673a64d3",
+  "tree": [
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "74e4fd46a521471eea8e916e954f099c1fc091ce",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/74e4fd46a521471eea8e916e954f099c1fc091ce"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c0f2eeb4d8bde5dff6462ed6cdc6b8a2ed334c75",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/c0f2eeb4d8bde5dff6462ed6cdc6b8a2ed334c75"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b38acaa8a24a19a981ecdf41261a3a14924ac332",
+      "size": 3918,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b38acaa8a24a19a981ecdf41261a3a14924ac332"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b908e73e45b7182b11264013c77618a7e40933fa",
+      "size": 2328,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b908e73e45b7182b11264013c77618a7e40933fa"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3211e2f65db36c70e235e4c9d5319f7832af85c4",
+      "size": 2499,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3211e2f65db36c70e235e4c9d5319f7832af85c4"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "966b5e5aac8405048a1384d1c1d4676cac6e3db6",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/966b5e5aac8405048a1384d1c1d4676cac6e3db6"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE/pr_form.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6173ae42698bccdadafa46ddaef51395bbab1c43",
+      "size": 2776,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6173ae42698bccdadafa46ddaef51395bbab1c43"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e6814c93b77aed5ee109366bacda40a44415a4ab",
+      "size": 480,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e6814c93b77aed5ee109366bacda40a44415a4ab"
+    },
+    {
+      "path": ".github/labels.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d887730361af6d266f2a1c79c72d72292cc845b",
+      "size": 1834,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8d887730361af6d266f2a1c79c72d72292cc845b"
+    },
+    {
+      "path": ".github/release-drafter.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13bdbd901b7b003bc2f7f828ac8c9d21fb5e322b",
+      "size": 770,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/13bdbd901b7b003bc2f7f828ac8c9d21fb5e322b"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e92f2b937e5cadc2901f00e3f0b5e8674267194d",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/e92f2b937e5cadc2901f00e3f0b5e8674267194d"
+    },
+    {
+      "path": ".github/workflows/checks.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dfd067098e498fbcc574fc1360507c7254ee4363",
+      "size": 1339,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/dfd067098e498fbcc574fc1360507c7254ee4363"
+    },
+    {
+      "path": ".github/workflows/codeql.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bbb8868c652ea536d9dc95c0ad8b7ef37949bd39",
+      "size": 4305,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/bbb8868c652ea536d9dc95c0ad8b7ef37949bd39"
+    },
+    {
+      "path": ".github/workflows/docs.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d2f7ecc2f038149db2e5576316a7d83cf56ae76d",
+      "size": 983,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d2f7ecc2f038149db2e5576316a7d83cf56ae76d"
+    },
+    {
+      "path": ".github/workflows/labeler.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d3b756e28dfdd04610ffb3d9e264ac069c7075a",
+      "size": 810,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9d3b756e28dfdd04610ffb3d9e264ac069c7075a"
+    },
+    {
+      "path": ".github/workflows/lint.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "750f8ec3e110e08574e9b3970c2766aa1103bd03",
+      "size": 381,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/750f8ec3e110e08574e9b3970c2766aa1103bd03"
+    },
+    {
+      "path": ".github/workflows/pr-lint.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae41d31bc15f377ce50039786a07bf756e91cc0f",
+      "size": 1353,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ae41d31bc15f377ce50039786a07bf756e91cc0f"
+    },
+    {
+      "path": ".github/workflows/publish-to-pypi.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d650a0065530c028a5575247fce219df1a3859fa",
+      "size": 5402,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d650a0065530c028a5575247fce219df1a3859fa"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d8edfd62c583b310c91aaf6063dce8a505197c8",
+      "size": 547,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7d8edfd62c583b310c91aaf6063dce8a505197c8"
+    },
+    {
+      "path": ".pre-commit-config.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4afabd752b740b4cc4758e3e9a87ef3f5b7b4c57",
+      "size": 298,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4afabd752b740b4cc4758e3e9a87ef3f5b7b4c57"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "756a5503c24747d7c11b587be2b5fec8b21875c1",
+      "size": 34519,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/756a5503c24747d7c11b587be2b5fec8b21875c1"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "81505808c400d3d6fdd04056b2317e2603ad6d68",
+      "size": 27158,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/81505808c400d3d6fdd04056b2317e2603ad6d68"
+    },
+    {
+      "path": "babeldoc",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ef1ab072acbdca3055f54856b67be2252e7e7b0b",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/ef1ab072acbdca3055f54856b67be2252e7e7b0b"
+    },
+    {
+      "path": "babeldoc/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "364e7baed0d2efed63b684b31647977efdc2f0c2",
+      "size": 22,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/364e7baed0d2efed63b684b31647977efdc2f0c2"
+    },
+    {
+      "path": "babeldoc/assets",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6866329273236afebb1dc4fffd22de44dae8fe57",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/6866329273236afebb1dc4fffd22de44dae8fe57"
+    },
+    {
+      "path": "babeldoc/assets/assets.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3f8961d433a9c21bb4132468a3426cf4c1b76c21",
+      "size": 21668,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3f8961d433a9c21bb4132468a3426cf4c1b76c21"
+    },
+    {
+      "path": "babeldoc/assets/embedding_assets_metadata.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1665a239113d78cf5e0559f979e2fa1ef6d5f167",
+      "size": 50017,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1665a239113d78cf5e0559f979e2fa1ef6d5f167"
+    },
+    {
+      "path": "babeldoc/asynchronize",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c6f2455e3fa59992a765f071d6556c5c2d6a5b65",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/c6f2455e3fa59992a765f071d6556c5c2d6a5b65"
+    },
+    {
+      "path": "babeldoc/asynchronize/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cf23d13356e0cc32750135a9a2993993a4a901f5",
+      "size": 1802,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cf23d13356e0cc32750135a9a2993993a4a901f5"
+    },
+    {
+      "path": "babeldoc/babeldoc_exception",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "7eaf89cdd6534b6e0fbe7d3b62c5c92389828426",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/7eaf89cdd6534b6e0fbe7d3b62c5c92389828426"
+    },
+    {
+      "path": "babeldoc/babeldoc_exception/BabelDOCException.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aafc991540ffcc6c07bddaef18cc7f004270565f",
+      "size": 463,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/aafc991540ffcc6c07bddaef18cc7f004270565f"
+    },
+    {
+      "path": "babeldoc/babeldoc_exception/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/const.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aef704fbfee06d3bc0aadffccc7eaf8b27f2d3b9",
+      "size": 2663,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/aef704fbfee06d3bc0aadffccc7eaf8b27f2d3b9"
+    },
+    {
+      "path": "babeldoc/docvision",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "de6a99ac18741d468f5bf08eeb5f7797a469ece0",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/de6a99ac18741d468f5bf08eeb5f7797a469ece0"
+    },
+    {
+      "path": "babeldoc/docvision/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/docvision/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/docvision/base_doclayout.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d03e2e0d5705e4631156d0fe3971399d4b953ec2",
+      "size": 1766,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d03e2e0d5705e4631156d0fe3971399d4b953ec2"
+    },
+    {
+      "path": "babeldoc/docvision/doclayout.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b991864f3217752bb6af63ef0c4a1fb73658a21",
+      "size": 9884,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1b991864f3217752bb6af63ef0c4a1fb73658a21"
+    },
+    {
+      "path": "babeldoc/docvision/rpc_doclayout.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0619f892c6f7b79572ec7dad1b2d1c89bee63efa",
+      "size": 11206,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0619f892c6f7b79572ec7dad1b2d1c89bee63efa"
+    },
+    {
+      "path": "babeldoc/docvision/rpc_doclayout2.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4a601fe914799f89039240df3f0c07cbfb6d2d6a",
+      "size": 11825,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4a601fe914799f89039240df3f0c07cbfb6d2d6a"
+    },
+    {
+      "path": "babeldoc/docvision/rpc_doclayout3.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d3e3abc74c061753dd9faa6e64fa0c6519f7725a",
+      "size": 11647,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d3e3abc74c061753dd9faa6e64fa0c6519f7725a"
+    },
+    {
+      "path": "babeldoc/docvision/rpc_doclayout4.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a63b2262b73ad1321d65931dcab01ae5e4240af2",
+      "size": 11824,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a63b2262b73ad1321d65931dcab01ae5e4240af2"
+    },
+    {
+      "path": "babeldoc/docvision/rpc_doclayout5.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75282211892da082d2b6ac03c85608633035924d",
+      "size": 11579,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/75282211892da082d2b6ac03c85608633035924d"
+    },
+    {
+      "path": "babeldoc/docvision/rpc_doclayout6.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7c68d0dc845ad26d934a8a94b73e5b34797661a",
+      "size": 22265,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f7c68d0dc845ad26d934a8a94b73e5b34797661a"
+    },
+    {
+      "path": "babeldoc/docvision/rpc_doclayout7.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7dca73a53483dbd79355d6091d8bb31b2dad105e",
+      "size": 12174,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7dca73a53483dbd79355d6091d8bb31b2dad105e"
+    },
+    {
+      "path": "babeldoc/docvision/rpc_doclayout8.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a7c2f1f1fcb7cc7cf1614fb9e15d28d1b110eeb8",
+      "size": 12503,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a7c2f1f1fcb7cc7cf1614fb9e15d28d1b110eeb8"
+    },
+    {
+      "path": "babeldoc/docvision/table_detection",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "df3f6de5e5ab6c7a614abd95e026d8ba1f5f8bed",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/df3f6de5e5ab6c7a614abd95e026d8ba1f5f8bed"
+    },
+    {
+      "path": "babeldoc/docvision/table_detection/rapidocr.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28e32566133e54072072a059226d43ad514ae1d6",
+      "size": 1279,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/28e32566133e54072072a059226d43ad514ae1d6"
+    },
+    {
+      "path": "babeldoc/format",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2063db31d43c7af3869fd6fee98422455bc20f49",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/2063db31d43c7af3869fd6fee98422455bc20f49"
+    },
+    {
+      "path": "babeldoc/format/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/format/pdf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "06b3274f47e51d4d01e8d0c9359e597d9598a133",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/06b3274f47e51d4d01e8d0c9359e597d9598a133"
+    },
+    {
+      "path": "babeldoc/format/pdf/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/format/pdf/awlt_char.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15fb7a94e4825135fcf2ccd625399a80f1aec664",
+      "size": 2732,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/15fb7a94e4825135fcf2ccd625399a80f1aec664"
+    },
+    {
+      "path": "babeldoc/format/pdf/babelpdf",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b51f0ec7c0e8d64365c1c8a4c4572d034ccb285d",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/b51f0ec7c0e8d64365c1c8a4c4572d034ccb285d"
+    },
+    {
+      "path": "babeldoc/format/pdf/babelpdf/base14.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5f5f260f8e17b9f38b8c2120263eec19d540523c",
+      "size": 127441,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5f5f260f8e17b9f38b8c2120263eec19d540523c"
+    },
+    {
+      "path": "babeldoc/format/pdf/babelpdf/cidfont.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dee28d515ae9150268d70f271f3675dafbac4040",
+      "size": 1851,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/dee28d515ae9150268d70f271f3675dafbac4040"
+    },
+    {
+      "path": "babeldoc/format/pdf/babelpdf/cmap.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53a115de8db05ab279d1ae95e9cf98867feda893",
+      "size": 3701,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/53a115de8db05ab279d1ae95e9cf98867feda893"
+    },
+    {
+      "path": "babeldoc/format/pdf/babelpdf/encoding.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9bb8820168d2f5b709e6f2cf92c7f0bf92432fe",
+      "size": 16977,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d9bb8820168d2f5b709e6f2cf92c7f0bf92432fe"
+    },
+    {
+      "path": "babeldoc/format/pdf/babelpdf/type3.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "20768876ebd927f92303ef90546435f7f84ad09e",
+      "size": 5237,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/20768876ebd927f92303ef90546435f7f84ad09e"
+    },
+    {
+      "path": "babeldoc/format/pdf/babelpdf/utils.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a9168b2878f06bacc2b72fb835d27f947057de60",
+      "size": 611,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a9168b2878f06bacc2b72fb835d27f947057de60"
+    },
+    {
+      "path": "babeldoc/format/pdf/babelpdf/win_core.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d6b6ce965494af41e81303af7c2c693d5a3227ba",
+      "size": 100126,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d6b6ce965494af41e81303af7c2c693d5a3227ba"
+    },
+    {
+      "path": "babeldoc/format/pdf/converter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d52d6c84e2e8d40a0a26c544aaffbbc491cfaba",
+      "size": 22603,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9d52d6c84e2e8d40a0a26c544aaffbbc491cfaba"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "580fcf6bfc2988a290ef91a47a478906f3119a20",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/580fcf6bfc2988a290ef91a47a478906f3119a20"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64f69256413c2e25732e2e955b06a2880b5dad24",
+      "size": 2897,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/64f69256413c2e25732e2e955b06a2880b5dad24"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/backend",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f062472e93addfe795423a3927bae80101e2a43f",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/f062472e93addfe795423a3927bae80101e2a43f"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/backend/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/backend/pdf_creater.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dbcac2dd96c4a0f232b1f16675f44ecce6397cc5",
+      "size": 63766,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/dbcac2dd96c4a0f232b1f16675f44ecce6397cc5"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/frontend",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "77aa630c6aa4dcc4023098abec52ec0fa1fd3793",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/77aa630c6aa4dcc4023098abec52ec0fa1fd3793"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/frontend/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/frontend/il_creater.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6c1ec94269623283b2b92c97c91e1d6ded8c20ca",
+      "size": 51031,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6c1ec94269623283b2b92c97c91e1d6ded8c20ca"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/frontend/il_creater_active.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c79eee1dec694746d3f84bb2e3166172bc9fee62",
+      "size": 58188,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c79eee1dec694746d3f84bb2e3166172bc9fee62"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/frontend/il_creater_active_support.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16288a813178d9700cb52d66fb89bacb61548f1f",
+      "size": 16575,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/16288a813178d9700cb52d66fb89bacb61548f1f"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/frontend/inline_image_params.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61a16c9fc1ff78f68ec00727980e7de843bcabab",
+      "size": 1593,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/61a16c9fc1ff78f68ec00727980e7de843bcabab"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/il_version_1.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7090defbc23f67aa138c1d382f5a17ed63352a0c",
+      "size": 29477,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7090defbc23f67aa138c1d382f5a17ed63352a0c"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/il_version_1.rnc",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5bd4fa358cbb38c9905c1287ddbf4866f0b3c270",
+      "size": 6492,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5bd4fa358cbb38c9905c1287ddbf4866f0b3c270"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/il_version_1.rng",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02eba3562c47c3d866a1351a357fe2acb78a09e2",
+      "size": 17062,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/02eba3562c47c3d866a1351a357fe2acb78a09e2"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/il_version_1.xsd",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8f7b015d85b7b500b8d7db63ed62b31b8ad41e77",
+      "size": 14797,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8f7b015d85b7b500b8d7db63ed62b31b8ad41e77"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a9b0b0fd3c8bad020d014ec40b914b6c4273add5",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/a9b0b0fd3c8bad020d014ec40b914b6c4273add5"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/add_debug_information.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac73ad87bfb03c5c8173a4e435e47e9f186476b9",
+      "size": 6387,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ac73ad87bfb03c5c8173a4e435e47e9f186476b9"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/automatic_term_extractor.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4f52be9d30180da5245984c389568098517fb53",
+      "size": 16328,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d4f52be9d30180da5245984c389568098517fb53"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/detect_scanned_file.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "28f04d0956f0adbefbc6979d88565ad3b8c4f728",
+      "size": 6933,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/28f04d0956f0adbefbc6979d88565ad3b8c4f728"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/il_translator.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6c5d16137a6ad9e6d35051f9b56d97c5ad3a5748",
+      "size": 49749,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6c5d16137a6ad9e6d35051f9b56d97c5ad3a5748"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/il_translator_llm_only.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cef6e069eb0526c78de255d9ea29e88e693e264f",
+      "size": 39095,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cef6e069eb0526c78de255d9ea29e88e693e264f"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/layout_parser.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5012b4ac40432bd2f9721f8642b1db59cfc97b6a",
+      "size": 8173,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5012b4ac40432bd2f9721f8642b1db59cfc97b6a"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/paragraph_finder.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "efeed5319e3666c3891952f9ee6b504b16e98077",
+      "size": 43591,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/efeed5319e3666c3891952f9ee6b504b16e98077"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/remove_descent.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d68c603515f94cd69972a8fd75451e21cc608f5",
+      "size": 6832,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8d68c603515f94cd69972a8fd75451e21cc608f5"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/styles_and_formulas.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "71fb8a7d5c78194616bad67235083101ee6f40ae",
+      "size": 52661,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/71fb8a7d5c78194616bad67235083101ee6f40ae"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/table_parser.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "13a8351c7efe9906097c2d35b8d2e36b216c8709",
+      "size": 6206,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/13a8351c7efe9906097c2d35b8d2e36b216c8709"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/midend/typesetting.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8489bc27236f829cae7e8c50fb9153e02977f837",
+      "size": 63142,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8489bc27236f829cae7e8c50fb9153e02977f837"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "61068bcd16494da33bc3869a17209e35b8259388",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/61068bcd16494da33bc3869a17209e35b8259388"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/extract_char.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d7a39e0cab0f9c50911a7be56251ce23777e9b5",
+      "size": 28698,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3d7a39e0cab0f9c50911a7be56251ce23777e9b5"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/fontmap.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7e3dd2a557703baa236d3c425b08816db98c2b5a",
+      "size": 12119,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7e3dd2a557703baa236d3c425b08816db98c2b5a"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/formular_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1a444a74c08f4bb6a103d21ee6a0bfff20ceb5b6",
+      "size": 10197,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1a444a74c08f4bb6a103d21ee6a0bfff20ceb5b6"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/layout_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4acd6cc9bd583e71c40b5118be0586628195b5a6",
+      "size": 32998,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4acd6cc9bd583e71c40b5118be0586628195b5a6"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/matrix_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "18b6c846530f23cef04108f70152fb8fc7f4af12",
+      "size": 10315,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/18b6c846530f23cef04108f70152fb8fc7f4af12"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/mupdf_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9aa5d4eaf4f7e67d4362c3a9a6caa0b336c4879f",
+      "size": 2492,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9aa5d4eaf4f7e67d4362c3a9a6caa0b336c4879f"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/paragraph_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ba671461b2a8c97828a58b52fe9ab88ad93deab",
+      "size": 3303,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0ba671461b2a8c97828a58b52fe9ab88ad93deab"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/raster_geometry.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "36111830f1f5bd4780692bd93ac73eaf39a5b601",
+      "size": 7820,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/36111830f1f5bd4780692bd93ac73eaf39a5b601"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/spatial_analyzer.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f7fafdec1c2d719040ca2bc5bd2f741079d37af",
+      "size": 5816,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6f7fafdec1c2d719040ca2bc5bd2f741079d37af"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/style_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e9c4a283fcc6e220b04588f8ed34e173ff3ced2",
+      "size": 3185,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0e9c4a283fcc6e220b04588f8ed34e173ff3ced2"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/type3_font_metrics.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "148eb04ecd7a5caade59880d69dce09892743ca4",
+      "size": 1748,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/148eb04ecd7a5caade59880d69dce09892743ca4"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/utils/zstd_helper.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dd514360c83c96c8a60ab31becc248a58e6df8b0",
+      "size": 557,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/dd514360c83c96c8a60ab31becc248a58e6df8b0"
+    },
+    {
+      "path": "babeldoc/format/pdf/document_il/xml_converter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ebc7b4651e04d5fec8ceeb528e7d53766e27be05",
+      "size": 2077,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ebc7b4651e04d5fec8ceeb528e7d53766e27be05"
+    },
+    {
+      "path": "babeldoc/format/pdf/high_level.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "303233d0bde16ff663348b2ab677556f59118b14",
+      "size": 44420,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/303233d0bde16ff663348b2ab677556f59118b14"
+    },
+    {
+      "path": "babeldoc/format/pdf/legacy_parse.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "385f63949dbf36eb5a4be47fded0fc68c8656c85",
+      "size": 4930,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/385f63949dbf36eb5a4be47fded0fc68c8656c85"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "a8c15644ba6c26806dfa7579d3efe2d88431ffbb",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/a8c15644ba6c26806dfa7579d3efe2d88431ffbb"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edc25c81d8ac20f57828f4233a82020a8202e3f5",
+      "size": 46,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/edc25c81d8ac20f57828f4233a82020a8202e3f5"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/active_direct_font_backend.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "93b6ef9bcc1dcd1e0d746d2d08bab8b10a3b75a8",
+      "size": 20517,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/93b6ef9bcc1dcd1e0d746d2d08bab8b10a3b75a8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/active_font_backend.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ab8ce41cf341b76271a78a7e2a7de9c5e140e0d2",
+      "size": 739,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ab8ce41cf341b76271a78a7e2a7de9c5e140e0d2"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/active_font_resource_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cb7277a92e12aa1491cd6f056586dac34198796d",
+      "size": 1688,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cb7277a92e12aa1491cd6f056586dac34198796d"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/active_font_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a2feb74d59f4e6df3450d6872c8f0d8524277726",
+      "size": 3752,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a2feb74d59f4e6df3450d6872c8f0d8524277726"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/active_object_backend.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3b34684daaccb7dcdc42db5a33b49430b03c23be",
+      "size": 418,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3b34684daaccb7dcdc42db5a33b49430b03c23be"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/active_object_projection.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc2dccffb9f573b9a2327c22fe255a158ceeea02",
+      "size": 6324,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cc2dccffb9f573b9a2327c22fe255a158ceeea02"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/active_parse_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edde93c6114f9c9ec9be272f42ecb7d8300d692a",
+      "size": 814,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/edde93c6114f9c9ec9be272f42ecb7d8300d692a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/active_value_access.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4a3689581c30ecef78ed8dd8d91aefea2b3d38a3",
+      "size": 1631,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4a3689581c30ecef78ed8dd8d91aefea2b3d38a3"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/base_operations.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "948102498af95cf0d25e0c136ca4e96abcbe0b06",
+      "size": 3071,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/948102498af95cf0d25e0c136ca4e96abcbe0b06"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/bridge_types.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2fc1c86404cb24fcae306739ce19c376c9641483",
+      "size": 4647,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2fc1c86404cb24fcae306739ce19c376c9641483"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/compat",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d3ff7ec17c975018ed8e00212c52de8afac1125d",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/d3ff7ec17c975018ed8e00212c52de8afac1125d"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/compat/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24b8fcaf89d8e5ee417a56f8417a07c2bfe3c638",
+      "size": 82,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/24b8fcaf89d8e5ee417a56f8417a07c2bfe3c638"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/font_spec_primitives.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4cb05002b633378f47a306752013af802b0ac06b",
+      "size": 1203,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4cb05002b633378f47a306752013af802b0ac06b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/font_types.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f4876bd3aa8f1cf0823641882a3b87f72f03fe42",
+      "size": 688,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f4876bd3aa8f1cf0823641882a3b87f72f03fe42"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/glyphs.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "daa5d087ebe8286413109df7cc2810948979e35b",
+      "size": 6962,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/daa5d087ebe8286413109df7cc2810948979e35b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/interpreter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac750ac8e96d657b26ad1f63aa577a413f6a3c6e",
+      "size": 29961,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ac750ac8e96d657b26ad1f63aa577a413f6a3c6e"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/native_page_execution_session.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ae9bbd4e611de84b81b3fb9c0a98aa83e388bcb",
+      "size": 1896,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4ae9bbd4e611de84b81b3fb9c0a98aa83e388bcb"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/native_page_interpreter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d3ea6883b942c21b86ac01ba122a4ada08c29c66",
+      "size": 2794,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d3ea6883b942c21b86ac01ba122a4ada08c29c66"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/native_parse.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e2d8ffc7a0e2f3dddff145ea36ce08652f46b379",
+      "size": 4996,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e2d8ffc7a0e2f3dddff145ea36ce08652f46b379"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/object_model.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f38fdfa2325648ceb967f4ede94635f9bfc13d90",
+      "size": 820,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f38fdfa2325648ceb967f4ede94635f9bfc13d90"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/object_parser.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b28328b174d4c2d13fd01f8261f082f54cab7bc4",
+      "size": 5325,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b28328b174d4c2d13fd01f8261f082f54cab7bc4"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/page_api.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2adf6a486544ce447557a96c7821df2bbd7b6642",
+      "size": 1151,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2adf6a486544ce447557a96c7821df2bbd7b6642"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/page_content_access.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "27a7b1803e1c82d6edbcbbe752b00b446819e096",
+      "size": 893,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/27a7b1803e1c82d6edbcbbe752b00b446819e096"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/page_content_execution.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "31dd6122cec31c43b296bd1921995fb8b6cc089b",
+      "size": 768,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/31dd6122cec31c43b296bd1921995fb8b6cc089b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/page_execution_session.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "401d8035da22109bd97a17cce9a444ebb128ccae",
+      "size": 2130,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/401d8035da22109bd97a17cce9a444ebb128ccae"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/page_interpreter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "064e2911a970f46a81d00e8639050e08919b4c0b",
+      "size": 386,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/064e2911a970f46a81d00e8639050e08919b4c0b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/pdf_token_serializer.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "293ac6513e2ac60165ebadda9d0f2e9ab1eecbb3",
+      "size": 6655,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/293ac6513e2ac60165ebadda9d0f2e9ab1eecbb3"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/prepared_page.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a396d7162be3936cef2b8beb480967d441b8df7",
+      "size": 2107,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2a396d7162be3936cef2b8beb480967d441b8df7"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/prepared_page_access.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "97835be8c103471c5ed028b860d655a5df9700c0",
+      "size": 1438,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/97835be8c103471c5ed028b860d655a5df9700c0"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/prepared_page_debug_access.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c4583ac6cbf14a59a1880123a455da9d41c3f2a",
+      "size": 1100,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0c4583ac6cbf14a59a1880123a455da9d41c3f2a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/prepared_page_execution.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "038dfb3296a5b05a5c3d8543815a75c364b72de0",
+      "size": 1025,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/038dfb3296a5b05a5c3d8543815a75c364b72de0"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/prepared_resource_builder.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0632a2eaada40c211e88bf635f7b4f75846d5d6d",
+      "size": 7433,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0632a2eaada40c211e88bf635f7b4f75846d5d6d"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/pymupdf_candidate_parse.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "172d29beea8bf8464b4b921b2fbc3bd102740d69",
+      "size": 1117,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/172d29beea8bf8464b4b921b2fbc3bd102740d69"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/pymupdf_object_access.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9da58b0079bbe76560c8e990ef2a00daeae42e7",
+      "size": 5058,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f9da58b0079bbe76560c8e990ef2a00daeae42e7"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/pymupdf_page_execution_session.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d4610973681b24ee90f7588a6f9814b33ac4c6b",
+      "size": 210,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4d4610973681b24ee90f7588a6f9814b33ac4c6b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/pymupdf_page_view_access.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2d6514372d52b30ef76c8654cb86d408ac4638cd",
+      "size": 2745,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2d6514372d52b30ef76c8654cb86d408ac4638cd"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/pymupdf_prepared_page_access.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b209ce25b932d7016111fe5c3a00bb40a23d6e4",
+      "size": 1278,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7b209ce25b932d7016111fe5c3a00bb40a23d6e4"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/raw_page_view.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d44406e6b9bff300ef5aff72cf778390f2fe20c",
+      "size": 800,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4d44406e6b9bff300ef5aff72cf778390f2fe20c"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/resolved_object_access.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e8bb1bca3eec3e3dd6d932d0c0f02980512a7e9a",
+      "size": 2356,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e8bb1bca3eec3e3dd6d932d0c0f02980512a7e9a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/resource_runtime_types.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b452d0598a8947f6049ad2a23fdfa73ccb47dc69",
+      "size": 384,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b452d0598a8947f6049ad2a23fdfa73ccb47dc69"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/resources.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "55de280983e8b0ef9bd972b729170a2b978fa2ee",
+      "size": 4660,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/55de280983e8b0ef9bd972b729170a2b978fa2ee"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "01f2a895438dd2f8b35dadd65bd6dd52a94eff02",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/01f2a895438dd2f8b35dadd65bd6dd52a94eff02"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d48db4f9f85e1752cf424c49ee18a6907c3f160",
+      "size": 35,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9d48db4f9f85e1752cf424c49ee18a6907c3f160"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/_cmap_manifest_data.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1470c71bb36cc3a2a2ef18692ff8b5accc566c4c",
+      "size": 19388,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1470c71bb36cc3a2a2ef18692ff8b5accc566c4c"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/cid_cmap_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "776145c821139746bd925f441b3ce197ee4325e8",
+      "size": 4135,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/776145c821139746bd925f441b3ce197ee4325e8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/cmap_secure_loader.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "18315cda879c2f18844e288ee02ca65e43852a38",
+      "size": 2353,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/18315cda879c2f18844e288ee02ca65e43852a38"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/cmap_types_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "89f31d15e64a232861d0d0722622e25a5a08f58f",
+      "size": 4834,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/89f31d15e64a232861d0d0722622e25a5a08f58f"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/cmapdb_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d4cd01ed794cdf6bf932b3dfd7f2577218cbcac2",
+      "size": 2868,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d4cd01ed794cdf6bf932b3dfd7f2577218cbcac2"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ab66f8692b1b1bd6b381b9bd43dbf7365549e0bd",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/ab66f8692b1b1bd6b381b9bd43dbf7365549e0bd"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "65b428f5e82624272739c750177ee41469d6e364",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/65b428f5e82624272739c750177ee41469d6e364"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/78-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6f412cf42575455fbd2f4d2b71a38640f10f44c",
+      "size": 20532,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c6f412cf42575455fbd2f4d2b71a38640f10f44c"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/78-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06e39f089ecbc4b497ba7a3e54da5e4496642da2",
+      "size": 20551,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/06e39f089ecbc4b497ba7a3e54da5e4496642da2"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/78-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "807b1a34c6362a84ee58e289e0700f133b4555d6",
+      "size": 19882,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/807b1a34c6362a84ee58e289e0700f133b4555d6"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/78-RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66aee98b824e9a74f9bd15bb4f69ed996512473e",
+      "size": 22969,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/66aee98b824e9a74f9bd15bb4f69ed996512473e"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/78-RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c5c73e5d4b7acf2a740baaa299985fd822242c22",
+      "size": 22990,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c5c73e5d4b7acf2a740baaa299985fd822242c22"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/78-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "37ae2cc5c1f756902a4e77e9945556bc66acefc1",
+      "size": 19883,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/37ae2cc5c1f756902a4e77e9945556bc66acefc1"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/78ms-RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "73971fb72ad22112a5b668e795641509f4599db7",
+      "size": 25942,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/73971fb72ad22112a5b668e795641509f4599db7"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/78ms-RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cccb224c08d409958a2995f1f4e976d73732f0e8",
+      "size": 25964,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cccb224c08d409958a2995f1f4e976d73732f0e8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/83pv-RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3ffa70e4cb7e9b9133b1328459c65f6727762c00",
+      "size": 26305,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3ffa70e4cb7e9b9133b1328459c65f6727762c00"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/83pv-RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d8a54ddd3844ec08cd98506fb13931999d7da5d",
+      "size": 26305,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9d8a54ddd3844ec08cd98506fb13931999d7da5d"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/90ms-RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7e2b3fe0bf7df63f7ebe038288631fb4b6295bb",
+      "size": 25732,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c7e2b3fe0bf7df63f7ebe038288631fb4b6295bb"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/90ms-RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0240b623e15ced15ccaf6f11242c8e84a39af977",
+      "size": 25757,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0240b623e15ced15ccaf6f11242c8e84a39af977"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/90msp-RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ebfd816462b72a349905a571f57b3522628eea2d",
+      "size": 25670,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ebfd816462b72a349905a571f57b3522628eea2d"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/90msp-RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "157e97f92373e6b82acd9d44569a40b189804c35",
+      "size": 25688,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/157e97f92373e6b82acd9d44569a40b189804c35"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/90pv-RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "be960c17a55211155f189b3e6df923724f482864",
+      "size": 24226,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/be960c17a55211155f189b3e6df923724f482864"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/90pv-RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5884375739ab1c08b1f1f37e290aab016a20f836",
+      "size": 24021,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5884375739ab1c08b1f1f37e290aab016a20f836"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Add-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "503fb8bebe37d1cd41f1e9a95de0838cff558577",
+      "size": 21027,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/503fb8bebe37d1cd41f1e9a95de0838cff558577"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Add-RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3275daff403ecfc996d404d9a15b6fd217187b45",
+      "size": 24275,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3275daff403ecfc996d404d9a15b6fd217187b45"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Add-RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e670c24e6263ba9317711e5907a33a71c785f154",
+      "size": 24079,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e670c24e6263ba9317711e5907a33a71c785f154"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Add-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a7c71c5af3be67948b7ca83ac4130248406a0056",
+      "size": 20874,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a7c71c5af3be67948b7ca83ac4130248406a0056"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ff5f632786a1cfa5590d723eea68f4be8cededf",
+      "size": 42594,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8ff5f632786a1cfa5590d723eea68f4be8cededf"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b2c863a672c43b2d3a5d6a774bfa99067e4e440",
+      "size": 42549,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6b2c863a672c43b2d3a5d6a774bfa99067e4e440"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/B5pc-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4353af9dae0921ab12c975776c484eb9a5855daf",
+      "size": 42602,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4353af9dae0921ab12c975776c484eb9a5855daf"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/B5pc-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "544f454e05afa98ebaa23d60b3b1281bc29c5ba2",
+      "size": 42557,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/544f454e05afa98ebaa23d60b3b1281bc29c5ba2"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/CNS-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19a7e6b67d4a067b42ec8171c32fd832e5114252",
+      "size": 56990,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/19a7e6b67d4a067b42ec8171c32fd832e5114252"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/CNS-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7f50ee9570efa8d8b322188aab8182b2fbba37a8",
+      "size": 56943,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7f50ee9570efa8d8b322188aab8182b2fbba37a8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/CNS1-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72d301a97b3d8b7766c5b9e646007c9943441980",
+      "size": 17615,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/72d301a97b3d8b7766c5b9e646007c9943441980"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/CNS1-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7cdbe4a0396d62671388ac0f822a5d78419c0853",
+      "size": 17564,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7cdbe4a0396d62671388ac0f822a5d78419c0853"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/CNS2-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e8ae6d3d5cf718a1cd375c4824d4f3198c8891b6",
+      "size": 21723,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e8ae6d3d5cf718a1cd375c4824d4f3198c8891b6"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/CNS2-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c9cc1d77838573b09bcb7c8c90aff327807d9030",
+      "size": 21723,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c9cc1d77838573b09bcb7c8c90aff327807d9030"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/ETHK-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6ac5a7c108a1bf3e62baa99e42a2cecad34cda0f",
+      "size": 59548,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6ac5a7c108a1bf3e62baa99e42a2cecad34cda0f"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/ETHK-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f9965c1f01f48c374747995c631cb8bfb4c811c1",
+      "size": 59481,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f9965c1f01f48c374747995c631cb8bfb4c811c1"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/ETen-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a26c52b78af436834c9605f33bdcc9920c66f41",
+      "size": 43982,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3a26c52b78af436834c9605f33bdcc9920c66f41"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/ETen-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d645d22d6874f1fb013736bb3995636826daa08",
+      "size": 43924,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3d645d22d6874f1fb013736bb3995636826daa08"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/ETenms-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2be623c4966493c4978e56b6954a75ddb587b3b",
+      "size": 320,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c2be623c4966493c4978e56b6954a75ddb587b3b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/ETenms-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "860d19912bf8c1594635d79727f305243d8f80d9",
+      "size": 438,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/860d19912bf8c1594635d79727f305243d8f80d9"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d62b96c5e25c620ba5c13c46acb2d29a27f9d2e9",
+      "size": 20429,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d62b96c5e25c620ba5c13c46acb2d29a27f9d2e9"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a0ad99436548a3fd3aeb4869888ad5fcd609d16",
+      "size": 20455,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2a0ad99436548a3fd3aeb4869888ad5fcd609d16"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Ext-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64a9d5d0b68f45ceb7abc9d25c49ec51fad8c3de",
+      "size": 22272,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/64a9d5d0b68f45ceb7abc9d25c49ec51fad8c3de"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Ext-RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1946dc60fae2cc446778563f242b10c951f67f54",
+      "size": 25721,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1946dc60fae2cc446778563f242b10c951f67f54"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Ext-RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dfa4770eaeda19475161e8a17dd7eaaee61d4aac",
+      "size": 25750,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/dfa4770eaeda19475161e8a17dd7eaaee61d4aac"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Ext-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67e4a2f02b5666285da281403c33da32fc20d118",
+      "size": 22307,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/67e4a2f02b5666285da281403c33da32fc20d118"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GB-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2cf692a82582440795a2f47b8cdb90d5022bcc1b",
+      "size": 22118,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2cf692a82582440795a2f47b8cdb90d5022bcc1b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GB-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "09c231847472987f501e9e5e174b6383fc3bec5c",
+      "size": 22111,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/09c231847472987f501e9e5e174b6383fc3bec5c"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GB-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bb7d65ad7f73540f8c36d4f8268d72d8cc947c7",
+      "size": 21699,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9bb7d65ad7f73540f8c36d4f8268d72d8cc947c7"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GB-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "000914cbe6c627027f9a1a9d87d7ef79f8629e2c",
+      "size": 21694,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/000914cbe6c627027f9a1a9d87d7ef79f8629e2c"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBK-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3cc563de5f87044b7801e5272db6a3fe2cd4f01",
+      "size": 68254,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c3cc563de5f87044b7801e5272db6a3fe2cd4f01"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBK-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eec4febce0294d19ddf511640d02b92e52006e2e",
+      "size": 68199,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/eec4febce0294d19ddf511640d02b92e52006e2e"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBK2K-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "742063ba1eda91ae0b60064d290ef0ebb1acbc71",
+      "size": 89917,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/742063ba1eda91ae0b60064d290ef0ebb1acbc71"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBK2K-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cf9338827735d361d11844df01d0efc344352653",
+      "size": 89872,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cf9338827735d361d11844df01d0efc344352653"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBKp-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f79dad867145bf074576cdee1c3f34d0da1c8bdb",
+      "size": 68148,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f79dad867145bf074576cdee1c3f34d0da1c8bdb"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBKp-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76d148ae60820c6e1c575808ab1577168c8090d0",
+      "size": 68102,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/76d148ae60820c6e1c575808ab1577168c8090d0"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBT-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a1c70366d60bfdcf17a4a4eee908b3f36ad3030",
+      "size": 23815,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5a1c70366d60bfdcf17a4a4eee908b3f36ad3030"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBT-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3232341561ca5b3c56dcfb3f6656b7aba7bb2d2f",
+      "size": 23806,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3232341561ca5b3c56dcfb3f6656b7aba7bb2d2f"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBT-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50b9e1f64af8a3997e5936c82887fb7ab2899952",
+      "size": 23339,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/50b9e1f64af8a3997e5936c82887fb7ab2899952"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBT-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2df2156cc41defe8543fe2f1b4ba1ce1dc4aa88",
+      "size": 23322,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c2df2156cc41defe8543fe2f1b4ba1ce1dc4aa88"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBTpc-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "71f38021271ec604529f585263f73d58067d734a",
+      "size": 23650,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/71f38021271ec604529f585263f73d58067d734a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBTpc-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a801e7381ee85f6c1203935ad53d518021d17eb7",
+      "size": 23647,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a801e7381ee85f6c1203935ad53d518021d17eb7"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBpc-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b940d16e75a09202182acd08e2349303c219a45",
+      "size": 21945,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0b940d16e75a09202182acd08e2349303c219a45"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/GBpc-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3fd4a32af7130a9cd98439f84a2dcbd80d8be0c6",
+      "size": 21956,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3fd4a32af7130a9cd98439f84a2dcbd80d8be0c6"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43fa9f2f26bb49acc0b9e0b021b4d06c545d2396",
+      "size": 19781,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/43fa9f2f26bb49acc0b9e0b021b4d06c545d2396"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKdla-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "102861048b16787c9645ebe9ae509ba8e8d6bbd4",
+      "size": 45212,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/102861048b16787c9645ebe9ae509ba8e8d6bbd4"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKdla-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9556e399b8ac94ea03a10bea637ce70ee100d03",
+      "size": 45167,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d9556e399b8ac94ea03a10bea637ce70ee100d03"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKdlb-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0594a74ea24b2385cb4cb6c2f7bc14c68aa20853",
+      "size": 44853,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0594a74ea24b2385cb4cb6c2f7bc14c68aa20853"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKdlb-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d405c7b9980a003bfecec519833d76447959eac1",
+      "size": 44816,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d405c7b9980a003bfecec519833d76447959eac1"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKgccs-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "90b0b6839232012ba7527e585e5c3bdc4250f426",
+      "size": 53104,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/90b0b6839232012ba7527e585e5c3bdc4250f426"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKgccs-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "91f08138b08e80f14d0f891dedab28026cb2bbf6",
+      "size": 53050,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/91f08138b08e80f14d0f891dedab28026cb2bbf6"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKm314-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8c17b605249f4e5659192dae45aa29950edba75e",
+      "size": 43667,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8c17b605249f4e5659192dae45aa29950edba75e"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKm314-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7dc58afc074302cb2cb7cf4ac1d71437bb524bf9",
+      "size": 43618,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7dc58afc074302cb2cb7cf4ac1d71437bb524bf9"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKm471-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f1c9e995cf648b484d84585d8705cdc8736234a",
+      "size": 44187,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0f1c9e995cf648b484d84585d8705cdc8736234a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKm471-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b64bb1de712cbb38f3f85ae2892e8ba64204f001",
+      "size": 44144,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b64bb1de712cbb38f3f85ae2892e8ba64204f001"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKscs-B5-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c918aceec8d4a099f402e2bb19b3ad7d8990585",
+      "size": 59508,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9c918aceec8d4a099f402e2bb19b3ad7d8990585"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/HKscs-B5-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "85b6d026342b6e51d53798371abfeaa7ab32a332",
+      "size": 59473,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/85b6d026342b6e51d53798371abfeaa7ab32a332"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Hankaku-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cad83d320a81efa0d1c3ee2cc628502e07ad855f",
+      "size": 840,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cad83d320a81efa0d1c3ee2cc628502e07ad855f"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Hankaku-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ce3ea5170173d9173ca3eb1adc69e9cb2730eba3",
+      "size": 839,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ce3ea5170173d9173ca3eb1adc69e9cb2730eba3"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Hiragana-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "113880358f29663bdd793c28dbda878a09823e38",
+      "size": 391,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/113880358f29663bdd793c28dbda878a09823e38"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Hiragana-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "82b094bea48c5eeca68af371bb8dd790f3c1a752",
+      "size": 391,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/82b094bea48c5eeca68af371bb8dd790f3c1a752"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSC-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d2515e663d41a8bf30942c883e65216110e42fc5",
+      "size": 24040,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d2515e663d41a8bf30942c883e65216110e42fc5"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSC-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4c0ebe3afbc40a629a28d1dfcfb740953e3dcdb",
+      "size": 24078,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b4c0ebe3afbc40a629a28d1dfcfb740953e3dcdb"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2feb14dcdc9a80c568c303f2852276528895190",
+      "size": 23563,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c2feb14dcdc9a80c568c303f2852276528895190"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSC-Johab-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5051f4448f30f570e6a8a485fbd81790ce204ded",
+      "size": 55016,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5051f4448f30f570e6a8a485fbd81790ce204ded"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSC-Johab-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1436d890dd93e3c8bb2fa2a66609a7f3c46468a",
+      "size": 55041,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e1436d890dd93e3c8bb2fa2a66609a7f3c46468a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e6cf409c4fbdae088351c5ed4905d2910e6a9a08",
+      "size": 23644,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e6cf409c4fbdae088351c5ed4905d2910e6a9a08"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSCms-UHC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8dd538489e12a6c42df407982dea04292f4906f0",
+      "size": 51667,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8dd538489e12a6c42df407982dea04292f4906f0"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSCms-UHC-HW-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9aa322c9bce30497a0ec5275375b0923b994ae4a",
+      "size": 51788,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9aa322c9bce30497a0ec5275375b0923b994ae4a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSCms-UHC-HW-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9768d18fd069908a8c1d56983abc6a2be0ae176f",
+      "size": 51821,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9768d18fd069908a8c1d56983abc6a2be0ae176f"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSCms-UHC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "450f983d570764ffd1135a01072a63a02c7064ff",
+      "size": 51698,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/450f983d570764ffd1135a01072a63a02c7064ff"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSCpc-EUC-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "576315aa4518b3e26dee750fc7dea0df94836d89",
+      "size": 27769,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/576315aa4518b3e26dee750fc7dea0df94836d89"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/KSCpc-EUC-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a0f7b477232f559a4aebecbf5d3bbd6e330f1cb",
+      "size": 27820,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0a0f7b477232f559a4aebecbf5d3bbd6e330f1cb"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Katakana-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "270f0faffe62ea3fbc50f8afd0b1b124eccdc360",
+      "size": 404,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/270f0faffe62ea3fbc50f8afd0b1b124eccdc360"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Katakana-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "236ae3b24b29e94fde743627a47dd84017f660e5",
+      "size": 404,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/236ae3b24b29e94fde743627a47dd84017f660e5"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/NWP-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8ec7ccea82d92c0c373913448f38f2e568c36d8",
+      "size": 21708,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b8ec7ccea82d92c0c373913448f38f2e568c36d8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/NWP-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a39a5bff0b5ed0166ff696a135f2bd74e131a68c",
+      "size": 21779,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a39a5bff0b5ed0166ff696a135f2bd74e131a68c"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/README.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7a7d0df4cbb1584ac603faa834a1c6151c41c01",
+      "size": 3917,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c7a7d0df4cbb1584ac603faa834a1c6151c41c01"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/RKSJ-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "744e530f77998bbd13ee675c7c4d68cbc58342a8",
+      "size": 23030,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/744e530f77998bbd13ee675c7c4d68cbc58342a8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/RKSJ-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e90a9f67b7bbadfc1a6e7c46b499f6e171b2fbc",
+      "size": 23048,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8e90a9f67b7bbadfc1a6e7c46b499f6e171b2fbc"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Roman-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "74d955b1d77fce7716e4d84ab5dbdf0d249f99ac",
+      "size": 394,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/74d955b1d77fce7716e4d84ab5dbdf0d249f99ac"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/Roman-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba034bc30699d8b248cb5dd6bd395cc9d8188150",
+      "size": 394,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ba034bc30699d8b248cb5dd6bd395cc9d8188150"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniCNS-UCS2-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6b31ee01891e0b4c1775819532817845e3e660ae",
+      "size": 67459,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6b31ee01891e0b4c1775819532817845e3e660ae"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniCNS-UCS2-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "304d94c10203753bfc41adc94a165b2fd5b8f3b1",
+      "size": 67395,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/304d94c10203753bfc41adc94a165b2fd5b8f3b1"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniCNS-UTF16-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "847f4deee076b4dc648d6087e84f1f904210c8d3",
+      "size": 87819,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/847f4deee076b4dc648d6087e84f1f904210c8d3"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniCNS-UTF16-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bea6ef081408de268f17617836bc896d065b4bed",
+      "size": 87751,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/bea6ef081408de268f17617836bc896d065b4bed"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniCNS-UTF32-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff115698ecf4bbb93fa9a0cadc73e1542a82435e",
+      "size": 87400,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ff115698ecf4bbb93fa9a0cadc73e1542a82435e"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniCNS-UTF32-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3ce43600e2773fc720c337982a04630a023e904",
+      "size": 87327,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b3ce43600e2773fc720c337982a04630a023e904"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniCNS-UTF8-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edab51669548d60b47e91bfa485c478f1dac69cc",
+      "size": 82631,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/edab51669548d60b47e91bfa485c478f1dac69cc"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniCNS-UTF8-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9e8a2e647ff1abf29fbc5e02bc0bb6dcad62d2dd",
+      "size": 82562,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9e8a2e647ff1abf29fbc5e02bc0bb6dcad62d2dd"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniGB-UCS2-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "640bf7ecf1bbcae48b023b3b83091143d257bc7b",
+      "size": 97445,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/640bf7ecf1bbcae48b023b3b83091143d257bc7b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniGB-UCS2-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ed0331d45263824ff34c6b309980ef03d87d104",
+      "size": 97441,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0ed0331d45263824ff34c6b309980ef03d87d104"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniGB-UTF16-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8f71f86c977496287398ef9a5effd66b5145d0b",
+      "size": 101459,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f8f71f86c977496287398ef9a5effd66b5145d0b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniGB-UTF16-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6828864c949d9bde3d74fbb222aa316b8aec7867",
+      "size": 101331,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6828864c949d9bde3d74fbb222aa316b8aec7867"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniGB-UTF32-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "842d286bf62d3c4ec8520223535e0be9de2c7a5b",
+      "size": 101490,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/842d286bf62d3c4ec8520223535e0be9de2c7a5b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniGB-UTF32-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d6f410a98431aaaa69f3f44ec4435970e707c203",
+      "size": 101357,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d6f410a98431aaaa69f3f44ec4435970e707c203"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniGB-UTF8-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "19eac074aeb11f1057bff23e64730ac11e810284",
+      "size": 90500,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/19eac074aeb11f1057bff23e64730ac11e810284"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniGB-UTF8-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "911b095732f73542f999212fa9f01bd66bf0aea2",
+      "size": 90368,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/911b095732f73542f999212fa9f01bd66bf0aea2"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UCS2-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "767cb0371b4547ed185b7006b5c54a3b6a5ce739",
+      "size": 35934,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/767cb0371b4547ed185b7006b5c54a3b6a5ce739"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UCS2-HW-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3d8d5319b121e0ba5a52058d2ef50fe3a5838dc8",
+      "size": 412,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3d8d5319b121e0ba5a52058d2ef50fe3a5838dc8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UCS2-HW-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1850dee9cd2cc203d555a07bfa1635adc56aa0b9",
+      "size": 1402,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1850dee9cd2cc203d555a07bfa1635adc56aa0b9"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UCS2-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ed3c806c6a690e4afa09f2b0f6535c7fa49b012",
+      "size": 35852,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1ed3c806c6a690e4afa09f2b0f6535c7fa49b012"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UTF16-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8b6559167b998baa2ca6422f73c0f572536ec8f",
+      "size": 58054,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b8b6559167b998baa2ca6422f73c0f572536ec8f"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UTF16-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5159409a8abf7d78f802964a50afd55f2172c023",
+      "size": 57928,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5159409a8abf7d78f802964a50afd55f2172c023"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UTF32-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cba91aa2fc52ab9acebec4f77ba1e433dfefc8b8",
+      "size": 57910,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cba91aa2fc52ab9acebec4f77ba1e433dfefc8b8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UTF32-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b35a71500bb121d71cd0b9704913bd47cd36d2a5",
+      "size": 57780,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b35a71500bb121d71cd0b9704913bd47cd36d2a5"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UTF8-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a209232ffcbb8dec4767d9858755b22f486256f4",
+      "size": 54764,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a209232ffcbb8dec4767d9858755b22f486256f4"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS-UTF8-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24752ad609bb04f4afba111d15c380d7f22a644f",
+      "size": 54684,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/24752ad609bb04f4afba111d15c380d7f22a644f"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS2004-UTF16-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ef4d1f25f47a06e55101fbf3b4e2fee23d88484c",
+      "size": 58081,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ef4d1f25f47a06e55101fbf3b4e2fee23d88484c"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS2004-UTF16-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66731b56d1e84c1ba1daebcd470cfe70147828d9",
+      "size": 57960,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/66731b56d1e84c1ba1daebcd470cfe70147828d9"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS2004-UTF32-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6c9e9abcf63fe2938bed7b8c5ae6d2353ae9f86",
+      "size": 57940,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c6c9e9abcf63fe2938bed7b8c5ae6d2353ae9f86"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS2004-UTF32-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5f8de3c86eec8233f86882935d665f0a102a528b",
+      "size": 57811,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5f8de3c86eec8233f86882935d665f0a102a528b"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS2004-UTF8-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b4c7813a3c0c3263a29f564d05b1aa151cf40dba",
+      "size": 54829,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b4c7813a3c0c3263a29f564d05b1aa151cf40dba"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJIS2004-UTF8-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb29f82edd509d67ccfa5e9d73ad94148ddeff92",
+      "size": 54749,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/fb29f82edd509d67ccfa5e9d73ad94148ddeff92"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJISX0213-UTF32-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68788446a677913b644469d856ec9f00e150e241",
+      "size": 57903,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/68788446a677913b644469d856ec9f00e150e241"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJISX0213-UTF32-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3fb944df40f624628806abebcc976de041005234",
+      "size": 57778,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3fb944df40f624628806abebcc976de041005234"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJISX02132004-UTF32-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "27f596a043f92e82b30fadffec1ecd96d047d897",
+      "size": 57930,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/27f596a043f92e82b30fadffec1ecd96d047d897"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniJISX02132004-UTF32-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "adf1a125177ba50ac3a8f9d4798b23b59d2fe506",
+      "size": 57808,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/adf1a125177ba50ac3a8f9d4798b23b59d2fe506"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniKS-UCS2-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "65873fe12dde7eb70d99c05c90597b10d16b5e2e",
+      "size": 60683,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/65873fe12dde7eb70d99c05c90597b10d16b5e2e"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniKS-UCS2-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c8eca08ef8a5c1f35de93e4021cce52df14f769",
+      "size": 60699,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9c8eca08ef8a5c1f35de93e4021cce52df14f769"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniKS-UTF16-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d528fd0237e6a2f95f76703b5cbd5fdfced6877",
+      "size": 61278,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4d528fd0237e6a2f95f76703b5cbd5fdfced6877"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniKS-UTF16-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2649bf959fa592b65a829b021455025e2039a581",
+      "size": 61298,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2649bf959fa592b65a829b021455025e2039a581"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniKS-UTF32-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc8758138437badb39cdfdf2cf157ed25d265a89",
+      "size": 61286,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cc8758138437badb39cdfdf2cf157ed25d265a89"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniKS-UTF32-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ec9064fbbddad4c88b93f217024a3f5ebe2b948",
+      "size": 61309,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5ec9064fbbddad4c88b93f217024a3f5ebe2b948"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniKS-UTF8-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d02a60888d4eac098044c4928b81fa57bda84f01",
+      "size": 54151,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d02a60888d4eac098044c4928b81fa57bda84f01"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/UniKS-UTF8-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0048952a6450b12a5f58034e3ab44c4efa86e89f",
+      "size": 54172,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0048952a6450b12a5f58034e3ab44c4efa86e89f"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0c0a9856a6140435d66ddfdd20112abe71d6c29",
+      "size": 19826,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c0c0a9856a6140435d66ddfdd20112abe71d6c29"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/WP-Symbol-H.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cac95506585c403b160bf2d8a85e4b80817ecab8",
+      "size": 505,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/cac95506585c403b160bf2d8a85e4b80817ecab8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/WP-Symbol-V.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d222e3c194592eb8916a0c63546a06c6ba78ec7",
+      "size": 505,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4d222e3c194592eb8916a0c63546a06c6ba78ec7"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/to-unicode-Adobe-CNS1.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8de6794af7a6d06e7e32815859f7b42b834a1d5a",
+      "size": 138237,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8de6794af7a6d06e7e32815859f7b42b834a1d5a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/to-unicode-Adobe-GB1.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "120cac28918d921483555854e26e4013f2b8c320",
+      "size": 204425,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/120cac28918d921483555854e26e4013f2b8c320"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/to-unicode-Adobe-Japan1.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9eeb637dd01ffd8220ff7dd6e8ce48785dca7a2a",
+      "size": 112987,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9eeb637dd01ffd8220ff7dd6e8ce48785dca7a2a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/cmap/to-unicode-Adobe-Korea1.pickle.gz",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ac933eebe61020200f5da21787981326b2e687e",
+      "size": 120859,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9ac933eebe61020200f5da21787981326b2e687e"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/fontmetrics.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b6780b963a5599f9ba3cc6269b34b5bd42fa3c79",
+      "size": 112593,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b6780b963a5599f9ba3cc6269b34b5bd42fa3c79"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/glyphlist.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9f46f5fed2a2c1ab56aa3be2f3fb7d3ffdd84e7a",
+      "size": 130954,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9f46f5fed2a2c1ab56aa3be2f3fb7d3ffdd84e7a"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/data/latin_enc.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e83c09cfdde9b13ca7fb65adffdac7ef6d4963c8",
+      "size": 8476,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e83c09cfdde9b13ca7fb65adffdac7ef6d4963c8"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/exceptions_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "27dfd2a13d046511094d851c2aaffd15a44e018c",
+      "size": 293,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/27dfd2a13d046511094d851c2aaffd15a44e018c"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/font_data_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c8c4f6a7d5042694f558e41ed40c45004b25d2d",
+      "size": 3711,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2c8c4f6a7d5042694f558e41ed40c45004b25d2d"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/font_encoding_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "886f90318e30a3860e5af04a7e2b15f9628bafda",
+      "size": 3670,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/886f90318e30a3860e5af04a7e2b15f9628bafda"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/font_unicode_maps.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d67ba99ab3a253c2409a45f4411be160abc693f1",
+      "size": 576,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d67ba99ab3a253c2409a45f4411be160abc693f1"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/font_widths.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b3264d9489219d4d118b68480b1bd42b60feb786",
+      "size": 2084,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b3264d9489219d4d118b68480b1bd42b60feb786"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/object_primitives_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f25a8acafe278a940610a3a5a169e565fef46707",
+      "size": 3030,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f25a8acafe278a940610a3a5a169e565fef46707"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/object_stream_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d60ed7c9a50aaddc8aa0baded8b8618feedda579",
+      "size": 743,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d60ed7c9a50aaddc8aa0baded8b8618feedda579"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/ps_primitives_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c48638d97312a645b06154ba31de5563e927fd25",
+      "size": 1729,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c48638d97312a645b06154ba31de5563e927fd25"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/runtime_settings.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "810077a0718f9fa29556b23009550b37a29cafab",
+      "size": 15,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/810077a0718f9fa29556b23009550b37a29cafab"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/runtime/to_unicode_parser_runtime.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "64ff88c7cb29b26228a3b0db6d23977cfd82e0f6",
+      "size": 5915,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/64ff88c7cb29b26228a3b0db6d23977cfd82e0f6"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/sinks",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f88c85dca21b5cea793ac215007fd7c6b9f746f1",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/f88c85dca21b5cea793ac215007fd7c6b9f746f1"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/sinks/legacy_ir.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "16e4c909e4170c287706e13ffd0dfe69edc61ad1",
+      "size": 13278,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/16e4c909e4170c287706e13ffd0dfe69edc61ad1"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/sinks/native_text.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2255b38cf3e1ea9067994bde888a4c3683ee8972",
+      "size": 8932,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2255b38cf3e1ea9067994bde888a4c3683ee8972"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/state.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aeeba7d297074768edea9090684f80d442980b8d",
+      "size": 5882,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/aeeba7d297074768edea9090684f80d442980b8d"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/text_positioning.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d35c1bb3771de5973380e11d6d5869ff2790381",
+      "size": 3572,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6d35c1bb3771de5973380e11d6d5869ff2790381"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/tokenizer.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc701cc51fade225d96ddb285f2b0c66a2444e67",
+      "size": 22286,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/dc701cc51fade225d96ddb285f2b0c66a2444e67"
+    },
+    {
+      "path": "babeldoc/format/pdf/new_parser/xobject_content_execution.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9eceacae96b81e62a2b6eae5910eb28d6864fc88",
+      "size": 5473,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9eceacae96b81e62a2b6eae5910eb28d6864fc88"
+    },
+    {
+      "path": "babeldoc/format/pdf/parse_only.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "336a15a24f55b72085745baa14e7c223730b885a",
+      "size": 3267,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/336a15a24f55b72085745baa14e7c223730b885a"
+    },
+    {
+      "path": "babeldoc/format/pdf/parse_shared.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bfdc137911a9c46243ec0c1304d1b1b861829177",
+      "size": 1943,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/bfdc137911a9c46243ec0c1304d1b1b861829177"
+    },
+    {
+      "path": "babeldoc/format/pdf/pdfinterp.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7afd817168f4e8ec6b79d2293f3198162eb841db",
+      "size": 23728,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7afd817168f4e8ec6b79d2293f3198162eb841db"
+    },
+    {
+      "path": "babeldoc/format/pdf/result_merger.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a784970f4920cb39345fbf7acadf43496891118",
+      "size": 7440,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3a784970f4920cb39345fbf7acadf43496891118"
+    },
+    {
+      "path": "babeldoc/format/pdf/split_manager.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b72179c714387b2478880f5a3133e7c2a8dcee69",
+      "size": 1942,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b72179c714387b2478880f5a3133e7c2a8dcee69"
+    },
+    {
+      "path": "babeldoc/format/pdf/translation_config.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3270b591b198ac8e9eec259915a434585782719e",
+      "size": 23181,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3270b591b198ac8e9eec259915a434585782719e"
+    },
+    {
+      "path": "babeldoc/glossary.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8ef88a5a5fdf614b7b22841b299ff92a6621f34",
+      "size": 7867,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f8ef88a5a5fdf614b7b22841b299ff92a6621f34"
+    },
+    {
+      "path": "babeldoc/main.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d63efd4705d10d6c29ed56e0f6be7acdf91f7f0f",
+      "size": 36066,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d63efd4705d10d6c29ed56e0f6be7acdf91f7f0f"
+    },
+    {
+      "path": "babeldoc/pdfminer",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8de3e5b1e777cbb5f1d1bd0c950e92d0cf6e1d9a",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/8de3e5b1e777cbb5f1d1bd0c950e92d0cf6e1d9a"
+    },
+    {
+      "path": "babeldoc/pdfminer/LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "67f3786571bfd6df02e93539ddca41b527fef625",
+      "size": 1092,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/67f3786571bfd6df02e93539ddca41b527fef625"
+    },
+    {
+      "path": "babeldoc/pdfminer/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8d3f787d6d8c255fbf25e214519292bebde43062",
+      "size": 290,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8d3f787d6d8c255fbf25e214519292bebde43062"
+    },
+    {
+      "path": "babeldoc/pdfminer/_saslprep.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d441e476e83373830cc97ff08dcee5fcf7404de",
+      "size": 3714,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9d441e476e83373830cc97ff08dcee5fcf7404de"
+    },
+    {
+      "path": "babeldoc/pdfminer/arcfour.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b0f62103abc30c4b99fdc26a6d16bd5c214ebe44",
+      "size": 936,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b0f62103abc30c4b99fdc26a6d16bd5c214ebe44"
+    },
+    {
+      "path": "babeldoc/pdfminer/ascii85.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "719cb86eebec88db32b5c7a075388e5d7ffc46bf",
+      "size": 1850,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/719cb86eebec88db32b5c7a075388e5d7ffc46bf"
+    },
+    {
+      "path": "babeldoc/pdfminer/casting.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f70a9e695e14389353484046a4df81523fbee6ae",
+      "size": 2055,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f70a9e695e14389353484046a4df81523fbee6ae"
+    },
+    {
+      "path": "babeldoc/pdfminer/ccitt.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "29da4ac8000c03dce2154e7b68fd5f22d333ba5c",
+      "size": 21280,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/29da4ac8000c03dce2154e7b68fd5f22d333ba5c"
+    },
+    {
+      "path": "babeldoc/pdfminer/cmapdb.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d74e2b870299b6db18b27043c5bfd45f14417a06",
+      "size": 15633,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d74e2b870299b6db18b27043c5bfd45f14417a06"
+    },
+    {
+      "path": "babeldoc/pdfminer/converter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b66b8572ad34fb965a6c996d9048aceb1a04fba7",
+      "size": 38290,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b66b8572ad34fb965a6c996d9048aceb1a04fba7"
+    },
+    {
+      "path": "babeldoc/pdfminer/data_structures.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5a6a5509e95948b399ed483c45a2bca91ca60d0a",
+      "size": 1775,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5a6a5509e95948b399ed483c45a2bca91ca60d0a"
+    },
+    {
+      "path": "babeldoc/pdfminer/encodingdb.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "965aeda96e1a2cd488a8170a738df37da2e9fe58",
+      "size": 4040,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/965aeda96e1a2cd488a8170a738df37da2e9fe58"
+    },
+    {
+      "path": "babeldoc/pdfminer/fontmetrics.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b6780b963a5599f9ba3cc6269b34b5bd42fa3c79",
+      "size": 112593,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b6780b963a5599f9ba3cc6269b34b5bd42fa3c79"
+    },
+    {
+      "path": "babeldoc/pdfminer/glyphlist.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fdc6fa1b12c5f401f62571b96c18cac85ccff02b",
+      "size": 130838,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/fdc6fa1b12c5f401f62571b96c18cac85ccff02b"
+    },
+    {
+      "path": "babeldoc/pdfminer/high_level.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3930caa7cd11ddcd4915ef07f274df5b5ba42c01",
+      "size": 7997,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3930caa7cd11ddcd4915ef07f274df5b5ba42c01"
+    },
+    {
+      "path": "babeldoc/pdfminer/image.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2b0a37a51fa91e2548e1ebd1b46d8a7a00f440fd",
+      "size": 10138,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2b0a37a51fa91e2548e1ebd1b46d8a7a00f440fd"
+    },
+    {
+      "path": "babeldoc/pdfminer/jbig2.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fd3f6e605d77fda0f91c8d85b79750e9e4e2ccb7",
+      "size": 11602,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/fd3f6e605d77fda0f91c8d85b79750e9e4e2ccb7"
+    },
+    {
+      "path": "babeldoc/pdfminer/latin_enc.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e83c09cfdde9b13ca7fb65adffdac7ef6d4963c8",
+      "size": 8476,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e83c09cfdde9b13ca7fb65adffdac7ef6d4963c8"
+    },
+    {
+      "path": "babeldoc/pdfminer/layout.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9c1bbbf024295b1e7eef931375a91220670d51ab",
+      "size": 34290,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9c1bbbf024295b1e7eef931375a91220670d51ab"
+    },
+    {
+      "path": "babeldoc/pdfminer/lzw.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c148c361ae6a128efc51efa8ca8a4b0033a2f950",
+      "size": 3537,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c148c361ae6a128efc51efa8ca8a4b0033a2f950"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdfcolor.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a264c2743589f0ab2116462fa0b4bcbdf33f614",
+      "size": 964,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3a264c2743589f0ab2116462fa0b4bcbdf33f614"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdfdevice.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d9a8d65307d6e09b4445398fe32817f06ba5a1f4",
+      "size": 9579,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d9a8d65307d6e09b4445398fe32817f06ba5a1f4"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdfdocument.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c13cd7226d836ae3f06c463f84dcd463ff21964",
+      "size": 38347,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1c13cd7226d836ae3f06c463f84dcd463ff21964"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdfexceptions.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c2e86eea09071edfc039890c350cb9bca67895a2",
+      "size": 499,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c2e86eea09071edfc039890c350cb9bca67895a2"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdffont.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "170c771d0af82bce4896c5e57e394bf8f80ce250",
+      "size": 36621,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/170c771d0af82bce4896c5e57e394bf8f80ce250"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdfinterp.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35249b41f94c0170b1b38a16ebecf0356197ce17",
+      "size": 44217,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/35249b41f94c0170b1b38a16ebecf0356197ce17"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdfpage.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ce38dfcae71e809821ac460fb151495e86f78c5b",
+      "size": 8978,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ce38dfcae71e809821ac460fb151495e86f78c5b"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdfparser.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "78a85a5f42e27d5864b7e98895a145bbfc53baf7",
+      "size": 5887,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/78a85a5f42e27d5864b7e98895a145bbfc53baf7"
+    },
+    {
+      "path": "babeldoc/pdfminer/pdftypes.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ea72c9c70e0a195dabdff807e3d1b2d1d0dd32d8",
+      "size": 12568,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ea72c9c70e0a195dabdff807e3d1b2d1d0dd32d8"
+    },
+    {
+      "path": "babeldoc/pdfminer/psexceptions.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8291dc0915cd48c0d63f7a29f877476f1c39220",
+      "size": 208,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b8291dc0915cd48c0d63f7a29f877476f1c39220"
+    },
+    {
+      "path": "babeldoc/pdfminer/psparser.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1c11dd0b7437078560da0c8d92cb62b856f0c089",
+      "size": 20388,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1c11dd0b7437078560da0c8d92cb62b856f0c089"
+    },
+    {
+      "path": "babeldoc/pdfminer/py.typed",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/pdfminer/runlength.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c821e7cc2416fa0751d17b5ec2c2e459c27b649c",
+      "size": 1305,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c821e7cc2416fa0751d17b5ec2c2e459c27b649c"
+    },
+    {
+      "path": "babeldoc/pdfminer/settings.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "810077a0718f9fa29556b23009550b37a29cafab",
+      "size": 15,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/810077a0718f9fa29556b23009550b37a29cafab"
+    },
+    {
+      "path": "babeldoc/pdfminer/utils.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5161ee7839ea2b5f77557cf068ec44da340ba6ae",
+      "size": 20871,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/5161ee7839ea2b5f77557cf068ec44da340ba6ae"
+    },
+    {
+      "path": "babeldoc/progress_monitor.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "555afe4586e343db0dbe378823582c0eaa357b68",
+      "size": 11299,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/555afe4586e343db0dbe378823582c0eaa357b68"
+    },
+    {
+      "path": "babeldoc/tools",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "318e88c87b268cc1394afb7f4446211d532fd8d4",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/318e88c87b268cc1394afb7f4446211d532fd8d4"
+    },
+    {
+      "path": "babeldoc/tools/executor",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f64cce5c6036b386f16c294fdd3e857629393d45",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/f64cce5c6036b386f16c294fdd3e857629393d45"
+    },
+    {
+      "path": "babeldoc/tools/executor/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/tools/executor/__main__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3a894c19b29ba4dc3489be893aaa502b0a17ab99",
+      "size": 87,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/3a894c19b29ba4dc3489be893aaa502b0a17ab99"
+    },
+    {
+      "path": "babeldoc/tools/executor/babeldoc_adapter.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c4c1401d2cfb4ad149e6ef7eaa1e2b2812751d7e",
+      "size": 16874,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c4c1401d2cfb4ad149e6ef7eaa1e2b2812751d7e"
+    },
+    {
+      "path": "babeldoc/tools/executor/protocol.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "02e5abac8929f56f1f89dddd761afdd37134e585",
+      "size": 808,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/02e5abac8929f56f1f89dddd761afdd37134e585"
+    },
+    {
+      "path": "babeldoc/tools/executor/runner.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c18216a1f3d1e30df9e80bc515a6abebfaaec549",
+      "size": 14453,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c18216a1f3d1e30df9e80bc515a6abebfaaec549"
+    },
+    {
+      "path": "babeldoc/tools/executor/server.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "61afb0a628c81de38dc90bab167dee3d2f7b67e7",
+      "size": 17814,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/61afb0a628c81de38dc90bab167dee3d2f7b67e7"
+    },
+    {
+      "path": "babeldoc/tools/executor/state.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a054399be5969f990ce181f943bb6d78c0e38376",
+      "size": 11903,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a054399be5969f990ce181f943bb6d78c0e38376"
+    },
+    {
+      "path": "babeldoc/tools/executor/translator.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6daea99b2ec78641e08747b35cc5532e323b68c8",
+      "size": 5636,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6daea99b2ec78641e08747b35cc5532e323b68c8"
+    },
+    {
+      "path": "babeldoc/tools/executor/watermark_transform.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1a4f6004402952aa3d8e9591ace165dea83649d",
+      "size": 5833,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e1a4f6004402952aa3d8e9591ace165dea83649d"
+    },
+    {
+      "path": "babeldoc/tools/executor/workroot.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7744c74433b9cbd341b0ee8fbc123b6ed357ad37",
+      "size": 2077,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7744c74433b9cbd341b0ee8fbc123b6ed357ad37"
+    },
+    {
+      "path": "babeldoc/tools/generate_cmap_metadata.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8fd369e4a15032f3998e3c083c3514b40fd58c6",
+      "size": 2306,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d8fd369e4a15032f3998e3c083c3514b40fd58c6"
+    },
+    {
+      "path": "babeldoc/tools/generate_font_metadata.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8b14fd6e9d4e3937ed609fd7470d3eb5d6e913be",
+      "size": 4780,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8b14fd6e9d4e3937ed609fd7470d3eb5d6e913be"
+    },
+    {
+      "path": "babeldoc/tools/italic_assistance.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "43b18d6ca1269ffe5ac9a1ada12b8a63719a9d88",
+      "size": 10455,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/43b18d6ca1269ffe5ac9a1ada12b8a63719a9d88"
+    },
+    {
+      "path": "babeldoc/tools/italic_recognize_tool.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7e8b199a98db4814a9d69ab11d8ea6e00202d17c",
+      "size": 2863,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/7e8b199a98db4814a9d69ab11d8ea6e00202d17c"
+    },
+    {
+      "path": "babeldoc/translator",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c133dfc155167ab6a12aaab5de13b1d2a3331dc2",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/c133dfc155167ab6a12aaab5de13b1d2a3331dc2"
+    },
+    {
+      "path": "babeldoc/translator/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/translator/cache.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d482ee2274013a3d5e73d2cb20c6a197b7f3864b",
+      "size": 6455,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d482ee2274013a3d5e73d2cb20c6a197b7f3864b"
+    },
+    {
+      "path": "babeldoc/translator/translator.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "117962b7e7670a570e6d1b98b37157066bfaab44",
+      "size": 14149,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/117962b7e7670a570e6d1b98b37157066bfaab44"
+    },
+    {
+      "path": "babeldoc/utils",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "da177dd085dd6d58b5fc5685696b3b5a0e79dfe4",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/da177dd085dd6d58b5fc5685696b3b5a0e79dfe4"
+    },
+    {
+      "path": "babeldoc/utils/__init__.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "babeldoc/utils/atomic_integer.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76c27eefc39dbb4c46b6c9ad733daac960990696",
+      "size": 536,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/76c27eefc39dbb4c46b6c9ad733daac960990696"
+    },
+    {
+      "path": "babeldoc/utils/memory.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "04d548b6e92d22b5537ca56f268c5e22f68ddde3",
+      "size": 8210,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/04d548b6e92d22b5537ca56f268c5e22f68ddde3"
+    },
+    {
+      "path": "babeldoc/utils/priority_thread_pool_executor.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdc56292a1aad8857231e4bda33a92d9cba9bef9",
+      "size": 9238,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/bdc56292a1aad8857231e4bda33a92d9cba9bef9"
+    },
+    {
+      "path": "docs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "14bfa364937901ffab265b41280844b1c787fd63",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/14bfa364937901ffab265b41280844b1c787fd63"
+    },
+    {
+      "path": "docs/CODE_OF_CONDUCT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8a4ba872ca06e33cc5141bffa8fef7575bbf2e37",
+      "size": 5217,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/8a4ba872ca06e33cc5141bffa8fef7575bbf2e37"
+    },
+    {
+      "path": "docs/CONTRIBUTING.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6222224c8c7c7fe7c1f297c239ae2b63aa833705",
+      "size": 8367,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6222224c8c7c7fe7c1f297c239ae2b63aa833705"
+    },
+    {
+      "path": "docs/CONTRIBUTOR_REWARD.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4362ba7ce1813bb16157ae0bb58e0cdc458100bb",
+      "size": 5074,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4362ba7ce1813bb16157ae0bb58e0cdc458100bb"
+    },
+    {
+      "path": "docs/ImplementationDetails",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f9f503b2e937cca02b9854a39fa3555cd3bcc7b7",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/f9f503b2e937cca02b9854a39fa3555cd3bcc7b7"
+    },
+    {
+      "path": "docs/ImplementationDetails/AsyncTranslate",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1a1c5353ab3079e84b1c130983ebe54cd3d158c9",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/1a1c5353ab3079e84b1c130983ebe54cd3d158c9"
+    },
+    {
+      "path": "docs/ImplementationDetails/AsyncTranslate/AsyncTranslate.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aae229e356917f1e0753f52bee761319b142c5ba",
+      "size": 5443,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/aae229e356917f1e0753f52bee761319b142c5ba"
+    },
+    {
+      "path": "docs/ImplementationDetails/ILTranslator",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "0c2167e5740ca502fd75b5588a096d999e0cf4fa",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/0c2167e5740ca502fd75b5588a096d999e0cf4fa"
+    },
+    {
+      "path": "docs/ImplementationDetails/ILTranslator/ILTranslator.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "692d153763a4942cae42b6004bd902d4e1b9cd2a",
+      "size": 3017,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/692d153763a4942cae42b6004bd902d4e1b9cd2a"
+    },
+    {
+      "path": "docs/ImplementationDetails/PDFCreation",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5c0c0eacff82540db3d7d79d6f576750a3c2295e",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/5c0c0eacff82540db3d7d79d6f576750a3c2295e"
+    },
+    {
+      "path": "docs/ImplementationDetails/PDFCreation/PDFCreation.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d6576f0c91120d1eb1b3067e67209b00a0d4f8de",
+      "size": 3525,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d6576f0c91120d1eb1b3067e67209b00a0d4f8de"
+    },
+    {
+      "path": "docs/ImplementationDetails/PDFParsing",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9c4c8daaa74beac3acea86f888dc2b9a8c85d5bb",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/9c4c8daaa74beac3acea86f888dc2b9a8c85d5bb"
+    },
+    {
+      "path": "docs/ImplementationDetails/PDFParsing/PDFParsing.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de1b2c0548c1c84daf6d431fd5a24cb0119756d3",
+      "size": 3817,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/de1b2c0548c1c84daf6d431fd5a24cb0119756d3"
+    },
+    {
+      "path": "docs/ImplementationDetails/ParagraphFinding",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "848f94b9194d8310666cbe01ba667d08abc69d05",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/848f94b9194d8310666cbe01ba667d08abc69d05"
+    },
+    {
+      "path": "docs/ImplementationDetails/ParagraphFinding/ParagraphFinding.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06eb5a4ae092b75f22c0e751c087100eceee4ac4",
+      "size": 2772,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/06eb5a4ae092b75f22c0e751c087100eceee4ac4"
+    },
+    {
+      "path": "docs/ImplementationDetails/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1dbe51ba24fd3687b5b6587e719335978bc5371f",
+      "size": 1362,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/1dbe51ba24fd3687b5b6587e719335978bc5371f"
+    },
+    {
+      "path": "docs/ImplementationDetails/StylesAndFormulas",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ba440eb9fe8d0e28d73c4cf19098c88235a0bceb",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/ba440eb9fe8d0e28d73c4cf19098c88235a0bceb"
+    },
+    {
+      "path": "docs/ImplementationDetails/StylesAndFormulas/StylesAndFormulas.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c98ad0a76b1eed80ff75144b25ccc02018728af8",
+      "size": 2798,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c98ad0a76b1eed80ff75144b25ccc02018728af8"
+    },
+    {
+      "path": "docs/ImplementationDetails/Typesetting",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "62e576adf1a8cefe0ab520082558901d4bc70af0",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/62e576adf1a8cefe0ab520082558901d4bc70af0"
+    },
+    {
+      "path": "docs/ImplementationDetails/Typesetting/Typesetting.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8dcf298b1157e917f17d185ba56c3047b0cf9a4",
+      "size": 4104,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/d8dcf298b1157e917f17d185ba56c3047b0cf9a4"
+    },
+    {
+      "path": "docs/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4e92dfbc9a147baf93a0a33c49304b61ecefcc0c",
+      "size": 384,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4e92dfbc9a147baf93a0a33c49304b61ecefcc0c"
+    },
+    {
+      "path": "docs/deploy.sh",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "724fca228fed6e78cdccd65d7af976b5e001d4b6",
+      "size": 859,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/724fca228fed6e78cdccd65d7af976b5e001d4b6"
+    },
+    {
+      "path": "docs/example",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "e4357948d1fd361af766d8c53bfeb0b3e8c1b509",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/e4357948d1fd361af766d8c53bfeb0b3e8c1b509"
+    },
+    {
+      "path": "docs/example/demo_glossary.csv",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e5fc2b599190f59dae6771044acc1f4d88b44da3",
+      "size": 73,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e5fc2b599190f59dae6771044acc1f4d88b44da3"
+    },
+    {
+      "path": "docs/images",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "27b6dec7629a83e8f2ad98cd08426b6b60d53dd6",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/27b6dec7629a83e8f2ad98cd08426b6b60d53dd6"
+    },
+    {
+      "path": "docs/images/babeldoc-banner.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0daace0e2303d69bb50468bece1bea29386d8c4",
+      "size": 550422,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c0daace0e2303d69bb50468bece1bea29386d8c4"
+    },
+    {
+      "path": "docs/images/babeldoc-big-logo-darkmode-with-transparent-background.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68eacb95f62b25dc43821afb1bc11852e4301ecc",
+      "size": 54006,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/68eacb95f62b25dc43821afb1bc11852e4301ecc"
+    },
+    {
+      "path": "docs/images/babeldoc-big-logo-darkmode-with-transparent-background.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a7509550c9d1b40da5189e4f368f70b2b8438d16",
+      "size": 7839,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/a7509550c9d1b40da5189e4f368f70b2b8438d16"
+    },
+    {
+      "path": "docs/images/babeldoc-big-logo-with-transparent-background.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0058dfc29211fe3d1c91c5790fae5f86442b305",
+      "size": 58175,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f0058dfc29211fe3d1c91c5790fae5f86442b305"
+    },
+    {
+      "path": "docs/images/babeldoc-big-logo-with-transparent-background.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d2b811c6018378e44cdeb3fd368de7ddbb308a5",
+      "size": 7841,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/4d2b811c6018378e44cdeb3fd368de7ddbb308a5"
+    },
+    {
+      "path": "docs/images/babeldoc-big-logo.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2cdcd48fce7a5b40604868377be46ddf74dcce6a",
+      "size": 54162,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2cdcd48fce7a5b40604868377be46ddf74dcce6a"
+    },
+    {
+      "path": "docs/images/babeldoc-contributor_reward_example.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08e62fc3c20a49e04a24f865f0b4a9071674215a",
+      "size": 259932,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/08e62fc3c20a49e04a24f865f0b4a9071674215a"
+    },
+    {
+      "path": "docs/images/babeldoc-preview.gif",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "718a160bf4ca7fc7c25583a6f07a600fdbd2f642",
+      "size": 9537280,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/718a160bf4ca7fc7c25583a6f07a600fdbd2f642"
+    },
+    {
+      "path": "docs/images/babeldoc-small-logo-with-transparent-background.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9711907a6195e7e8104412a17de02fe23754497b",
+      "size": 23629,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9711907a6195e7e8104412a17de02fe23754497b"
+    },
+    {
+      "path": "docs/images/babeldoc-small-logo-with-transparent-background.svg",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ed45c74f155138af4cdbc197db14a35a828b15e",
+      "size": 1821,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0ed45c74f155138af4cdbc197db14a35a828b15e"
+    },
+    {
+      "path": "docs/images/babeldoc-small-logo.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "76864521fc800242855feafaee70b222e82a6b01",
+      "size": 22165,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/76864521fc800242855feafaee70b222e82a6b01"
+    },
+    {
+      "path": "docs/index.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9b17bdedffc776e9e4d5df3f00720fb115da38b",
+      "size": 15,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b9b17bdedffc776e9e4d5df3f00720fb115da38b"
+    },
+    {
+      "path": "docs/intro-to-pdf-object.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c5a3ea48f241d9f44fb35993840e24e5a61127d8",
+      "size": 6292,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/c5a3ea48f241d9f44fb35993840e24e5a61127d8"
+    },
+    {
+      "path": "docs/release-notes",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "902dc354fc0b60706b92a579df92b2fd1dd6d709",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/902dc354fc0b60706b92a579df92b2fd1dd6d709"
+    },
+    {
+      "path": "docs/release-notes/v0.6.0.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6c772e5c99f922bb00585d6be0bd0f1086d6e5cd",
+      "size": 2633,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/6c772e5c99f922bb00585d6be0bd0f1086d6e5cd"
+    },
+    {
+      "path": "docs/release-notes/v0.6.1.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "aa42f4dc03e4e0db7b85b8702e34d29f04fc7742",
+      "size": 2261,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/aa42f4dc03e4e0db7b85b8702e34d29f04fc7742"
+    },
+    {
+      "path": "docs/release-notes/v0.6.2.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e58004402e8a42594243ba9dd5e495111388521f",
+      "size": 662,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/e58004402e8a42594243ba9dd5e495111388521f"
+    },
+    {
+      "path": "docs/release-notes/v0.6.3.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8741de8c2f48f813189479b2913a89939154d52",
+      "size": 5268,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f8741de8c2f48f813189479b2913a89939154d52"
+    },
+    {
+      "path": "docs/release-notes/v0.6.4.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "03577321d5100627895cf7ecacdb9131445a831c",
+      "size": 2308,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/03577321d5100627895cf7ecacdb9131445a831c"
+    },
+    {
+      "path": "docs/requirements.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "540dbb33ba66bf4dfe4f4c30237da3ddaac73a0a",
+      "size": 104,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/540dbb33ba66bf4dfe4f4c30237da3ddaac73a0a"
+    },
+    {
+      "path": "docs/supported_languages.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b862112ab526bbea0e264433aca8fc981b8508ba",
+      "size": 12504,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/b862112ab526bbea0e264433aca8fc981b8508ba"
+    },
+    {
+      "path": "examples",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "1ed196c97abb64a1596b8b88fda8365f41cb9d24",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/1ed196c97abb64a1596b8b88fda8365f41cb9d24"
+    },
+    {
+      "path": "examples/basic.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24142141f86dbb9c22a25b8abad01bdfa477fb3f",
+      "size": 447,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/24142141f86dbb9c22a25b8abad01bdfa477fb3f"
+    },
+    {
+      "path": "examples/ci",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cf3adf5ff577d7611f3c363b072e19aaa6f37c9a",
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/trees/cf3adf5ff577d7611f3c363b072e19aaa6f37c9a"
+    },
+    {
+      "path": "examples/ci/test.pdf",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "641ee95682ade4a9b0d1f9946a9fcd4e14f5b0c0",
+      "size": 4414,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/641ee95682ade4a9b0d1f9946a9fcd4e14f5b0c0"
+    },
+    {
+      "path": "examples/code-figure.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9dc836e6b9a2e4320faa3644a5f365f6c30da975",
+      "size": 872,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/9dc836e6b9a2e4320faa3644a5f365f6c30da975"
+    },
+    {
+      "path": "examples/complex.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0b9781e3e08aec993c7766126950f9e7356ef208",
+      "size": 10138,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0b9781e3e08aec993c7766126950f9e7356ef208"
+    },
+    {
+      "path": "examples/formular.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ca7abcbb9cf90fe135ccbde4654ec793c021b360",
+      "size": 402,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/ca7abcbb9cf90fe135ccbde4654ec793c021b360"
+    },
+    {
+      "path": "examples/table.xml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c5eafbc38ee49113113f93b7aef25fd072501d2",
+      "size": 1372,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/2c5eafbc38ee49113113f93b7aef25fd072501d2"
+    },
+    {
+      "path": "mkdocs.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f2ac4eeddb7cb60116f8fe86cc90860adad1c406",
+      "size": 5219,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/f2ac4eeddb7cb60116f8fe86cc90860adad1c406"
+    },
+    {
+      "path": "pyproject.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0efb88b7ee3443c80427fc0b1007018720c9dd8f",
+      "size": 5093,
+      "url": "https://api.github.com/repos/funstory-ai/BabelDOC/git/blobs/0efb88b7ee3443c80427fc0b1007018720c9dd8f"
+    }
+  ],
+  "truncated": false
+}

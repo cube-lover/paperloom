@@ -1,0 +1,10 @@
+/* Fresh archive and pause only, no provider calls. */
+var CubePrepare084Promise=(async()=>{const h=Zotero.getMainWindow(),a=Zotero.PaperLoom,io=h.IOUtils,root='D:/Users/Administrator/Pi-Agent/home/pi-cwd-20260926/paperloom/',local=p=>(root+p).replace(/\//g,'\\'),before=[];
+ for(const [r,s]of a.inplace){before.push({itemID:r.itemID,stats:a.inplaceStats(r)});a.pauseInPlace(r,true);}
+ for(const s of a.graphicSessions.values()){s.panel.hidden=true;s.control.stopped=true;s.control.process?.kill();for(const req of s.control.requests)req.abort();}
+ for(let i=0;i<600&&(a.allRequests.size||[...a.inplace.values()].some(s=>s.workers)||[...a.graphicSessions.values()].some(s=>s.busy));i++)await new Promise(r=>h.setTimeout(r,100));
+ if(a.allRequests.size||[...a.graphicSessions.values()].some(s=>s.busy))throw Error('Work has not settled');
+ const archive={at:new Date().toISOString(),version:a.version,sessions:[...a.inplace].map(([r,s])=>({itemID:r.itemID,stats:a.inplaceStats(r),pages:[r._internalReader._primaryView,r._internalReader._secondaryView].map(v=>v?._iframeWindow?.PDFViewerApplication?.pdfViewer?.currentPageNumber),records:[...s.records.values()].map(v=>({id:v.id,text:v.text,target:v.target,status:v.status,edited:!!v.edited,pageIndex:v.layout.pageIndex,inkRect:v.layout.inkRect,rect:v.layout.rect}))})),graphics:[...a.graphicSessions].map(([r,s])=>({itemID:r.itemID,file:s.file,rows:s.rows,replace:s.replace,hidden:s.hidden}))};
+ const file='pre-084-work-'+Date.now()+'.json';await io.writeUTF8(local('validation/'+file),JSON.stringify(archive,null,2));await io.makeDirectory(h.PathUtils.join(a.dir,'recovery'),{ignoreExisting:true});await io.writeUTF8(h.PathUtils.join(a.dir,'recovery',file),JSON.stringify(archive));for(const s of a.graphicSessions.values())await a.saveGraphics(s);
+ const report={file,before,after:archive.sessions.map(s=>({itemID:s.itemID,stats:s.stats,pages:s.pages})),graphics:archive.graphics.map(s=>({itemID:s.itemID,rows:s.rows.length,done:s.rows.filter(r=>r.target).length}))};await io.writeUTF8(local('validation/prepare-084.json'),JSON.stringify(report,null,2));return report;
+})();

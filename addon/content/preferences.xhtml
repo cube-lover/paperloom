@@ -1,0 +1,170 @@
+<vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:html="http://www.w3.org/1999/xhtml" style="padding:16px;max-width:760px;">
+  <html:style>
+    #paperloom-pane { font: 13px/1.6 system-ui; color: #1b2742; }
+    #paperloom-pane h2 { margin: 0 0 2px; }
+    #paperloom-pane .muted { color: #5a6b86; }
+    #paperloom-pane .pl-section { border: 1px solid #d8e0f0; border-radius: 10px; padding: 14px 16px; margin: 12px 0; }
+    #paperloom-pane .pl-section > h3 { margin: 0 0 10px; font-size: 13px; }
+    #paperloom-pane .pl-grid { display: grid; grid-template-columns: 150px 1fr; gap: 8px 12px; align-items: center; }
+    #paperloom-pane .pl-grid.cols3 { grid-template-columns: 150px 1fr 1fr; }
+    #paperloom-pane label.pl-label { color: #35435f; }
+    #paperloom-pane input[type=text], #paperloom-pane input[type=password], #paperloom-pane input[type=number],
+    #paperloom-pane select, #paperloom-pane textarea { width: 100%; box-sizing: border-box; padding: 5px 8px;
+      border: 1px solid #c4d0e6; border-radius: 7px; font: inherit; background: #fff; }
+    #paperloom-pane textarea { resize: vertical; min-height: 56px; font-family: ui-monospace, Consolas, monospace; }
+    #paperloom-pane .pl-checks { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+    #paperloom-pane .pl-checks label { display: inline-flex; align-items: center; gap: 6px; }
+    #paperloom-pane .pl-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    #paperloom-pane button { padding: 6px 14px; border-radius: 8px; border: 1px solid #b7c4e0; background: #f3f6fd; cursor: pointer; }
+    #paperloom-pane button.primary { background: #2f6bff; border-color: #2f6bff; color: #fff; }
+    #paperloom-pane #pl-notice { margin-top: 8px; padding: 7px 10px; border-radius: 8px; background: #eef4ff; }
+    #paperloom-pane #pl-notice.error { background: #fdecec; color: #a3261f; }
+    #paperloom-pane #pl-notice[hidden] { display: none; }
+    #paperloom-pane table.pl-terms { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    #paperloom-pane table.pl-terms th, #paperloom-pane table.pl-terms td { text-align: left; padding: 4px 6px; border-bottom: 1px solid #e6ecf7; }
+    #paperloom-pane .pl-term-add { display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 8px; align-items: center; margin-top: 8px; }
+  </html:style>
+
+  <html:div id="paperloom-pane">
+    <html:h2>Cube 翻译</html:h2>
+    <html:p class="muted">独立学术翻译工作台：术语一致性、双语对照、逐段缓存、质量提示与 AI 文献列。此页配置翻译引擎、术语表与 AI 列；翻译 / 阅读在工作台窗口进行。</html:p>
+
+    <html:div class="pl-actions">
+      <html:button id="pl-open" class="primary" type="button">打开翻译工作台</html:button>
+      <html:button id="pl-test" type="button">测试引擎连接</html:button>
+      <html:span class="muted" style="align-self:center;">快捷键 Ctrl / Cmd + Shift + L，或 工具 菜单。</html:span>
+    </html:div>
+    <html:div id="pl-notice" hidden="true"></html:div>
+
+    <html:form id="pl-form">
+      <html:div class="pl-section">
+        <html:h3>翻译引擎</html:h3>
+        <html:div class="pl-grid">
+          <html:label class="pl-label">接口类型</html:label>
+          <html:select name="provider"><html:option value="openai">OpenAI 兼容</html:option><html:option value="deepl">DeepL</html:option></html:select>
+          <html:label class="pl-label">服务地址</html:label>
+          <html:input type="text" name="endpoint" placeholder="https://api.openai.com/v1"/>
+          <html:label class="pl-label">模型名称</html:label>
+          <html:input type="text" name="model" placeholder="gpt-4.1-mini"/>
+          <html:label class="pl-label">API 密钥</html:label>
+          <html:input type="password" id="pl-key" placeholder="仅存入登录管理器；留空表示无认证的本地模型"/>
+          <html:label class="pl-label">密钥状态</html:label>
+          <html:span id="pl-key-state" class="muted">—</html:span>
+        </html:div>
+      </html:div>
+
+      <html:div class="pl-section">
+        <html:h3>语言与领域</html:h3>
+        <html:div class="pl-grid cols3">
+          <html:label class="pl-label">源语言</html:label>
+          <html:input type="text" name="sourceLang" placeholder="auto"/>
+          <html:input type="text" name="targetLang" placeholder="简体中文"/>
+          <html:label class="pl-label">学科领域</html:label>
+          <html:input type="text" name="domain" placeholder="通用学术"/>
+          <html:input type="text" name="outputTag" placeholder="输出标签 PaperLoom/译文"/>
+        </html:div>
+      </html:div>
+
+      <html:div class="pl-section">
+        <html:h3>性能与配额</html:h3>
+        <html:div class="pl-grid cols3">
+          <html:label class="pl-label">并发 (1–8)</html:label>
+          <html:input type="number" name="concurrency" min="1" max="8"/>
+          <html:input type="number" name="chunkSize" min="400" max="12000" title="分段字符上限"/>
+          <html:label class="pl-label">重试 / 超时(ms)</html:label>
+          <html:input type="number" name="retries" min="0" max="6"/>
+          <html:input type="number" name="timeoutMs" min="1000" max="300000"/>
+          <html:label class="pl-label">每分钟请求</html:label>
+          <html:input type="number" name="requestsPerMinute" min="1" max="600"/>
+          <html:span></html:span>
+        </html:div>
+      </html:div>
+
+      <html:div class="pl-section">
+        <html:h3>译文与排版</html:h3>
+        <html:div class="pl-checks">
+          <html:label><html:input type="checkbox" name="translateGraphics"/>文章与图表一起翻译（后台）</html:label>
+          <html:label><html:input type="checkbox" name="skipReferences"/>跳过参考文献</html:label>
+          <html:label><html:input type="checkbox" name="skipHeadings"/>跳过标题行</html:label>
+          <html:label><html:input type="checkbox" name="context"/>携带上文语境</html:label>
+          <html:label><html:input type="checkbox" name="bilingual"/>双语对照</html:label>
+          <html:label><html:input type="checkbox" name="sourceFirst"/>原文在前</html:label>
+          <html:label><html:input type="checkbox" name="visibleColumnsOnly"/>仅可见列生成 AI 列</html:label>
+        </html:div>
+        <html:div class="pl-grid cols3" style="margin-top:10px;">
+          <html:label class="pl-label">对照布局</html:label>
+          <html:select name="layout"><html:option value="columns">左右分栏</html:option><html:option value="rows">上下排列</html:option></html:select>
+          <html:select name="clickAction" title="点击译文时复制"><html:option value="both">点击复制：原文+译文</html:option><html:option value="source">仅原文</html:option><html:option value="target">仅译文</html:option><html:option value="none">不复制</html:option></html:select>
+          <html:label class="pl-label">附件方式</html:label>
+          <html:select name="attachMode"><html:option value="import">导入副本</html:option><html:option value="link">链接文件</html:option></html:select>
+          <html:select name="columnSource"><html:option value="metadata">AI 列依据：标题+摘要</html:option><html:option value="fulltext">AI 列依据：全文</html:option></html:select>
+        </html:div>
+      </html:div>
+
+      <html:div class="pl-section">
+        <html:h3>解析与总结</html:h3>
+        <html:div class="pl-grid cols3">
+          <html:label class="pl-label">PDF 解析</html:label>
+          <html:select name="parser"><html:option value="builtin">内置文本层</html:option><html:option value="bridge">本机解析桥接</html:option></html:select>
+          <html:input type="text" name="bridgeURL" placeholder="http://127.0.0.1:8767"/>
+          <html:label class="pl-label">桥接令牌</html:label>
+          <html:input type="password" id="pl-bridge-token" placeholder="留空表示桥接无需认证"/>
+          <html:span></html:span>
+        </html:div>
+        <html:label class="pl-label" style="display:block;margin:10px 0 4px;">总结提示词</html:label>
+        <html:textarea name="summaryPrompt"></html:textarea>
+      </html:div>
+
+      <html:div class="pl-actions">
+        <html:button id="pl-save" class="primary" type="submit">保存设置</html:button>
+        <html:button id="pl-reload" type="button">重新载入</html:button>
+      </html:div>
+    </html:form>
+
+    <html:div class="pl-section">
+      <html:h3>识别引擎（本机 Python）</html:h3>
+      <html:p class="muted">图内文字与扫描件文字在本机识别，图像不发送给翻译引擎。点下面的按钮一次装好 Python、依赖与模型；已经装过或想用手上的现成安装，就在下面手动填路径。</html:p>
+      <html:div id="pl-ocr-install"></html:div>
+
+      <html:details style="margin-top:10px;">
+        <html:summary class="muted">手动指定路径（已有安装时用）</html:summary>
+        <html:div class="pl-grid" style="margin-top:8px;">
+          <html:label class="pl-label">Python 可执行文件</html:label>
+          <html:input type="text" id="pl-ocr-python" placeholder="例如 python.exe 的完整路径"/>
+          <html:label class="pl-label">OCR 依赖目录</html:label>
+          <html:input type="text" id="pl-ocr-runtime" placeholder="rapidocr / onnxruntime 所在目录"/>
+          <html:label class="pl-label">OCR 模型目录</html:label>
+          <html:input type="text" id="pl-ocr-models" placeholder="det/rec/cls 模型所在目录"/>
+        </div>
+      </html:details>
+      <html:p class="muted" style="margin:8px 0 0;">许可：PP-OCRv4 (Apache-2.0)、onnxruntime-web (MIT)。原生去字（PyMuPDF，AGPL）为可选增强，不随插件分发。</html:p>
+    </html:div>
+
+    <html:div class="pl-section">
+      <html:h3>术语表（翻译时强制一致）</html:h3>
+      <html:table class="pl-terms"><html:thead><html:tr><html:th>原文</html:th><html:th>译文</html:th><html:th>区分大小写</html:th><html:th></html:th></html:tr></html:thead><html:tbody id="pl-term-rows"></html:tbody></html:table>
+      <html:div class="pl-term-add">
+        <html:input type="text" id="pl-term-source" placeholder="原文术语，如 band gap"/>
+        <html:input type="text" id="pl-term-target" placeholder="译文，如 带隙"/>
+        <html:label><html:input type="checkbox" id="pl-term-case"/>区分大小写</html:label>
+        <html:button id="pl-term-add" type="button">添加术语</html:button>
+      </html:div>
+      <html:div class="pl-actions">
+        <html:button id="pl-term-import" type="button">导入术语表(JSON)</html:button>
+        <html:button id="pl-term-export" type="button">导出术语表</html:button>
+      </html:div>
+    </html:div>
+
+    <html:div class="pl-section">
+      <html:h3>AI 列定义（JSON）</html:h3>
+      <html:p class="muted">每项含 id（英文标识）、name（列名）、prompt（提示词）、enabled。保存后出现在文献列表的列选择器中。</html:p>
+      <html:textarea id="pl-columns" style="min-height:150px;"></html:textarea>
+      <html:div class="pl-actions">
+        <html:button id="pl-columns-save" class="primary" type="button">保存 AI 列</html:button>
+        <html:button id="pl-columns-reset" type="button">恢复默认提示</html:button>
+      </html:div>
+    </html:div>
+
+    <html:p class="muted">v0.2.3：核心工作流已可用。原 PDF 覆盖翻译、双 PDF 同步滚动、部分云解析服务仍待后续实现，详见项目 FEATURE-MATRIX.md。</html:p>
+  </html:div>
+</vbox>

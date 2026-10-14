@@ -1,0 +1,8 @@
+listener is not a function
+dispatch@resource://zotero/reader/pdf/web/viewer.mjs:1381:17
+update@resource://zotero/reader/pdf/web/viewer.mjs:12992:19
+onScaleChanging@resource://zotero/reader/pdf/web/viewer.mjs:16708:18
+dispatch@resource://zotero/reader/pdf/web/viewer.mjs:1377:15
+#setScaleUpdatePages@resource://zotero/reader/pdf/web/viewer.mjs:12752:19
+#setScale@resource://zotero/reader/pdf/web/viewer.mjs:12813:32
+set pagesRotation@resource://zotero/reader/pdf/web/viewer.mjs:12203:21

@@ -1,0 +1,19 @@
+# 本机工作数据：dev-channel 检查产物、备份、OCR 临时目录、模型/依赖缓存
+.local/
+payload/
+# 构建产物（XPI 走 GitHub Releases）
+dist/
+*.xpi
+# 验证证据里的二进制（可重新生成）；报告 *.md 保留
+validation/**/*.png
+validation/**/*.jpg
+validation/**/*.zip
+validation/**/*.json
+!validation/graphics-rotation-source.png
+# 杂项
+node_modules/
+__pycache__/
+*.pyc
+graphic-tmp/
+*.log
+.runtime-test/

@@ -1,0 +1,27 @@
+[
+  {
+    "name": "babeldoc",
+    "url": "https://raw.githubusercontent.com/funstory-ai/BabelDOC/main/README.md",
+    "error": "fetch failed"
+  },
+  {
+    "name": "pdf2zh",
+    "url": "https://raw.githubusercontent.com/PDFMathTranslate/PDFMathTranslate/main/README.md",
+    "error": "fetch failed"
+  },
+  {
+    "name": "zoteroReader",
+    "url": "https://raw.githubusercontent.com/zotero/zotero/main/chrome/content/zotero/xpcom/reader.js",
+    "error": "fetch failed"
+  },
+  {
+    "name": "simalign",
+    "url": "https://raw.githubusercontent.com/cisnlp/simalign/master/README.md",
+    "error": "fetch failed"
+  },
+  {
+    "name": "pdfjsText",
+    "url": "https://raw.githubusercontent.com/mozilla/pdf.js/master/src/display/text_layer.js",
+    "error": "fetch failed"
+  }
+]

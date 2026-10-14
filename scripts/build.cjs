@@ -1,0 +1,21 @@
+const { spawnSync } = require('node:child_process');
+const path = require('node:path');
+const fs = require('node:fs');
+const crypto = require('node:crypto');
+const root = path.resolve(__dirname, '..');
+const version = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).version;
+const manifest = JSON.parse(fs.readFileSync(path.join(root, 'addon/manifest.json'), 'utf8'));
+if (manifest.version !== version) throw new Error('Version mismatch');
+fs.mkdirSync(path.join(root, 'dist'), { recursive: true });
+const development = process.argv.includes('--dev');
+const output = path.join(root, 'dist', `paperloom-${version}${development ? '-dev' : ''}.xpi`);
+const nativeArg = process.argv.find(x=>x.startsWith('--native-python='));
+const nativePython = nativeArg ? path.normalize(nativeArg.slice('--native-python='.length)) : undefined;
+if(nativePython && (!development || !path.isAbsolute(nativePython) || !fs.existsSync(nativePython)))throw Error('Native runtime requires a real absolute path and --dev');
+const devMarker = development ? 'var CubeDevelopmentBuild = '+JSON.stringify({ enabled:true, directory:path.join(root,'.local','dev-channel'), nativePython })+';\n' : '';
+const script = 'import pathlib,zipfile,sys\nroot=pathlib.Path("addon")\nwith zipfile.ZipFile(sys.argv[1],"w",zipfile.ZIP_DEFLATED) as z:\n for p in sorted(root.rglob("*")):\n  if p.is_file() and "__pycache__" not in p.parts and p.suffix!=".pyc":\n   name=p.relative_to(root).as_posix()\n   if name in ("content/dev-build.js","content/dev-channel.js") and not sys.argv[2]: continue\n   info=zipfile.ZipInfo(name,(2026,1,1,0,0,0))\n   info.compress_type=zipfile.ZIP_DEFLATED\n   z.writestr(info,p.read_bytes())\n if sys.argv[2]:\n  info=zipfile.ZipInfo("content/dev-build.js",(2026,1,1,0,0,0));info.compress_type=zipfile.ZIP_DEFLATED\n  z.writestr(info,sys.argv[2].encode("utf-8"))\n';
+const result = spawnSync('python', ['-c', script, output, devMarker], { cwd: root, encoding: 'utf8' });
+if (result.status) { console.error(result.stderr); process.exit(result.status || 1); }
+const hash = crypto.createHash('sha256').update(fs.readFileSync(output)).digest('hex');
+fs.writeFileSync(output + '.sha256', hash + '  ' + path.basename(output) + '\n');
+console.log(`Built ${path.basename(output)} (${fs.statSync(output).size} bytes)\nSHA256 ${hash}`);

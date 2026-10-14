@@ -1,0 +1,23 @@
+{
+  "name": "paperloom-zotero",
+  "version": "0.8.38",
+  "private": true,
+  "description": "PaperLoom 译研 — Zotero academic translation workbench",
+  "scripts": {
+    "test": "npm run test:js && npm run test:bridge",
+    "check": "node scripts/check.cjs",
+    "build": "node scripts/build.cjs",
+    "verify": "npm run check && npm test && npm run build",
+    "test:js": "node scripts/test.cjs",
+    "test:bridge": "python -m unittest discover -s tests -p test_*.py",
+    "validate": "node scripts/validate.cjs",
+    "release": "npm run validate && python scripts/release.py"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "jsdom": "26.1.0"
+  }
+}

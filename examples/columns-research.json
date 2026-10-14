@@ -1,0 +1,7 @@
+[
+  { "id": "question", "name": "⭐ 研究问题", "prompt": "概述本文的研究问题，不超过60字。证据不足时写未报告。", "enabled": true },
+  { "id": "method", "name": "⭐ 研究方法", "prompt": "概述本文使用的方法或实验设计，不超过60字。保留重要条件。", "enabled": true },
+  { "id": "finding", "name": "⭐ 核心发现", "prompt": "概述核心发现，不超过80字。区分相关性与因果性，保留重要数值和范围。", "enabled": true },
+  { "id": "limitation", "name": "⭐ 局限性", "prompt": "提取作者明确陈述的局限性，不超过80字；未报告则写未报告，不根据常识臆测。", "enabled": true },
+  { "id": "reproducibility", "name": "⭐ 复现线索", "prompt": "列出给定证据中出现的数据集、代码或实验参数线索，简短回答；资料未提供时写未报告。", "enabled": false }
+]

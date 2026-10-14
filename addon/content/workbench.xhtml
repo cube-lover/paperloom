@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <title>Cube 翻译 · 论文翻译工作台</title>
+  <link rel="stylesheet" href="workbench.css"/>
+  <script src="workbench.js" defer="defer"></script>
+</head>
+<body>
+  <aside class="rail">
+    <div class="brand"><img src="icon-48.png" width="36" height="36" alt=""/><span>Cube Translation<small>Cube 翻译 · 学术翻译</small></span></div>
+    <div class="rail-label">工作空间</div>
+    <nav aria-label="主导航">
+      <button data-tab="translate" class="nav active">↔　翻译工作台</button>
+      <button data-tab="jobs" class="nav">▤　任务与历史 <span id="job-count">0</span></button>
+      <button data-tab="glossary" class="nav">Aa　学科术语表</button>
+      <button data-tab="columns" class="nav">▥　AI 文献列</button>
+      <button data-tab="settings" class="nav">⚙　引擎与设置</button>
+      <button data-tab="about" class="nav">?　使用说明</button>
+    </nav>
+    <div class="rail-bottom"><span class="dot"></span>独立插件 · 本地任务存储<br/><small>v0.2.0 · 内容发送前需确认</small></div>
+  </aside>
+  <main>
+    <header class="topbar"><span id="section-title">翻译工作台</span><span class="muted">ZOTERO RESEARCH WORKSPACE</span></header>
+    <div id="notice" role="status" aria-live="polite" hidden="hidden"></div>
+    <section id="tab-translate" class="tab">
+      <div class="hero"><div><div class="eyebrow">READ BEYOND LANGUAGE</div><h1>读懂论文，不止于翻译。</h1><p>术语保持一致，论据回到原文，让每一段译文都可核对。</p></div><span class="pill">AI 辅助 · 人工核验</span></div>
+      <div class="toolbar">
+        <button id="load-selected" class="primary">＋ 加载选中论文</button><button id="import-text">导入 Markdown / 文本</button><button id="toggle-input">粘贴文本</button>
+        <select id="job-select" aria-label="当前论文"><option value="">选择任务</option></select>
+      </div>
+      <div id="text-input" class="card" hidden="hidden"><label for="paper-title">任务名称</label><input id="paper-title" value="粘贴文本"/><label for="paper-text">论文正文 / Markdown</label><textarea id="paper-text" rows="7" placeholder="粘贴摘要、正文或 OCR 解析后的 Markdown…"></textarea><button id="create-text" class="primary">创建翻译任务</button></div>
+      <div id="empty-state" class="empty"><div class="book-mark">文 ↔ A</div><h2>从一篇论文开始</h2><p>在 Zotero 中选中 PDF，点击“加载选中论文”。<br/>这里只在本地解析；开始翻译前会显示服务地址与发送确认。</p><div class="feature-pills"><span>公式 / 引文保护</span><span>逐段断点续译</span><span>术语表强制一致</span></div></div>
+      <div id="job-workspace" hidden="hidden">
+        <div class="job-head"><div><h2 id="job-title"></h2><p id="job-meta" class="muted"></p></div><div><button id="start" class="primary">开始 / 继续翻译</button><button id="pause">暂停</button><button id="clone-job">按当前设置新建副本</button></div></div>
+        <div class="progress-track"><div id="progress"></div></div>
+        <div class="toolbar compact"><span id="job-status" class="pill"></span><span id="ai-progress" class="muted" aria-live="polite"></span><button id="toggle-layout">切换上下 / 左右对照</button><button id="source-pdf">打开原文 PDF</button><label>仅看待核对 <input id="warnings-only" type="checkbox"/></label></div>
+        <div class="toolbar compact"><button id="note-export">保存双语笔记</button><button id="md-export">导出 Markdown</button><button id="html-export">导出可打印 HTML</button><button id="pdf-export">保版式 PDF（桥接）</button><select id="summary-mode" aria-label="总结方式"><option value="outline">章节 / 段落证据摘要</option><option value="keywords">关键词筛选摘要</option><option value="paper">分层论文综述</option></select><button id="summarize">生成总结笔记</button><button id="generate-columns">生成 AI 列</button></div>
+        <div id="segments" class="segments"></div>
+      </div>
+    </section>
+    <section id="tab-jobs" class="tab" hidden="hidden"><div class="section-heading"><div><div class="eyebrow">DURABLE WORKFLOW</div><h1>任务与历史</h1><p>已完成段落不重复请求。重启后任务保持暂停，等待手动继续。</p></div><button id="start-all" class="primary">依次继续全部</button></div><div id="jobs-list"></div></section>
+    <section id="tab-glossary" class="tab" hidden="hidden"><div class="eyebrow">CONSISTENCY FIRST</div><h1>让同一个术语，只用一种译法。</h1><p>先保存术语表，再创建任务。已创建任务保留自己的配置快照，防止中途改变译法。</p><div class="card"><div class="toolbar"><input id="term-source" placeholder="源术语，例如 band gap" aria-label="源术语"/><input id="term-target" placeholder="目标译法，例如 带隙" aria-label="目标译法"/><label><input id="term-case" type="checkbox"/>区分大小写</label><button id="add-term" class="primary">添加 / 保存</button><button id="reset-term">取消编辑</button><button id="import-terms">导入 JSON</button><button id="export-terms">导出 JSON</button></div><table><thead><tr><th>源术语</th><th>目标译法</th><th>操作</th></tr></thead><tbody id="terms-body"></tbody></table><p class="muted">采用词边界、最长术语优先与保护标记；建议按学科分别管理。只约束术语用词，不保证译文语义正确。</p></div></section>
+    <section id="tab-columns" class="tab" hidden="hidden"><div class="eyebrow">STRUCTURED INSIGHTS</div><h1>把阅读线索，放进文献列表。</h1><p>自定义 AI 列，在 Zotero 列标题菜单中显示。可选择<strong>标题摘要</strong>或<strong>全文分段证据</strong>生成；后一种模式会增加调用次数。</p><div class="card"><div class="toolbar"><label>证据范围 <select id="column-source"><option value="metadata">标题与摘要</option><option value="fulltext">全文证据（多次调用）</option></select></label><label><input id="visible-columns" type="checkbox"/>仅生成文献列表中可见的列</label></div><label for="columns-json">AI 列定义（可新增、编辑、删除；enabled 控制是否注册与生成）</label><textarea id="columns-json" rows="16" spellcheck="false"></textarea><div class="toolbar"><button id="save-columns" class="primary">保存 AI 列</button><button id="import-columns">导入 JSON</button><button id="export-columns">导出 JSON</button><button id="copy-columns">复制 JSON</button></div><p class="muted">每项包含 id、name、prompt、enabled。生成入口位于论文工作台；证据范围保存在生成记录中；标题摘要模式不会假装读过全文。</p></div></section>
+    <section id="tab-settings" class="tab" hidden="hidden"><div class="eyebrow">YOUR ENGINE, YOUR DATA</div><h1>引擎与设置</h1><p>密钥按服务地址分别保存到 Zotero / Firefox 登录管理器；切换服务不会转发旧密钥。配置导出不包含密钥。</p><form id="settings-form">
+      <div class="card"><h2>翻译与 AI 引擎</h2><div class="form-grid">
+        <label>接口类型<select name="provider"><option value="openai">OpenAI 兼容 / 本地模型</option><option value="deepl">DeepL（仅翻译）</option></select></label>
+        <label>模型名称<input name="model" required="required"/></label>
+        <label class="wide">服务地址<input name="endpoint" type="url" required="required"/><small>OpenAI 填至 /v1；DeepL 填 https://api-free.deepl.com 或 https://api.deepl.com。</small></label>
+        <label class="wide">新的 API Key<input id="api-key" type="password" autocomplete="off" placeholder="留空保留原密钥"/><small id="key-state">密钥状态未读取</small></label>
+        <label>源语言<input name="sourceLang"/></label><label>目标语言<input name="targetLang"/></label><label class="wide">研究领域<input name="domain"/></label>
+        <label>段落并发（1–8）<input name="concurrency" type="number" min="1" max="8"/></label><label>分段字符数<input name="chunkSize" type="number" min="400" max="12000"/></label><label>每分钟请求上限<input name="requestsPerMinute" type="number" min="1" max="600"/></label><label>重试次数<input name="retries" type="number" min="0" max="6"/></label><label>超时（毫秒）<input name="timeoutMs" type="number" min="1000" max="300000"/></label>
+      </div><div class="checks"><label><input name="skipReferences" type="checkbox"/>跳过参考文献段</label><label><input name="skipHeadings" type="checkbox"/>保留 Markdown 标题原文</label><label><input name="context" type="checkbox"/>附带上文帮助消歧（增加请求长度）</label></div></div>
+      <div class="card"><h2>双语阅读与导出</h2><div class="checks"><label><input name="bilingual" type="checkbox"/>导出包含原文</label><label><input name="sourceFirst" type="checkbox"/>原文在译文之前</label></div><div class="form-grid"><label>对照布局<select name="layout"><option value="columns">左右对照</option><option value="rows">上下对照</option></select></label><label>点击译文操作<select name="clickAction"><option value="both">复制原文与译文</option><option value="source">复制原文</option><option value="target">复制译文</option><option value="none">无操作</option></select></label><label>PDF 附件存储<select name="attachMode"><option value="import">导入文件副本</option><option value="link">链接输出文件</option></select></label><label>PDF 输出标签<input name="outputTag"/></label></div></div>
+      <div class="card"><h2>文献总结模板</h2><label for="summary-prompt">总结要求（新任务采用此模板）</label><textarea id="summary-prompt" name="summaryPrompt" rows="4"></textarea><p class="muted">章节依据 Markdown 标题识别。普通 PDF 未识别章节时保留段落证据，不虚构大纲。总结笔记附有可回溯的段落编号与原文摘录。</p></div>
+      <div class="card"><h2>PDF 解析与保版式桥接</h2><p class="muted">内置解析适合带文本层的 PDF。扫描件 / 多栏公式可用本地 MinerU 桥接。保版式 PDF 使用独立 pdf2zh 引擎，需安装并启动 tools/bridge.py。</p><div class="form-grid"><label>解析器<select name="parser"><option value="builtin">Zotero 内置文本解析</option><option value="bridge">本地 MinerU 桥接</option></select></label><label>本地桥接地址<input name="bridgeURL"/></label><label class="wide">新的桥接 Token<input id="bridge-token" type="password" autocomplete="off" placeholder="留空保留原 Token"/></label></div></div>
+      <div class="toolbar"><button type="submit" class="primary">保存设置</button><button type="button" id="test-engine">测试接口（确认后发送短文本）</button><button type="button" id="delete-key">删除 API 密钥</button><button type="button" id="clear-cache">清理翻译缓存</button><button type="button" id="data-dir">打开数据目录</button><button type="button" id="export-config">导出配置（无密钥）</button><button type="button" id="import-config">导入配置</button></div>
+    </form></section>
+    <section id="tab-about" class="tab" hidden="hidden"><div class="eyebrow">PAPERLOOM 0.2.0</div><h1>独立实现，逐项验收。</h1><div class="card"><h2>快速开始</h2><ol><li>在引擎设置中保存服务地址、模型、密钥与术语表。</li><li>选择 Zotero 论文，点击加载；检查本地解析出的原文顺序。</li><li>开始翻译并确认发送。逐段查看“待核对”提示，点击译文可复制。</li><li>导出双语笔记、Markdown 或可打印 HTML。保版式 PDF 另需桥接程序。</li></ol><p>快捷键：Ctrl / Cmd + Shift + L 打开工作台。PDF 选文弹窗和阅读器工具栏也有入口。</p></div><div class="card"><h2>当前边界</h2><ul><li>双语对照位于独立工作台，不是原 PDF 页面上的译文覆盖层。</li><li>页码只在解析结果有明确分页时显示；不虚构 PDF 定位。</li><li>文本层解析不保证多栏阅读顺序、图表提取和数学结构完整。</li><li>公式保护只覆盖已识别的 LaTeX / Markdown 片段，不是公式 OCR。</li><li>章节总结支持已识别的 Markdown 标题；PDF 原有大纲与跨栏段落顺序仍需核对。</li><li>SimpleTex、Doc2X、MinerU 云 API 尚未集成；GROBID 可经本地桥接处理。</li><li>不导入 Magic 的账户、激活数据或服务凭证。</li></ul></div></section>
+    <dialog id="edit-dialog" aria-labelledby="edit-title"><form id="edit-form"><h2 id="edit-title">校订译文</h2><label for="edit-source">原文</label><textarea id="edit-source" rows="5" readonly="readonly"></textarea><label for="edit-target">译文</label><textarea id="edit-target" rows="7" required="required"></textarea><div class="toolbar"><label><input id="edit-reviewed" type="checkbox"/>已对照原文人工核验</label><select id="edit-history" aria-label="历史译文"><option value="">恢复历史版本到编辑框</option></select></div><div class="toolbar"><button type="submit" class="primary">保存校订</button><button type="button" id="edit-cancel">取消</button></div><p class="muted">仅修改此任务，保留最近 5 次编辑 / 重译记录；不修改原 PDF 和已导出的笔记。</p></form></dialog>
+    <footer>Cube Translation · 让翻译服务于理解，而不是替代判断。</footer>
+  </main>
+</body>
+</html>

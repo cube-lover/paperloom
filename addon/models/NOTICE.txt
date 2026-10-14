@@ -1,0 +1,19 @@
+PaperLoom bundled OCR runtime - provenance and licenses
+
+ch_PP-OCRv4_det_infer.onnx, ch_PP-OCRv4_rec_infer.onnx, ch_ppocr_mobile_v2.0_cls_infer.onnx
+  PP-OCRv4 / PP-OCRv2 mobile models, Apache License 2.0.
+  Source: rapidocr_onnxruntime 1.4.4 wheel (PyPI), which redistributes the PaddleOCR models.
+  Upstream: https://github.com/PaddlePaddle/PaddleOCR
+
+keys.txt
+  PP-OCRv4 character dictionary (6623 entries), Apache License 2.0.
+  Source: PaddleOCR ppocr/utils/ppocr_keys_v1.txt
+  Decoding uses class 0 as CTC blank and the final class as space (6625 classes total).
+
+ort.min.js, ort-wasm-simd-threaded.wasm
+  onnxruntime-web, MIT License. (c) Microsoft Corporation.
+  Source: npm package onnxruntime-web dist/.
+
+These files are redistributed unmodified. Replace or remove this folder to ship a
+build without the bundled runtime; the plugin then falls back to a locally
+configured Python OCR worker or to no image-text recognition at all.

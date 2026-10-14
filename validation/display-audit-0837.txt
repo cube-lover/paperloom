@@ -1,0 +1,26 @@
+=== item 428 pages 21 paintable 375 blocked 52 collision 0
+   reasons [["译文与原文相同，无需替换",48],["文字阅读方向待核对",4]]
+   overlapping different-text pairs 30 both-displayed 28
+      [22,"time intenal8 steps","-time interral=12 steps",0.35,"",""]
+      [22,"time interval=8 steps","time intenva|=4 steps",0.23,"",""]
+      [22,"time intenal=16 steps","time intenal=20 steps",0.25,"",""]
+      [22,"time intenal=16 steps","-time interral=12 steps",0.22,"",""]
+      [22,"timeinteval=16steps","time intenal20 steps",0.24,"",""]
+      [22,"time intenal20 steps","timeinteval=16steps",0.24,"",""]
+      [22,"time intenal20 steps","time interval24 steps",0.36,"",""]
+      [22,"time intenal=20 steps","time intenal=16 steps",0.25,"",""]
+      [22,"time intenal=20 steps","timeinterval=24steps",0.36,"",""]
+      [22,"time interal=4 steps","time intenal steps",0.22,"",""]
+      [22,"timeinteral=8steps","fime intenal4 steps",0.37,"",""]
+      [22,"timeinteral=12steps","time intenal steps",0.31,"",""]
+      [22,"-time interral=12 steps","time intenal8 steps",0.35,"",""]
+      [22,"-time interral=12 steps","time intenal=16 steps",0.22,"",""]
+      [22,"time interval24 steps","time intenal20 steps",0.36,"",""]
+      [22,"timeinterval=24steps","time intenal=20 steps",0.36,"",""]
+      [23,"overlap ares=1","overlap ares=2",0.21,"",""]
+      [23,"overlap ares=2","overlap ares=1",0.21,"",""]
+      [23,"overlap ares=2","overlap area=3",0.27,"",""]
+      [23,"overlap area=3","overlap ares=2",0.27,"",""]
+=== item 594 pages 48 paintable 1134 blocked 258 collision 38
+   reasons [["与其他文字相交",38],["重复识别，已保留完整一处",42],["译文与原文相同，无需替换",163],["文字阅读方向待核对",10],["斜切标签定位待核对",5]]
+   overlapping different-text pairs 16 both-displayed 2

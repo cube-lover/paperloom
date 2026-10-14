@@ -1,0 +1,1 @@
+JavaScript syntax, manifest, safe-rendering and XML checks passed.

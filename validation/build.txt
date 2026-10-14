@@ -1,0 +1,2 @@
+Built paperloom-0.2.0.xpi (39738 bytes)
+SHA256 9995f8a3565df50c87f78d21468b2538daef37b665f63429e77ae6a49cdc3321

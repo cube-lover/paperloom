@@ -1,0 +1,20 @@
+{
+  "manifest_version": 2,
+  "name": "Cube Translation · Cube 翻译",
+  "version": "0.8.38",
+  "description": "正文与图表一体翻译：后台识别、双语对照、术语一致性、质量检查与人工校订。",
+  "author": "Cube Translation",
+  "icons": {
+    "48": "content/icon-48.png",
+    "96": "content/icon-96.png",
+    "128": "content/icon-128.png"
+  },
+  "applications": {
+    "zotero": {
+      "id": "paperloom@local.research",
+      "strict_min_version": "7.0",
+      "strict_max_version": "9.*",
+      "update_url": "https://paperloom.invalid/updates.json"
+    }
+  }
+}

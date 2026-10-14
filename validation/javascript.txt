@@ -1,0 +1,400 @@
+TAP version 13
+# Subtest: application initializes data files and custom columns
+ok 1 - application initializes data files and custom columns
+  ---
+  duration_ms: 29.9522
+  type: 'test'
+  ...
+# Subtest: no network before affirmative consent
+ok 2 - no network before affirmative consent
+  ---
+  duration_ms: 49.7741
+  type: 'test'
+  ...
+# Subtest: translation, glossary restoration, persistent segments and cache hit
+ok 3 - translation, glossary restoration, persistent segments and cache hit
+  ---
+  duration_ms: 46.8363
+  type: 'test'
+  ...
+# Subtest: key storage is scoped by endpoint and never included in config or job export
+ok 4 - key storage is scoped by endpoint and never included in config or job export
+  ---
+  duration_ms: 12.8306
+  type: 'test'
+  ...
+# Subtest: historical task sends only its endpoint-specific test credential
+ok 5 - historical task sends only its endpoint-specific test credential
+  ---
+  duration_ms: 23.097
+  type: 'test'
+  ...
+# Subtest: pause aborts in-flight XHR, then resume completes without stuck active lock
+ok 6 - pause aborts in-flight XHR, then resume completes without stuck active lock
+  ---
+  duration_ms: 26.8254
+  type: 'test'
+  ...
+# Subtest: 401 is not retried and partial jobs can resume later
+ok 7 - 401 is not retried and partial jobs can resume later
+  ---
+  duration_ms: 30.9617
+  type: 'test'
+  ...
+# Subtest: 429 retries only to configured limit and succeeds
+ok 8 - 429 retries only to configured limit and succeeds
+  ---
+  duration_ms: 135.0956
+  type: 'test'
+  ...
+# Subtest: missing math placeholder fails visibly instead of writing damaged translation
+ok 9 - missing math placeholder fails visibly instead of writing damaged translation
+  ---
+  duration_ms: 22.5511
+  type: 'test'
+  ...
+# Subtest: disk-write failure does not strand task in active map
+ok 10 - disk-write failure does not strand task in active map
+  ---
+  duration_ms: 13.1855
+  type: 'test'
+  ...
+# Subtest: invalid primary job file restores validated backup and preserves corrupt bytes
+ok 11 - invalid primary job file restores validated backup and preserves corrupt bytes
+  ---
+  duration_ms: 16.2293
+  type: 'test'
+  ...
+# Subtest: manual correction retains prior text and no API calls; clone keeps original
+ok 12 - manual correction retains prior text and no API calls; clone keeps original
+  ---
+  duration_ms: 13.7021
+  type: 'test'
+  ...
+# Subtest: note export escapes model markup and retains parent item
+ok 13 - note export escapes model markup and retains parent item
+  ---
+  duration_ms: 12.9258
+  type: 'test'
+  ...
+# Subtest: named FilePicker export is compatible with inspected Zotero 9 API
+ok 14 - named FilePicker export is compatible with inspected Zotero 9 API
+  ---
+  duration_ms: 7.3998
+  type: 'test'
+  ...
+# Subtest: request registration cleaned up when XHR.send throws synchronously
+ok 15 - request registration cleaned up when XHR.send throws synchronously
+  ---
+  duration_ms: 7.0078
+  type: 'test'
+  ...
+# Subtest: schema-invalid or redirected HTTP responses fail explicitly
+ok 16 - schema-invalid or redirected HTTP responses fail explicitly
+  ---
+  duration_ms: 26.3125
+  type: 'test'
+  ...
+# Subtest: chapter summary produces a persisted note and repeat uses cache
+ok 17 - chapter summary produces a persisted note and repeat uses cache
+  ---
+  duration_ms: 60.3897
+  type: 'test'
+  ...
+# Subtest: AI summary cancellation resets busy state and does not save partial note
+ok 18 - AI summary cancellation resets busy state and does not save partial note
+  ---
+  duration_ms: 19.3713
+  type: 'test'
+  ...
+# Subtest: fulltext AI columns cover all body segments and retain evidence scope
+ok 19 - fulltext AI columns cover all body segments and retain evidence scope
+  ---
+  duration_ms: 45.1214
+  type: 'test'
+  ...
+# Subtest: visible-column filtering excludes hidden custom columns
+ok 20 - visible-column filtering excludes hidden custom columns
+  ---
+  duration_ms: 10.3955
+  type: 'test'
+  ...
+# Subtest: shutdown aborts all request classes including standalone requests
+ok 21 - shutdown aborts all request classes including standalone requests
+  ---
+  duration_ms: 9.7147
+  type: 'test'
+  ...
+# Subtest: concurrent duplicate paragraphs share one API request and cache write
+ok 22 - concurrent duplicate paragraphs share one API request and cache write
+  ---
+  duration_ms: 23.0335
+  type: 'test'
+  ...
+# Subtest: credential update failure preserves the previously saved value
+ok 23 - credential update failure preserves the previously saved value
+  ---
+  duration_ms: 7.8255
+  type: 'test'
+  ...
+# Subtest: bootstrap loads all modules, registers resources and cleans up in a simulated host
+ok 24 - bootstrap loads all modules, registers resources and cleans up in a simulated host
+  ---
+  duration_ms: 46.2558
+  type: 'test'
+  ...
+# Subtest: defaults and numeric range validation
+ok 25 - defaults and numeric range validation
+  ---
+  duration_ms: 4.1098
+  type: 'test'
+  ...
+# Subtest: HTTPS remote and loopback HTTP only; credentials and query strings rejected
+ok 26 - HTTPS remote and loopback HTTP only; credentials and query strings rejected
+  ---
+  duration_ms: 0.3854
+  type: 'test'
+  ...
+# Subtest: glossary and column schema validation
+ok 27 - glossary and column schema validation
+  ---
+  duration_ms: 0.5291
+  type: 'test'
+  ...
+# Subtest: page mapping comes only from explicit page breaks
+ok 28 - page mapping comes only from explicit page breaks
+  ---
+  duration_ms: 1.7332
+  type: 'test'
+  ...
+# Subtest: references skipped and appendix resumes
+ok 29 - references skipped and appendix resumes
+  ---
+  duration_ms: 0.4956
+  type: 'test'
+  ...
+# Subtest: word References inside body does not suppress following text
+ok 30 - word References inside body does not suppress following text
+  ---
+  duration_ms: 0.1568
+  type: 'test'
+  ...
+# Subtest: optional Markdown heading skip
+ok 31 - optional Markdown heading skip
+  ---
+  duration_ms: 0.137
+  type: 'test'
+  ...
+# Subtest: long text split is lossless up to whitespace and has bounded chunks
+ok 32 - long text split is lossless up to whitespace and has bounded chunks
+  ---
+  duration_ms: 1.1073
+  type: 'test'
+  ...
+# Subtest: surrogate pairs are not bisected
+ok 33 - surrogate pairs are not bisected
+  ---
+  duration_ms: 1.1121
+  type: 'test'
+  ...
+# Subtest: math and fenced code with blank lines remain atomic
+ok 34 - math and fenced code with blank lines remain atomic
+  ---
+  duration_ms: 1.024
+  type: 'test'
+  ...
+# Subtest: protect and restore formulas, citations, DOI, URL and inline code
+ok 35 - protect and restore formulas, citations, DOI, URL and inline code
+  ---
+  duration_ms: 1.5476
+  type: 'test'
+  ...
+# Subtest: glossary longest first and avoids partial-word substitutions
+ok 36 - glossary longest first and avoids partial-word substitutions
+  ---
+  duration_ms: 4.2423
+  type: 'test'
+  ...
+# Subtest: glossary is not applied inside math and code
+ok 37 - glossary is not applied inside math and code
+  ---
+  duration_ms: 0.2094
+  type: 'test'
+  ...
+# Subtest: literal marker namespace collision is avoided
+ok 38 - literal marker namespace collision is avoided
+  ---
+  duration_ms: 0.107
+  type: 'test'
+  ...
+# Subtest: missing and duplicated placeholders are detected
+ok 39 - missing and duplicated placeholders are detected
+  ---
+  duration_ms: 0.1355
+  type: 'test'
+  ...
+# Subtest: quality checker detects number loss without claiming semantic verification
+ok 40 - quality checker detects number loss without claiming semantic verification
+  ---
+  duration_ms: 1.0832
+  type: 'test'
+  ...
+# Subtest: cache includes every translation-affecting choice
+ok 41 - cache includes every translation-affecting choice
+  ---
+  duration_ms: 0.5206
+  type: 'test'
+  ...
+# Subtest: prompts keep task instructions separate from document data
+ok 42 - prompts keep task instructions separate from document data
+  ---
+  duration_ms: 0.4176
+  type: 'test'
+  ...
+# Subtest: HTML export escapes source, model output, title and URI
+ok 43 - HTML export escapes source, model output, title and URI
+  ---
+  duration_ms: 0.4395
+  type: 'test'
+  ...
+# Subtest: untranslated segments are explicit, never represented as successful translations
+ok 44 - untranslated segments are explicit, never represented as successful translations
+  ---
+  duration_ms: 0.1584
+  type: 'test'
+  ...
+# Subtest: bounded worker pool and stable item processing
+ok 45 - bounded worker pool and stable item processing
+  ---
+  duration_ms: 31.5331
+  type: 'test'
+  ...
+# Subtest: pool cancellation stops scheduling new work
+ok 46 - pool cancellation stops scheduling new work
+  ---
+  duration_ms: 0.3363
+  type: 'test'
+  ...
+# Subtest: source-literal marker text is preserved without a false unknown-marker warning
+ok 47 - source-literal marker text is preserved without a false unknown-marker warning
+  ---
+  duration_ms: 0.1089
+  type: 'test'
+  ...
+# Subtest: Chinese glossary matches words inside unspaced sentences
+ok 48 - Chinese glossary matches words inside unspaced sentences
+  ---
+  duration_ms: 0.6407
+  type: 'test'
+  ...
+# Subtest: validation strips accidental credential properties and rejects string booleans
+ok 49 - validation strips accidental credential properties and rejects string booleans
+  ---
+  duration_ms: 0.2518
+  type: 'test'
+  ...
+# Subtest: recovery pauses running work and never considers an empty translation completed
+ok 50 - recovery pauses running work and never considers an empty translation completed
+  ---
+  duration_ms: 0.4376
+  type: 'test'
+  ...
+# Subtest: PDF backlink allows only known Zotero URI form
+ok 51 - PDF backlink allows only known Zotero URI form
+  ---
+  duration_ms: 0.0944
+  type: 'test'
+  ...
+# Subtest: worker failure drains in-flight work before the pool rejects
+ok 52 - worker failure drains in-flight work before the pool rejects
+  ---
+  duration_ms: 18.2037
+  type: 'test'
+  ...
+# Subtest: OpenAI URL accepts base URL and complete endpoint without duplicating suffix
+ok 53 - OpenAI URL accepts base URL and complete endpoint without duplicating suffix
+  ---
+  duration_ms: 1.1893
+  type: 'test'
+  ...
+# Subtest: DeepL uses XML ignore-tags, correct endpoint, and language codes
+ok 54 - DeepL uses XML ignore-tags, correct endpoint, and language codes
+  ---
+  duration_ms: 0.9279
+  type: 'test'
+  ...
+# Subtest: DeepL response decodes only after stripping our wrapper, preserving source markup literally
+ok 55 - DeepL response decodes only after stripping our wrapper, preserving source markup literally
+  ---
+  duration_ms: 0.3076
+  type: 'test'
+  ...
+# Subtest: DeepL refuses unsupported AI operations and invalid languages before network
+ok 56 - DeepL refuses unsupported AI operations and invalid languages before network
+  ---
+  duration_ms: 0.3109
+  type: 'test'
+  ...
+# Subtest: truncation and missing content are explicit failures
+ok 57 - truncation and missing content are explicit failures
+  ---
+  duration_ms: 0.2671
+  type: 'test'
+  ...
+# Subtest: offline UI renders all tabs and supports empty state without opening Zotero
+ok 58 - offline UI renders all tabs and supports empty state without opening Zotero
+  ---
+  duration_ms: 118.1821
+  type: 'test'
+  ...
+# Subtest: newly created task becomes current and deleted task falls back to remaining task
+ok 59 - newly created task becomes current and deleted task falls back to remaining task
+  ---
+  duration_ms: 61.3072
+  type: 'test'
+  ...
+# Subtest: AI/source HTML is rendered as literal text, never executable nodes
+ok 60 - AI/source HTML is rendered as literal text, never executable nodes
+  ---
+  duration_ms: 35.9685
+  type: 'test'
+  ...
+# Subtest: unchanged segment DOM nodes are preserved across progress redraws
+ok 61 - unchanged segment DOM nodes are preserved across progress redraws
+  ---
+  duration_ms: 28.2148
+  type: 'test'
+  ...
+# Subtest: correction dialog saves manual translation and review flag
+ok 62 - correction dialog saves manual translation and review flag
+  ---
+  duration_ms: 41.4175
+  type: 'test'
+  ...
+# Subtest: AI column controls save evidence scope and visibility options
+ok 63 - AI column controls save evidence scope and visibility options
+  ---
+  duration_ms: 23.2444
+  type: 'test'
+  ...
+# Subtest: glossary UI adds and edits a term without duplicating it
+ok 64 - glossary UI adds and edits a term without duplicating it
+  ---
+  duration_ms: 37.6486
+  type: 'test'
+  ...
+# Subtest: cancelled PDF export does not display a false success message
+ok 65 - cancelled PDF export does not display a false success message
+  ---
+  duration_ms: 48.8749
+  type: 'test'
+  ...
+1..65
+# tests 65
+# suites 0
+# pass 65
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 979.2124

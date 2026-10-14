@@ -1,0 +1,4 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),L=require('../addon/content/layout.js');
+function ops(rects){return {fnArray:rects.map(()=>91),argsArray:rects.map(r=>[20,[],r])};}
+test('vector chart requires several nontrivial overlapping paths, not lone backgrounds/rules',()=>{const paths=Array.from({length:8},(_,i)=>[100+i,200+i,320-i,330-i]),m=L.graphics(ops(paths),[0,0,600,800]);assert.equal(m.regions.filter(r=>r.evidence==='vector-path-cluster').length,1);assert.equal(L.graphics(ops([[0,0,600,800],[10,100,300,100]]),[0,0,600,800]).regions.length,0);});
+test('separate vector clusters never union across the gutter',()=>{const left=Array.from({length:6},(_,i)=>[30+i,300+i,230-i,450-i]),right=left.map(r=>[r[0]+280,r[1],r[2]+280,r[3]]),m=L.graphics(ops([...left,...right]),[0,0,600,800]);assert.equal(m.regions.filter(r=>r.evidence==='vector-path-cluster').length,2);});
