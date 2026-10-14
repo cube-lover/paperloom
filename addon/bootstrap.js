@@ -31,6 +31,7 @@ async function startup({ id, version, rootURI }) {
   Services.scriptloader.loadSubScript(rootURI + 'content/graphic-ink.js', appScope);
   Services.scriptloader.loadSubScript(rootURI + 'content/graphic-evidence.js', appScope);
   Services.scriptloader.loadSubScript(rootURI + 'content/graphics.js', appScope);
+  Services.scriptloader.loadSubScript(rootURI + 'content/ocr-install.js', appScope);
   Services.scriptloader.loadSubScript(rootURI + 'content/native-background.js', appScope);
   Services.scriptloader.loadSubScript(rootURI + 'content/selection.js', appScope);
   Services.scriptloader.loadSubScript(rootURI + 'content/checkpoint.js', appScope);
@@ -41,6 +42,7 @@ async function startup({ id, version, rootURI }) {
   appScope.PaperLoomGraphics.attach(appScope.PaperLoom, appScope.PaperLoomCore, appScope.PaperLoomLayout);
   appScope.CubeNativeBackground.attach(appScope.PaperLoom, appScope.PaperLoomCore, appScope.PaperLoomLayout);
   appScope.PaperLoomSelection.attach(appScope.PaperLoom);
+  appScope.CubeOCRInstall.attach(appScope.PaperLoom, appScope.PaperLoomCore, appScope.PaperLoomLayout);
   appScope.CubeReaderProgress.attach(appScope.PaperLoom);
   appScope.CubeCheckpoint.attach(appScope.PaperLoom);
   appScope.CubeAlignment.attach(appScope.PaperLoom);

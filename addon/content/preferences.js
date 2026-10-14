@@ -28,6 +28,10 @@
       pane.setGraphicRuntimeValue('models', models.value.trim());
     };
     for (const el of [python, runtime, models]) el.addEventListener('change', persist);
+    const installHost = $('pl-ocr-install');
+    if (installHost && pane.mountOCRInstallControls) {
+      pane.mountOCRInstallControls(document, installHost, { onStatus: text => notice(text) });
+    }
   }
 
   function fillForm() {

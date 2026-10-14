@@ -1,0 +1,12 @@
+{
+ "version": "1.0.0",
+ "platform": "win-x64",
+ "bytes": 105889554,
+ "sha256": "56e701d5e0dff7a600076e2112c5443a6ab3c1f2904707d0f35aa4749359ab64",
+ "files": 1258,
+ "urls": [
+  "https://github.com/cube-lover/paperloom/releases/download/ocr-runtime-1.0.0/paperloom-ocr-runtime-win-x64-1.0.0.zip"
+ ],
+ "contents": ["python 3.12.10 embedded", "rapidocr 3.10.0 + onnxruntime 1.31.0 + opencv/numpy/Pillow/shapely/pyclipper", "PP-OCRv4 mobile det/rec/cls models"],
+ "licenses": ["PSF-2.0 (python)", "Apache-2.0 (rapidocr, opencv, PP-OCRv4 models)", "MIT (onnxruntime, pyclipper, six, tqdm)", "BSD-3-Clause (numpy, shapely, PyYAML)", "HPND (Pillow)"]
+}
