@@ -2,7 +2,10 @@ const {test}=require('node:test');const assert=require('node:assert/strict');con
 const {createHarness}=require('./harness.cjs');const InPlace=require('../addon/content/inplace.js'),L=require('../addon/content/layout.js');
 const delay=ms=>new Promise(r=>setTimeout(r,ms));
 async function until(fn){for(let i=0;i<150;i++){if(fn())return;await delay(5);}throw Error('timeout');}
-async function setup(t){const {app,C}=await createHarness(t);InPlace.attach(app,C,L);
+async function setup(t){const {app,C,context}=await createHarness(t);InPlace.attach(app,C,L);
+ // Preserve notice lifetimes: the generic harness compresses timers to 1 ms,
+ // which otherwise hides a 12-second notice before the 5-ms assertion poll.
+ const fast=context.setTimeout,longTimers=[];context.setTimeout=(fn,ms)=>{if(ms<9000)return fast(fn,ms);const timer=setTimeout(fn,ms);longTimers.push(timer);return timer;};t.after(()=>longTimers.forEach(clearTimeout));
  const dom=new JSDOM('<div class="toolbar" style="overflow:hidden"></div>');t.after(()=>dom.window.close());
  const doc=dom.window.document,reader={itemID:12,_iframeWindow:dom.window};
  const append=n=>doc.querySelector('.toolbar').appendChild(n);app.buildReaderButton(doc,reader,append);

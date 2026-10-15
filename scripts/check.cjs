@@ -6,6 +6,9 @@ const root = path.resolve(__dirname, '..');
 function walk(dir) { return fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]); }
 for (const file of walk(path.join(root, 'addon')).filter(x => x.endsWith('.js'))) new vm.Script(fs.readFileSync(file, 'utf8'), { filename: file });
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'addon/manifest.json'), 'utf8'));
+const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'));
+if ([manifest.version, lock.version, lock.packages?.['']?.version].some(v => v !== pkg.version)) throw new Error('Package, lockfile and addon versions must match');
 if (manifest.applications.zotero.id !== 'paperloom@local.research') throw new Error('Unexpected addon ID');
 const python = spawnSync('python', ['-c', 'import pathlib,xml.etree.ElementTree as E; [E.parse(p) for p in pathlib.Path("addon").rglob("*.xhtml")]; E.parse("addon/content/icon.svg"); print("XML verified")'], { cwd: root, encoding: 'utf8' });
 if (python.status) { console.error(python.stderr); process.exit(python.status || 1); }

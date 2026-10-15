@@ -24,3 +24,47 @@ test('real diamond borders retain pixels while old letter cores disappear',{skip
  let residual=0;for(let y=4;y<h-5;y++)for(let xx=2;xx<w-2;xx++)if(m.data[(y*w+xx)*4]<180)residual++;assert.equal(residual,0);
  }
 });
+
+// 用户报"外边框脏、有小黑斑"：带颜色的抗锯齿像素以前既不算墨迹也不被擦。
+test('coloured antialias around a glyph is erased while coloured rules stay',()=>{
+ const w=60,h=24,data=new Uint8ClampedArray(w*h*4).fill(255),put=(x,y,c)=>data.set([...c,255],(y*w+x)*4);
+ for(let y=6;y<16;y++)for(let x=12;x<18;x++)put(x,y,[25,25,25]);           // 字身
+ for(let x=10;x<20;x++){put(x,5,[120,140,205]);put(x,16,[120,140,205]);}   // 蓝色抗锯齿边
+ for(let y=15;y<17;y++)for(let x=30;x<58;x++)put(x,y,[250,90,10]);         // 远处彩色色带
+ const m=I.mask({width:w,height:h,data});
+ assert.ok(m&&m.complete,'掩膜要成立');
+ assert.deepEqual(Array.from(m.data.slice((5*w+14)*4,(5*w+14)*4+4)),[255,255,255,255],'蓝色抗锯齿要被擦成纸面');
+ assert.deepEqual(Array.from(m.data.slice((16*w+14)*4,(16*w+14)*4+4)),[255,255,255,255]);
+ assert.deepEqual(Array.from(m.data.slice((15*w+40)*4,(15*w+40)*4+4)),[250,90,10,255],'远处的彩色色带不能被擦');
+});
+
+test('isolated neutral specks in a neutral glyph frame are cleaned, long rules are kept',()=>{
+ const w=80,h=26,data=new Uint8ClampedArray(w*h*4).fill(255),put=(x,y,c)=>data.set([...c,255],(y*w+x)*4);
+ for(let y=8;y<18;y++)for(const l of [10,26,42])for(let x=l;x<l+2;x++)put(x,y,[22,22,22]);
+ put(60,20,[30,30,30]);put(61,20,[30,30,30]);put(60,21,[30,30,30]);         // 孤立 3px 暗点
+ for(let x=0;x<w;x++)put(x,24,[180,180,180]);                              // 长灰线
+ const m=I.mask({width:w,height:h,data});
+ assert.ok(m&&m.complete);
+ assert.deepEqual(Array.from(m.data.slice((20*w+60)*4,(20*w+60)*4+4)),[255,255,255,255],'孤立暗点要被清掉');
+ assert.deepEqual(Array.from(m.data.slice((24*w+30)*4,(24*w+30)*4+4)),[180,180,180,255],'长直线要保留');
+});
+
+// 近纸面的文字框整块铺纸面色，带受保护长线的框仍只擦字形。
+test('near-paper text frames are filled flat while protected rules survive',()=>{
+ const w=90,h=28,data=new Uint8ClampedArray(w*h*4).fill(255),put=(x,y,c)=>data.set([...c,255],(y*w+x)*4);
+ for(let y=9;y<19;y++)for(const l of [12,30,48])for(let x=l;x<l+2;x++)put(x,y,[25,25,25]);
+ put(70,10,[90,130,200]);put(71,10,[90,130,200]);put(70,11,[90,130,200]);   // 零星彩色碎片
+ const flat=I.mask({width:w,height:h,data},{flatFill:true});
+ assert.ok(flat&&flat.flat,'近纸面文字框要走整块铺');
+ assert.deepEqual(Array.from(flat.data.slice((10*w+70)*4,(10*w+70)*4+4)),[90,130,200,255],'远处彩色小标记不是已验证字形，必须保留');
+ assert.deepEqual(Array.from(flat.data.slice((14*w+12)*4,(14*w+12)*4+4)),[255,255,255,255],'英文要不见');
+ const d2=new Uint8ClampedArray(data);for(let x=0;x<w;x++)d2.set([180,180,180,255],(24*w+x)*4);
+ const ruled=I.mask({width:w,height:h,data:d2},{flatFill:true});
+ assert.ok(ruled&&ruled.flat,'表格框要走铺平');
+ assert.deepEqual(Array.from(ruled.data.slice((24*w+40)*4,(24*w+40)*4+4)),[180,180,180,255],'表格线要保留');
+ assert.deepEqual(Array.from(ruled.data.slice((14*w+12)*4,(14*w+12)*4+4)),[255,255,255,255],'框里的文字碎片一起铺掉');
+ const band=new Uint8ClampedArray(data);for(let x=0;x<w;x++)for(let y=0;y<3;y++)band.set([230,40,60,255],((1+y)*w+x)*4);
+ const keepColour=I.mask({width:w,height:h,data:band},{flatFill:true});
+ assert.ok(keepColour&&!keepColour.flat,'整条彩条在框里时不能铺平');
+ assert.deepEqual(Array.from(keepColour.data.slice((2*w+50)*4,(2*w+50)*4+4)),[230,40,60,255],'彩条要保留');
+});

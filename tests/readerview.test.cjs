@@ -247,3 +247,17 @@ test('restoration preserves different page corrections for identical source and 
  const legacy=await app.translateInPlace(reader,{startPaused:true,restoredRecords:[{text:'This is a paragraph.',target:'旧版本归档',status:'done'}]});
  assert.equal([...legacy.records.values()].filter(r=>r.target).length,1);
 });
+
+test('cleared record restores pending with edit history and alignment archive intact',async t=>{
+ const {app,page,reader}=setup(t,{},1);page(1);let calls=0;
+ const history=[{target:'手工旧译',edited:true,alignment:{kept:true},reason:'cleared-by-user'}];
+ const s=await app.translateInPlace(reader,{startPaused:true,restoredRecords:[{text:'This is a paragraph.',target:'',status:'pending',pageIndex:0,clearedAt:'2026-10-15T00:00:00Z',history}],translateBlock:async()=>{calls++;return {text:'new'};}});
+ const r=[...s.records.values()][0];assert.equal(r.status,'pending');assert.equal(r.target,'');assert.deepEqual(r.history,history);assert.ok(r.clearedAt);assert.equal(calls,0);
+});
+
+test('clear then resume passes persisted cache generation to prose translator',async t=>{
+ const {app,page,reader}=setup(t,{},1);page(1);const calls=[];
+ const s=await app.translateInPlace(reader,{startPaused:true,restoredRecords:[{text:'This is a paragraph.',target:'',status:'pending',pageIndex:0,clearedAt:'old-clear',translationEpoch:'fresh-prose',history:[{target:'旧结果'}]}],translateBlock:async(...args)=>{calls.push(args[4]);return {text:'真正的新结果'};}});
+ const r=[...s.records.values()][0];assert.equal(calls.length,0);assert.equal(r.translationEpoch,'fresh-prose');
+ app.pauseInPlace(reader,false);await until(()=>r.status==='done');assert.equal(calls.length,1);assert.equal(calls[0].cacheScope,'fresh-prose');assert.equal(r.target,'真正的新结果');assert.equal(r.history[0].target,'旧结果');
+});

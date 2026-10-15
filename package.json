@@ -1,6 +1,6 @@
 {
   "name": "paperloom-zotero",
-  "version": "0.9.0",
+  "version": "0.9.5",
   "private": true,
   "description": "PaperLoom 译研 — Zotero academic translation workbench",
   "scripts": {

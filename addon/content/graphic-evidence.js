@@ -42,6 +42,7 @@ var CubeGraphicEvidence;
    return cx>b[0]&&cx<b[2]&&cy>b[1]&&cy<b[3]&&intersect(a,b)>area(a)*.7;
   });
   if(hits.some(r=>r.id===next.id))return {existing:true};
+  const cleared=hits.find(r=>r.translationEpoch||r.clearedAt);if(cleared){next.translationEpoch=cleared.translationEpoch||cleared.clearedAt;next.clearedAt=cleared.clearedAt;}
   if(hits.some(r=>r.edited||r.approved)){for(const r of hits)r.flowSuggestion={text:next.text,quad:next.quad};return {blocked:true};}
   const exact=hits.filter(r=>normalized(r.text).toLowerCase()===normalized(next.text).toLowerCase());
   if(hits.length===1&&exact.length===1){next.target=exact[0].target;next.history=exact[0].history;}
@@ -55,6 +56,7 @@ var CubeGraphicEvidence;
   const norm=t=>normalized(t).toLowerCase().replace(/[^a-z0-9]/g,''),text=norm(next.text);
   if(hits.some(r=>!text.includes(norm(r.text))&&r.score>=.94&&!r.review))return {};
   if(hits.some(r=>r.edited||r.approved)){for(const r of hits)r.axisSuggestion={text:next.text,quad:next.quad};return {blocked:true};}
+  const cleared=hits.find(r=>r.translationEpoch||r.clearedAt);if(cleared){next.translationEpoch=cleared.translationEpoch||cleared.clearedAt;next.clearedAt=cleared.clearedAt;}
   for(const r of hits){r.legacyLayout=true;r.selected=false;r.supersededBy=next.id;}next.previousIDs=hits.map(r=>r.id);return {archived:hits.length};
  }
  const api={match,reconcile,adoptFlowNode,adoptAxisTitle};CubeGraphicEvidence=root.CubeGraphicEvidence=api;if(typeof module==='object'&&module.exports)module.exports=api;

@@ -24,3 +24,10 @@ test('layout cache is reused only for the same fingerprint, page count and parse
   await app.clearLayoutCache();
   assert.equal(await app.readLayoutCache(identity,3),null);
 });
+
+test('cleared prose history survives disk checkpoint without resurrecting target',async t=>{
+ const {app}=await setup(t),s=session(),r=s.records.get('a');
+ r.history=[{target:r.target,edited:true,alignment:{word:'retained'},reason:'cleared-by-user'}];r.target='';r.status='pending';r.edited=false;r.clearedAt='2026-10-15T00:00:00Z';r.translationEpoch='clear-checkpoint';
+ await app.saveInPlaceCheckpoint(s);const id=await app.checkpointIdentity(s.reader,s.pdf),data=JSON.parse(await fs.readFile(path.join(app.dir,id.file)));
+ assert.equal(data.records[0].target,'');assert.equal(data.records[0].clearedAt,r.clearedAt);assert.deepEqual(data.records[0].history,r.history);assert.equal(data.records[0].translationEpoch,r.translationEpoch);
+});

@@ -57,7 +57,10 @@ var PaperLoom = (() => {
         if(view.label.textContent!==label)view.label.textContent=label;
         view.button.dataset.state=state;view.button.title='Cube Translation · '+hint+(this.graphicSessions?.get(reader)?.message?'\n'+this.graphicSessions.get(reader).message:'');view.button.setAttribute('aria-label',label);
         view.button.setAttribute('aria-busy',String(['starting','parsing','running'].includes(state)));
-        view.notice.textContent=error;view.notice.hidden=!error;
+        // 只有真的出错时才写这条提示：无错误的刷新（进度 tick）不能把别的消息清掉，
+        // 否则「已清除…」刚写上去就被进度刷新抹成空白，看起来像没反应。
+        if(error){view.notice.textContent=error;view.notice.hidden=false;clearTimeout(view.noticeTimer);
+          view.noticeTimer=setTimeout(()=>{if(view.notice.textContent===error)view.notice.hidden=true;},12000);}
       }
     },
     activateReaderButton(reader) {
@@ -106,11 +109,79 @@ var PaperLoom = (() => {
       return ()=>{reset();button.removeEventListener('pointerdown',down);button.removeEventListener('mousedown',mouse);
         button.removeEventListener('pointerleave',reset);button.removeEventListener('click',click);};
     },
+    // One dispatcher for window, reader iframe and XUL command paths.
+    regionShortcutTyping(target) {
+      try { return !!target && (/^(input|textarea|select|textbox)$/i.test(target.localName||target.tagName||'') || target.isContentEditable || !!target.closest?.('[contenteditable]:not([contenteditable="false"])')); }
+      catch { return true; }
+    },
+    triggerRegionShortcut(reader,event) {
+      if(this.stopped||!reader||event?.repeat||event?.isComposing||this.regionShortcutTyping(event?.target))return false;
+      const stamp=Date.now();
+      if(stamp-(this.regionShortcutAt||0)<400){event?.preventDefault?.();return false;}
+      this.regionShortcutAt=stamp;this.readerShortcutMatches=(this.readerShortcutMatches||0)+1;
+      event?.preventDefault?.();event?.stopPropagation?.();
+      Promise.resolve().then(()=>{if(!this.stopped)return this.selectGraphicRegion(reader);})
+        .catch(error=>this.refreshReaderButton(reader,error.message||'框选失败'));
+      return true;
+    },
+    installRegionKeyHandler() {
+      const win=Zotero.getMainWindow?.();if(!win?.document)return false;
+      this.removeRegionKeyHandler();
+      const handle=e=>{
+        if(this.stopped||!this.matchShortcut?.(this.readerShortcut?.(),e))return;
+        this.readerShortcutHits=(this.readerShortcutHits||0)+1;
+        // Do not record ordinary keys or text entered in search/edit fields.
+        this.triggerRegionShortcut(this.activeReader(),e);
+      };
+      win.addEventListener('keydown',handle,true);
+      this.regionKeyHandler={win,handle,mode:'window'};
+      return true;
+    },
+    removeRegionKeyHandler() {
+      const bound=this.regionKeyHandler;this.regionKeyHandler=null;
+      try { bound?.win.removeEventListener('keydown',bound.handle,true); } catch { /* Closed window. */ }
+    },
+    installRegionKeyset() {
+      try {
+        const win=Zotero.getMainWindow?.();if(!win?.document)return false;
+        const doc=win.document;this.regionKeyset?.remove();doc.getElementById('pl-region-keyset')?.remove();
+        const make=tag=>doc.createXULElement?doc.createXULElement(tag):doc.createElement(tag);
+        const keyset=make('keyset');keyset.id='pl-region-keyset';
+        for(const spec of String(this.readerShortcut?.()??'').split(',')){
+          const parts=spec.trim().split('+').map(p=>p.trim()).filter(Boolean),key=parts.pop();if(!key)continue;
+          const el=make('key'),special={esc:'VK_ESCAPE',escape:'VK_ESCAPE',space:'VK_SPACE',enter:'VK_RETURN'};
+          const code=/^F(?:[1-9]|1[0-9]|2[0-4])$/i.test(key)?'VK_'+key.toUpperCase():special[key.toLowerCase()];
+          if(code)el.setAttribute('keycode',code);else el.setAttribute('key',key==='Plus'?'+':key);
+          el.setAttribute('modifiers',parts.map(p=>/^(ctrl|control|cmd|meta)$/i.test(p)?'accel':/^(alt|option)$/i.test(p)?'alt':p.toLowerCase()).join(','));
+          el.addEventListener('command',event=>{
+            // Keyset can survive a preferences change or toolbar replacement.
+            if(!String(this.readerShortcut?.()||'').split(',').some(p=>p.trim()===spec.trim()))return;
+            let focus=doc.activeElement;
+            try { while(focus?.contentDocument?.activeElement)focus=focus.contentDocument.activeElement; } catch {}
+            if(this.regionShortcutTyping(focus))return;
+            this.triggerRegionShortcut(this.activeReader(),event);
+          });
+          keyset.appendChild(el);
+        }
+        const host=doc.getElementById('mainKeyset');
+        if(host?.parentNode)host.parentNode.insertBefore(keyset,host);else doc.documentElement.appendChild(keyset);
+        this.regionKeyset=keyset;return true;
+      } catch(error){this.logError?.(error);return false;}
+    },
+    activeReader() {
+      const list=[];
+      for(const r of Zotero.Reader?._readers||[])try{if(r&&!r._destroyed&&r._iframeWindow?.document)list.push(r);}catch{ /* One dead wrapper must not hide healthy tabs. */ }
+      const selected=Zotero.getMainWindow?.()?.Zotero_Tabs?.selectedID;
+      if(selected!==undefined)return list.find(r=>r.tabID===selected)||null;
+      return list.find(r=>{try{return r._iframeWindow.document.hasFocus();}catch{return false;}})||null;
+    },
     buildReaderButton(doc, reader, append) {
       this.readerButtons ||= new Map();
       // Reader toolbar recreation must not accumulate detached menus or click listeners.
       for(const view of [...this.readerButtons.get(reader)||[]])if(view.doc===doc)view.dispose();
       const commandCleanup=[];
+      if(!this.regionKeyset)this.installRegionKeyset();
+      if(!this.regionKeyHandler)this.installRegionKeyHandler();
       const wrap=doc.createElement('div');wrap.className='pl-reader-action';
       wrap.style.cssText='display:inline-flex;align-items:center;flex-shrink:0;margin:0 4px;';
       const btn=doc.createElement('button');btn.type='button';btn.className='pl-main-button';btn.textContent='Cube 翻译';
@@ -125,12 +196,13 @@ var PaperLoom = (() => {
       notice.style.cssText='position:fixed;top:48px;right:12px;max-width:420px;padding:8px 12px;background:Canvas;color:CanvasText;z-index:2147483646;border:1px solid #c77;border-radius:6px;font:13px system-ui;';
       // The host toolbar is a native window-drag region. Custom buttons are not
       // covered by its .toolbar-button no-drag rule: explicitly exclude our UI.
-      const feedback=doc.createElement('style');feedback.textContent='.pl-reader-action,.pl-reader-action *,.pl-reader-menu,.pl-reader-menu *,.pl-inplace-controls,.pl-inplace-controls *{-moz-window-dragging:no-drag}.pl-reader-action button:hover{filter:brightness(1.12)}.pl-reader-action button.pl-pressed,.pl-reader-menu button.pl-pressed,.pl-inplace-controls button.pl-pressed{filter:brightness(.86);box-shadow:inset 0 1px 3px #0005}.pl-reader-action button:focus-visible{outline:2px solid #e6a700;outline-offset:2px}';wrap.appendChild(feedback);
+      const feedback=doc.createElement('style');feedback.textContent='.pl-reader-action,.pl-reader-action *,.pl-reader-menu,.pl-reader-menu *,.pl-reader-submenu,.pl-reader-submenu *,.pl-region-badge,.pl-region-list,.pl-region-list *,.pl-inplace-controls,.pl-inplace-controls *{-moz-window-dragging:no-drag}.pl-reader-action button:hover{filter:brightness(1.12)}.pl-reader-action button.pl-pressed,.pl-reader-menu button.pl-pressed,.pl-inplace-controls button.pl-pressed{filter:brightness(.86);box-shadow:inset 0 1px 3px #0005}.pl-reader-action button:focus-visible{outline:2px solid #e6a700;outline-offset:2px}';wrap.appendChild(feedback);
       const position=()=>{const r=caret.getBoundingClientRect(),w=doc.defaultView;
         menu.style.left=Math.max(8,Math.min(r.right-260,w.innerWidth-280))+'px';menu.style.top=Math.max(4,Math.min(r.bottom+5,w.innerHeight-100))+'px';};
-      const outside=e=>{if(!wrap.contains(e.target)&&!menu.contains(e.target))close();};
+      const outside=e=>{const t=e.target;if(wrap.contains(t)||menu.contains(t))return;if(submenus.some(sub=>sub.panel.contains(t)))return;close();};
       const escape=e=>{if(e.key==='Escape'){close();caret.focus();}};
-      const close=()=>{menu.style.display='none';caret.setAttribute('aria-expanded','false');doc.removeEventListener('pointerdown',outside,true);doc.removeEventListener('keydown',escape,true);doc.defaultView.removeEventListener('resize',position);};
+      const submenus=[];
+      const close=()=>{for(const sub of submenus)sub.hide();menu.style.display='none';caret.setAttribute('aria-expanded','false');doc.removeEventListener('pointerdown',outside,true);doc.removeEventListener('keydown',escape,true);doc.defaultView.removeEventListener('resize',position);};
       const toggle=()=>{if(menu.style.display!=='none'){close();return;}position();menu.style.display='block';caret.setAttribute('aria-expanded','true');doc.addEventListener('pointerdown',outside,true);doc.addEventListener('keydown',escape,true);doc.defaultView.addEventListener('resize',position);};
       // 用最近一次状态结果给菜单起名；同时后台刷新一次，避免阻塞菜单弹出。
       void this._ocrReadyState;
@@ -139,6 +211,43 @@ var PaperLoom = (() => {
         node.style.cssText='display:block;width:100%;text-align:left;padding:8px 10px;border:0;background:transparent;color:inherit;font:13px system-ui;cursor:pointer;';
         node.addEventListener('mouseenter',()=>{node.style.background='#7b9ad622';});node.addEventListener('mouseleave',()=>{node.style.background='transparent';});
         commandCleanup.push(this.bindReaderCommand(node,async()=>{close();try{await fn();}catch(error){this.refreshReaderButton(reader,error.message||'操作失败');}}));menu.appendChild(node);return node;
+      };
+      // 二级菜单：父项右侧显示 ›，悬停或点一下往右弹出子项（参考框选翻译那种菜单）。
+      const submenuItem=(text,entries)=>{
+        const node=doc.createElement('button');node.type='button';node.setAttribute('role','menuitem');node.setAttribute('aria-haspopup','true');node.setAttribute('aria-expanded','false');
+        node.style.cssText='display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;border:0;background:transparent;color:inherit;font:13px system-ui;cursor:pointer;text-align:left;';
+        const label=doc.createElement('span');label.textContent=text;
+        const arrow=doc.createElement('span');arrow.textContent='\u203a';arrow.style.cssText='opacity:.6;font-size:14px;line-height:1;';
+        node.append(label,arrow);
+        const panel=doc.createElement('div');panel.className='pl-reader-submenu';panel.setAttribute('role','menu');
+        panel.style.cssText='position:fixed;z-index:2147483647;min-width:158px;padding:6px;background:Canvas;color:CanvasText;border:1px solid #b8c3d6;border-radius:8px;box-shadow:0 6px 20px #14285a30;display:none;';
+        const hide=()=>{panel.style.display='none';node.setAttribute('aria-expanded','false');};
+        const show=()=>{const r=node.getBoundingClientRect(),w=doc.defaultView;
+          panel.style.left=Math.max(8,Math.min(r.right+2,w.innerWidth-176))+'px';
+          panel.style.top=Math.max(4,Math.min(r.top-6,w.innerHeight-90))+'px';
+          panel.style.display='block';node.setAttribute('aria-expanded','true');};
+        for(const [text2,fn] of entries){
+          const sub=doc.createElement('button');sub.type='button';sub.textContent=text2;sub.setAttribute('role','menuitem');sub.dataset.action=String(text2).includes('当前')?'clear-page':String(text2).includes('所有')?'clear-all':'submenu-item';
+          sub.style.cssText='display:block;width:100%;text-align:left;padding:7px 10px;border:0;background:transparent;color:inherit;font:13px system-ui;cursor:pointer;';
+          sub.addEventListener('mouseenter',()=>{sub.style.background='#7b9ad622';});sub.addEventListener('mouseleave',()=>{sub.style.background='transparent';});
+          let running=false;
+          const run=()=>{if(running)return;running=true;hide();close();
+            Promise.resolve().then(fn)
+              .catch(error=>this.refreshReaderButton(reader,error.message||'操作失败'))
+              .finally(()=>{running=false;});};
+          // Run on release/click only; cancelled drags and right-clicks are inert.
+          commandCleanup.push(this.bindReaderCommand(sub,run));
+          panel.appendChild(sub);
+        }
+        node.addEventListener('mouseenter',()=>{node.style.background='#7b9ad622';show();});
+        node.addEventListener('mouseleave',()=>{node.style.background='transparent';});
+        node.addEventListener('focus',show);
+        node.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();if(panel.style.display!=='block')show();});
+        node.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();show();panel.firstChild?.focus();}});
+        menu.appendChild(node);doc.body.appendChild(panel);
+        commandCleanup.push(()=>panel.remove());
+        submenus.push({hide,show,panel});
+        return node;
       };
       item('显示原文 / 译文',()=>{if(!this.inplace?.has(reader))throw Error('本篇还没有原位译文');this.toggleInPlace(reader);});
       // 识别引擎是本机能力：菜单里一眼能看到，装完自动自检。
@@ -150,7 +259,7 @@ var PaperLoom = (() => {
         if(panel){panel.message=result.ok?'识别引擎已就绪，可框选翻译图表文字。':'安装失败：'+result.error;panel.update();}
       });
       item('补译当前页图表',()=>this.requestCurrentGraphics(reader));
-      item('框选翻译（补漏）…'+(this.readerShortcut?.()?'  '+this.readerShortcut():''),async()=>{
+      const regionShortcutItem=item('框选翻译（补漏）…'+(this.readerShortcut?.()?'  '+String(this.readerShortcut()).split(',')[0].trim():''),async()=>{
         // Same region pipeline as the figure panel's advanced entry, surfaced here
         // because that one is easy to miss.
         await this.selectGraphicRegion(reader);
@@ -159,27 +268,37 @@ var PaperLoom = (() => {
         clearTimeout(view.noticeTimer);view.noticeTimer=setTimeout(()=>{if(notice.textContent===hint)notice.hidden=true;},20000);
       });
       item('重试失败项',()=>this.retryInPlace(reader));
+      // 测试用：把原位译文清掉恢复原文，历史留着，随时可以重译。
+      const sayNow=text=>{
+        notice.textContent=text;notice.hidden=false;clearTimeout(view.noticeTimer);
+        view.noticeTimer=setTimeout(()=>{if(notice.textContent===text)notice.hidden=true;},9000);
+      };
+      submenuItem('清除翻译 …',[
+        ['清除当前页面翻译',async()=>{
+          sayNow('正在清除第 '+(this.graphicPageIndex(reader)+1)+' 页的翻译…');
+          const out=await this.clearTranslations(reader,{pageIndex:this.graphicPageIndex(reader)});
+          sayNow('已清除第 '+(out.pageIndex+1)+' 页：图表 '+out.graphics+' 处、正文 '+out.prose+' 处；再次翻译将重新请求引擎');
+        }],
+        ['清除所有页面翻译',async()=>{
+          sayNow('正在清除全部页面的翻译…');
+          const out=await this.clearTranslations(reader,{all:true});
+          sayNow('已清除全部页面：图表 '+out.graphics+' 处、正文 '+out.prose+' 处（再次翻译将重新请求引擎，不复用旧缓存）');
+        }]
+      ]);
       const syncItem=item('同步选区：开',()=>{const s=this.inplace?.get(reader);if(!s)return;s.syncEnabled=!s.syncEnabled;s.selectionSync?.update();s.update();});syncItem.dataset.action='selection-sync';syncItem.setAttribute('role','menuitemcheckbox');
-      // Reader-level shortcut for the region workflow; ignored while typing.
+      // Iframe keys do not bubble to the chrome window. Bind only this reader's
+      // documents here; the single window handler resolves the selected tab.
       const shortcutKey=e=>{
-        this.readerShortcutHits=(this.readerShortcutHits||0)+1;
-        if(e.defaultPrevented||e.repeat||e.isComposing)return;const t=e.target;
-        const tag=String(t?.tagName||'').toLowerCase();
-        // 只有真正的输入控件才该屏蔽快捷键；工具栏按钮拿到焦点后 Alt+R 仍然要能用。
-        if(t&&!t.closest?.('button')&&(tag==='input'||tag==='textarea'||tag==='select'||t.isContentEditable||t.closest?.('[contenteditable]')))return;
-        this.readerShortcutMatches=(this.readerShortcutMatches||0)+1;
         if(!this.matchShortcut?.(this.readerShortcut?.(),e))return;
-        e.preventDefault();e.stopPropagation();
-        Promise.resolve().then(()=>this.selectGraphicRegion(reader)).catch(error=>this.refreshReaderButton(reader,error.message||'\u6846\u9009\u5931\u8d25'));
+        this.readerShortcutHits=(this.readerShortcutHits||0)+1;
+        this.triggerRegionShortcut(reader,e);
       };
       // 阅读器是多层 iframe：工具栏一个文档、主/次 PDF 各一个文档，按键事件**不会**冒泡到父文档；
       // 只挂外层 doc 时，焦点在 PDF 页面上按 Alt+R 永远收不到。每个可能持焦点的文档都要挂，
       // 并在新视图出现后补挂（视图是异步创建的）。
       const boundDocs=new Set();
       const bindShortcutDoc=target=>{
-        const d=target?.document;
-        if(!d||boundDocs.has(d))return;
-        try{d.addEventListener('keydown',shortcutKey,true);boundDocs.add(d);}catch(e){ /* 文档已销毁 */ }
+        try{const d=target?.document;if(!d||boundDocs.has(d))return;d.addEventListener('keydown',shortcutKey,true);boundDocs.add(d);}catch(e){ /* 文档已销毁 */ }
       };
       const bindShortcutDocs=()=>{
         bindShortcutDoc(reader._iframeWindow);bindShortcutDoc(doc.defaultView);
@@ -190,13 +309,13 @@ var PaperLoom = (() => {
       bindShortcutDocs();
       // 用递归 setTimeout 而不是 setInterval：与插件其余部分一致，权限作用域里都可用。
       let shortcutTimer=null;
-      const scheduleShortcutBind=()=>{shortcutTimer=setTimeout(()=>{bindShortcutDocs();scheduleShortcutBind();},1500);};
+      const scheduleShortcutBind=()=>{shortcutTimer=setTimeout(()=>{if(this.stopped)return;try{bindShortcutDocs();}catch{}scheduleShortcutBind();},1500);};
       scheduleShortcutBind();
       commandCleanup.push(()=>{clearTimeout(shortcutTimer);for(const d of boundDocs)try{d.removeEventListener('keydown',shortcutKey,true);}catch(e){}boundDocs.clear();});
       commandCleanup.push(this.bindReaderCommand(btn,()=>{close();this.activateReaderButton(reader);}));
       commandCleanup.push(this.bindReaderCommand(caret,toggle));
       caret.addEventListener('keydown',e=>{if(e.key==='ArrowDown'){e.preventDefault();if(menu.style.display==='none')toggle();menu.firstChild?.focus();}});
-      const view={doc,wrap,menu,button:btn,label:labelNode,notice,noticeTimer:null,dispose:()=>{close();clearTimeout(view.noticeTimer);for(const clean of commandCleanup.splice(0))clean();wrap.remove();menu.remove();notice.remove();doc.defaultView.removeEventListener('unload',view.dispose);const views=this.readerButtons.get(reader);views?.delete(view);if(!views?.size)this.readerButtons.delete(reader);}};
+      const view={doc,wrap,menu,regionShortcutItem,button:btn,label:labelNode,notice,shortcutDocs:boundDocs,shortcutListener:shortcutKey,rebindShortcuts:bindShortcutDocs,noticeTimer:null,dispose:()=>{close();clearTimeout(view.noticeTimer);for(const clean of commandCleanup.splice(0))clean();wrap.remove();menu.remove();notice.remove();doc.defaultView.removeEventListener('unload',view.dispose);const views=this.readerButtons.get(reader);views?.delete(view);if(!views?.size)this.readerButtons.delete(reader);}};
       if(!this.readerButtons.has(reader))this.readerButtons.set(reader,new Set());this.readerButtons.get(reader).add(view);
       doc.defaultView.addEventListener('unload',view.dispose,{once:true});
       wrap.appendChild(btn);wrap.appendChild(caret);append(wrap);doc.body.appendChild(menu);doc.body.appendChild(notice);this.refreshReaderButton(reader);
@@ -499,8 +618,11 @@ var PaperLoom = (() => {
         }
       }
     },
-    async translate(source, cfg, context = '', control = { requests: new Set() }) {
-      const hash = await this.hash(C.cacheMaterial(source, cfg, context));
+    async translate(source, cfg, context = '', control = { requests: new Set() }, {cacheScope=''} = {}) {
+      const material=C.cacheMaterial(source,cfg,context);
+      // Clearing a page creates a durable cache generation. It excludes old disk
+      // and in-flight results without evicting another page/paper's shared cache.
+      const hash = await this.hash(cacheScope?JSON.stringify(['reader-clear-v1',String(cacheScope),material]):material);
       if (this.translations.has(hash)) return this.translations.get(hash);
       const work = this.translateUncached(source, cfg, context, control, hash);
       this.translations.set(hash, work);
@@ -625,6 +747,8 @@ var PaperLoom = (() => {
     },
     async shutdown() {
       this.stopped = true; this.batchStop = true;
+      this.removeRegionKeyHandler();
+      try{this.regionKeyset?.remove();}catch{}this.regionKeyset=null;
       await this.stopDevChannel?.();
       for(const process of this.nativeJobs||[])try{process.kill();}catch{}
       await this.flushCheckpoints?.();

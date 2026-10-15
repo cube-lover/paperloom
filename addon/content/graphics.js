@@ -145,21 +145,34 @@ var PaperLoomGraphics;
       return {tables,labels};
     };
     app.graphicSessions=new Map();app.graphicProcesses=new Set();
-  const shortcutPref='extensions.zotero.paperloom.reader.shortcut',DEFAULT_SHORTCUT='Alt+R';
+  const shortcutPref='extensions.zotero.paperloom.reader.shortcut';
+  // Short default requested by the user. Alt-based defaults can be consumed
+  // by global overlays before Zotero sees them; custom/disabled values survive.
+  const DEFAULT_SHORTCUT='Ctrl+R';
+  const LEGACY_DEFAULTS=['Alt+R','Alt+R, Ctrl+Alt+R','Alt+R, Ctrl+Alt+R, Alt+Shift+R','Ctrl+Alt+R, Alt+R, Alt+Shift+R'];
   app.readerShortcut=function(){let v=null;try{v=Zotero.Prefs.get(shortcutPref,true);}catch{}
    // An unset preference (undefined) means the shipped default; an explicitly
-   // emptied preference turns the shortcut off.
-   return typeof v==='string'?v.trim():DEFAULT_SHORTCUT;};
-  app.setReaderShortcut=function(value){try{Zotero.Prefs.set(shortcutPref,String(value||'').trim(),true);}catch{}return this.readerShortcut();};
+   // emptied preference turns the shortcut off. A value still equal to an old
+   // default counts as untouched, so shipped additions reach existing profiles.
+   if(typeof v!=='string')return DEFAULT_SHORTCUT;
+   const text=v.trim();let custom=false;try{custom=Zotero.Prefs.get(shortcutPref+'.custom',true)===true;}catch{}
+   return !custom&&LEGACY_DEFAULTS.includes(text)?DEFAULT_SHORTCUT:text;};
+  app.setReaderShortcut=function(value){try{Zotero.Prefs.set(shortcutPref,String(value||'').trim(),true);Zotero.Prefs.set(shortcutPref+'.custom',true,true);}catch{}
+    this.installRegionKeyset?.();const spec=this.readerShortcut();
+    for(const views of this.readerButtons?.values()||[])for(const view of views)if(view.regionShortcutItem)view.regionShortcutItem.textContent='框选翻译（补漏）…'+(spec?'  '+spec.split(',')[0].trim():'');
+    return spec;};
   // "Alt+R" / "Ctrl+Shift+L" / "F9": modifiers are exact, Ctrl and Cmd are one
   // physical modifier so a single setting works on Windows and macOS.
   app.matchShortcut=function(spec,event){
+   if(event&&String(spec||'').includes(','))return String(spec).split(',').some(one=>app.matchShortcut(one,event));
    const parts=String(spec||'').split('+').map(x=>x.trim()).filter(Boolean);if(!parts.length||!event)return false;
    const key=parts.pop().toLowerCase(),mods=new Set(parts.map(x=>x.toLowerCase())),
     wantShift=mods.has('shift'),wantAlt=mods.has('alt')||mods.has('option'),wantCmd=mods.has('ctrl')||mods.has('cmd')||mods.has('control')||mods.has('meta');
    if(wantShift!==!!event.shiftKey||wantAlt!==!!event.altKey||wantCmd!==!!(event.ctrlKey||event.metaKey))return false;
-   const name=String(event.key||'').toLowerCase();
-   return name===key||(key==='space'&&name===' ')||(key==='esc'&&name==='escape')||(key==='plus'&&name==='+');
+   const name=String(event.key||'').toLowerCase(),code=String(event.code||'').toLowerCase();
+   // Alt+字母 在部分输入法/键盘布局下 event.key 不是字母，code=KeyX 才是可靠信号。
+   return name===key||(/^[a-z]$/.test(key)&&code==='key'+key)
+     ||(key==='space'&&name===' ')||(key==='esc'&&name==='escape')||(key==='plus'&&name==='+');
   };
     app.graphicRuntime=function(){try{return JSON.parse(Zotero.Prefs.get(runtimePref,true)||'{}');}catch{return {};}};
     app.setGraphicRuntimeValue=function(key,value){
@@ -216,7 +229,7 @@ var PaperLoomGraphics;
     app.saveGraphics=function(s){return this.writeJSON(s.file,{version:1,fingerprint:s.fingerprint,replace:!!s.replace,hidden:!!s.hidden,lastLocation:s.lastLocation||null,nativeBackgrounds:[...s.nativeBackgrounds||[]],rows:s.rows.map(({element,...r})=>r)});};
     app.openGraphics=async function(reader,{panel=true}={}){this.bindNativeOverlayInput?.(reader)?.bind();const s=await this.graphicSession(reader);await s.ready;if(panel)s.panel.hidden=false;s.update();return s;};
     app.toggleGraphics=async function(reader){const s=await this.graphicSession(reader);await s.ready;s.hidden=!s.hidden;s.paint();s.update();await this.saveGraphics(s);};
-    app.closeGraphics=function(reader){const s=this.graphicSessions.get(reader);if(!s)return;this.closeNativeBackgrounds?.(s);this.graphicSessions.delete(reader);s.control.stopped=true;s.control.process?.kill();s.control.renderTask?.cancel();clearTimeout(s.paintTimer);for(const v of s.hiRes?.values()||[])try{v.canvas.width=v.canvas.height=0;}catch(e){}s.hiRes?.clear();for(const xhr of [...s.control.requests])xhr.abort();s.selection?.();for(const clean of s.cleanup.splice(0))clean();s.panel?.remove();};
+    app.closeGraphics=function(reader){const s=this.graphicSessions.get(reader);if(!s)return;this.closeNativeBackgrounds?.(s);this.graphicSessions.delete(reader);s.control.stopped=true;s.control.process?.kill();s.control.renderTask?.cancel();s.regionQueue?.splice(0);s.regionPaused=true;this.hideRegionBadge(s);clearTimeout(s.maskPaintTimer);clearTimeout(s.paintTimer);for(const v of s.hiRes?.values()||[])try{v.canvas.width=v.canvas.height=0;}catch(e){}s.hiRes?.clear();for(const xhr of [...s.control.requests])xhr.abort();s.selection?.();for(const clean of s.cleanup.splice(0))clean();s.panel?.remove();};
     app.bindGraphicPages=function(s){
       const bound=new Set(),paint=()=>{if(this.stopped||!this.graphicSessions.has(s.reader))return;
         // The primary pane is always the unmodified source, even after split
@@ -230,7 +243,7 @@ var PaperLoomGraphics;
           for(const pageEl of win.document.querySelectorAll('.page[data-page-number]')){
             const index=Number(pageEl.dataset.pageNumber)-1,pv=viewer.getPageView(index);if(!pv?.viewport)continue;
             if(pv.renderingState!==3){s.paintKeys?.delete(pageEl);for(const old of pageEl.querySelectorAll('.pl-graphic-anchor')){old.plDispose?.();old.remove();}continue;}
-            const key=JSON.stringify([this.nativeArtifactRevision||0,s.maskRevision||0,s.hidden,s.replace,Array.from(pv.viewport.transform),pageEl.clientWidth,pageEl.clientHeight,s.rows.filter(r=>r.pageIndex===index).map(r=>[r.id,r.legacyLayout,r.preserveSource,r.preserveLiterals,r.text,r.target,r.approved,r.autoValidated,r.review,r.warnings,r.quad,r.directionVerified,r.background,r.fontSize,r.score,r.inkPatch?.quad])]);
+            const key=JSON.stringify([this.nativeArtifactRevision||0,s.maskRevision||0,s.hidden,s.replace,Array.from(pv.viewport.transform),pageEl.clientWidth,pageEl.clientHeight,s.rows.filter(r=>r.pageIndex===index).map(r=>[r.id,r.legacyLayout,r.preserveSource,r.preserveLiterals,r.text,r.target,r.approved,r.autoValidated,r.review,r.warnings,r.quad,r.directionVerified,r.background,r.fontSize,r.score,r.inkPatch?.version,r.inkPatch?.quad])]);
             if(s.paintKeys?.get(pageEl)===key)continue;(s.paintKeys||=new WeakMap()).set(pageEl,key);
             for(const old of pageEl.querySelectorAll('.pl-graphic-anchor')){old.plDispose?.();old.remove();}
             if(s.hidden)continue;
@@ -281,7 +294,8 @@ var PaperLoomGraphics;
       const cx=cv.getContext('2d',{willReadFrequently:true});
       cx.drawImage(hi.canvas,x,y,w,h,0,0,w,h);
       const pixels=cx.getImageData(0,0,w,h);
-      const m=CubeGraphicInk.mask(pixels)||CubeGraphicInk.mask(pixels,{edgeDashes:true});
+      const textFrame=['PDF-table','PDF-text-table','PDF-caption'].includes(String(row.origin||''));
+      const m=CubeGraphicInk.mask(pixels,{flatFill:textFrame})||CubeGraphicInk.mask(pixels,{edgeDashes:true});
       let url=null,kind='none';
       if(m?.uniform||m?.complete){
         cx.setTransform(1,0,0,1,0,0);
@@ -370,7 +384,7 @@ var PaperLoomGraphics;
       if(sample&&sample.share>=.85)return {color:sample.color,cover:'sampled-flat',confidence:+sample.share.toFixed(2),sample};
       // 底色不纯（地图、色块、跨边界）：铺一层从四周环带插出来的渐变，胜过一块错色矩形。
       try{const ring=this.graphicRingPatch(canvas,p,viewport,cw,ch,doc);if(ring)return {url:ring.url,cover:'ring-gradient',confidence:sample?+sample.share.toFixed(2):undefined};}catch(e){ /* 取样失败就退回平铺色 */ }
-      if(row.inkPatch?.version===5&&row.inkPatch?.uniform)return {color:'rgb('+Array(3).fill(row.inkPatch.background).join(',')+')',cover:'sampled-flat',confidence:1};
+      if(row.inkPatch?.version===7&&row.inkPatch?.uniform)return {color:'rgb('+Array(3).fill(row.inkPatch.background).join(',')+')',cover:'sampled-flat',confidence:1};
       if(row.background)return {color:row.background,cover:'verified-paper',confidence:1};
       if(sample)return {color:sample.color,cover:'sampled-flat',confidence:+sample.share.toFixed(2),sample};
       return {color:'#ffffff',cover:'paper-fallback',confidence:0};
@@ -392,7 +406,7 @@ var PaperLoomGraphics;
       box.style.cssText='position:absolute;left:0;top:0;transform-origin:0 0;box-sizing:border-box;appearance:none;min-width:0;min-height:0;margin:0;padding:0;border:0;z-index:45;outline:none;background:transparent;color:transparent;overflow:hidden;cursor:help;display:block;text-align:left;align-content:start;';
       box.style.width=p.width+'px';box.style.height=p.height+'px';box.style.transform='matrix('+p.matrix.join(',')+')';
       box.title=row.text+' → '+row.target+' · Alt+单击打开校订';box.setAttribute('aria-label',box.title);
-      const nativePatch=this.nativeBackgroundFor?.(s,row);let mask=row.inkPatch?.version===5&&row.inkPatch?.quad===JSON.stringify(row.quad)?row.inkPatch.url:null;if(mask)box.dataset.maskResult='verified-high-resolution-mask';const peers=s.rows.filter(r=>r.pageIndex===row.pageIndex&&!r.legacyLayout);
+      const nativePatch=this.nativeBackgroundFor?.(s,row);let mask=row.inkPatch?.version===7&&row.inkPatch?.quad===JSON.stringify(row.quad)?row.inkPatch.url:null;if(mask)box.dataset.maskResult='verified-high-resolution-mask';const peers=s.rows.filter(r=>r.pageIndex===row.pageIndex&&!r.legacyLayout);
       // 掩膜是「抠掉墨迹、留下真实底色」的补丁，比任何平铺色都干净，所以只要有画布就做；
       // 原先要求 1.5 倍像素密度，结果 100% 缩放下的标签全部落到半透明兜底，看着就是脏。
       const maskKey=row.id+'|'+JSON.stringify(row.quad);
@@ -569,7 +583,7 @@ var PaperLoomGraphics;
     };
     // A manual box selection must never be silently dropped because the background
     // page scan happens to be running; wait briefly for it instead.
-    app.waitGraphicIdle=async function(s,timeout=25000){const end=Date.now()+timeout;while(s.busy&&Date.now()<end&&!this.stopped)await new Promise(resolve=>setTimeout(resolve,120));return !s.busy;};
+    app.waitGraphicIdle=async function(s,timeout=25000){const end=Date.now()+timeout;while(s.busy&&Date.now()<end&&!this.stopped&&!s.regionPaused&&this.graphicSessions.get(s.reader)===s)await new Promise(resolve=>setTimeout(resolve,120));return !s.busy;};
     // 框选翻译的轻量提示：平时不占地方，只在框选后出现一个小圆点；
     // 识别/翻译时转圈，结束后停下并显示条数，点一下才展开这次识别到的文字。
     app.regionBadge=function(s){
@@ -582,7 +596,7 @@ var PaperLoomGraphics;
         style.textContent='.pl-region-badge{position:fixed;z-index:2147483645;width:26px;height:26px;border-radius:50%;border:1px solid #2f6bff;background:Canvas;color:#2f6bff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px #14285a33;font:600 12px/1 system-ui;padding:0}'
           +'.pl-region-badge[data-state="busy"]{cursor:progress}'
           +'.pl-region-badge .pl-region-ring{position:absolute;width:22px;height:22px;border-radius:50%;border:2px solid #2f6bff33;border-top-color:#2f6bff;animation:pl-region-spin .9s linear infinite;display:none}'
-          +'.pl-region-badge[data-state="busy"] .pl-region-ring{display:block}'
+          +'.pl-region-badge[data-state="busy"] .pl-region-ring,.pl-region-badge[data-state="queued"] .pl-region-ring{display:block}'
           +'.pl-region-badge[data-state="busy"] .pl-region-count{opacity:0}'
           +'.pl-region-badge[data-state="error"]{border-color:#c0392b;color:#c0392b}'
           +'.pl-region-list{position:fixed;z-index:2147483646;width:390px;max-width:92vw;max-height:46vh;overflow:auto;background:Canvas;color:CanvasText;border:1px solid #b8c3d6;border-radius:8px;box-shadow:0 8px 24px #14285a2e;padding:8px 10px;font:12px/1.5 system-ui;display:none}'
@@ -596,6 +610,9 @@ var PaperLoomGraphics;
           +'@keyframes pl-region-spin{to{transform:rotate(360deg)}}';
         doc.body.appendChild(style);
       }
+      if(s.badge){try{s.badge.root.remove();s.badge.popover.remove();}catch(e){}
+        for(const [target,type,fn,capture] of s.badge.listeners||[])try{target.removeEventListener(type,fn,capture);}catch(e){}
+        clearTimeout(s.badge.timer);s.badge=null;}
       const root=doc.createElement('button');root.type='button';root.className='pl-region-badge';root.dataset.state='armed';
       const ring=doc.createElement('span');ring.className='pl-region-ring';
       const count=doc.createElement('span');count.className='pl-region-count';count.textContent='择';
@@ -603,17 +620,19 @@ var PaperLoomGraphics;
       const popover=doc.createElement('div');popover.className='pl-region-list';popover.setAttribute('role','dialog');
       doc.body.append(root,popover);
       const place=()=>{
+        // 放在工具栏按钮下方，并且不许压在按钮上：压在按钮上时点圆点等于点按钮，
+        // 会再触发一次框选，看着就像"圆点被点没了"。
         const rect=view?.wrap?.isConnected?view.wrap.getBoundingClientRect():null;
-        const left=rect?Math.round(rect.left+4):Math.round(doc.defaultView.innerWidth-64);
-        const top=rect?Math.round(rect.bottom+4):48;
+        const gap=6,left=rect?Math.round(rect.left):Math.round(doc.defaultView.innerWidth-64);
+        const top=rect?Math.round(rect.bottom+gap):48;
         root.style.left=left+'px';root.style.top=top+'px';
-        popover.style.left=Math.max(8,Math.min(left,doc.defaultView.innerWidth-400))+'px';popover.style.top=(top+30)+'px';
+        popover.style.left=Math.max(8,Math.min(left,doc.defaultView.innerWidth-400))+'px';popover.style.top=(top+32)+'px';
       };
       root.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();this.toggleRegionList(s);});
       root.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();this.toggleRegionList(s);}});
-      s.badge={doc,root,count,popover,place,timer:null};
-      doc.addEventListener('pointerdown',e=>{if(s.badge&&!root.contains(e.target)&&!popover.contains(e.target))this.hideRegionBadge(s);},true);
-      doc.defaultView.addEventListener('resize',place);
+      const onOutside=e=>{const b=s.badge;if(!b||b.root!==root)return;if(!root.contains(e.target)&&!popover.contains(e.target))this.hideRegionBadge(s);};
+      s.badge={doc,root,count,popover,place,timer:null,listeners:[[doc,'pointerdown',onOutside,true],[doc.defaultView,'resize',place,false]]};
+      for(const [target,type,fn,capture] of s.badge.listeners)target.addEventListener(type,fn,capture);
       place();return s.badge;
     };
     app.showRegionBadge=function(s,state,{count,title}={}){
@@ -632,20 +651,32 @@ var PaperLoomGraphics;
     app.hideRegionBadge=function(s){
       const badge=s.badge;if(!badge)return;
       clearTimeout(badge.timer);try{badge.root.remove();badge.popover.remove();}catch(e){}
+      for(const [target,type,fn,capture] of badge.listeners||[])try{target.removeEventListener(type,fn,capture);}catch(e){}
       s.badge=null;
     };
     app.toggleRegionList=function(s){
-      const badge=this.regionBadge(s),open=badge.popover.style.display==='block';
+      const badge=s.badge||this.regionBadge(s),open=badge.popover.style.display==='block';
       if(open){badge.popover.style.display='none';return;}
-      const list=s.lastRegionList||[];
+      const batches=(s.regionResults||[]).slice();
+      if(!batches.length&&s.lastRegionList?.length)batches.push({pageIndex:s.lastRegionList[0].pageIndex,rows:s.lastRegionList});
+      const list=batches.flatMap(b=>b.rows||[]);
       badge.popover.replaceChildren();
       const header=badge.doc.createElement('header');
       const title=badge.doc.createElement('span');
-      title.textContent='本次框选：识别 '+list.length+' 条 · 已译 '+list.filter(r=>r.target).length+' 条';
+      const queued=(s.regionQueue||[]).length;
+      title.textContent='本次框选：识别 '+list.length+' 条 · 已译 '+list.filter(r=>r.target).length+' 条'+(batches.length>1?'（'+batches.length+' 次）':'')+(queued?'，另有 '+queued+' 个排队':'');
       const close=badge.doc.createElement('button');close.type='button';close.textContent='✕';close.title='关闭';
       close.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();this.hideRegionBadge(s);});
       header.append(title,close);badge.popover.appendChild(header);
-      for(const row of list){
+      const rows=batches.length>1
+        ?batches.flatMap(b=>[{group:'第 '+(b.pageIndex+1)+' 页 · 识别 '+(b.rows||[]).length+' 条 · 已译 '+(b.rows||[]).filter(r=>r.target).length+' 条'},...(b.rows||[])])
+        :list;
+      for(const row of rows){
+        if(row.group){
+          const head=badge.doc.createElement('div');head.className='pl-region-group';head.textContent=row.group;
+          head.style.cssText='margin:6px 0 2px;font-weight:600;color:#2f6bff;font-size:11px;';
+          badge.popover.appendChild(head);continue;
+        }
         const line=badge.doc.createElement('div');line.className='pl-region-row';
         const src=badge.doc.createElement('span');src.className='pl-region-src';src.textContent=row.text||'';
         const dst=badge.doc.createElement('span');dst.textContent=row.target||'（未翻译）';
@@ -659,6 +690,104 @@ var PaperLoomGraphics;
       footer.append(full,again);badge.popover.appendChild(footer);
       badge.place();badge.popover.style.display='block';
     };
+    // 框选立刻可用：一次识别要跑几秒到几十秒，不能让后面的人干等。
+    // 每次框选排进队列按顺序处理；开工前先等后台任务空出来，避免和自动翻译抢资源。
+    app.updateRegionQueueBadge=function(s){
+      const queued=(s.regionQueue||[]).length,pending=queued+(s.regionRunning?1:0);
+      if(pending>0)return this.showRegionBadge(s,'queued',{count:pending,title:'框选翻译：正在处理，另有 '+Math.max(0,pending-1)+' 个排队'});
+      const done=(s.regionResults||[]).slice(-1)[0];
+      const translated=done?(done.rows||[]).filter(r=>r.target).length:0;
+      return this.showRegionBadge(s,'done',{count:translated||((done?.rows||[]).length)||0,title:'框选翻译：点这里看识别结果'});
+    };
+    app.pauseRegionQueue=function(s){
+      if(!s)return;s.regionPaused=true;s.regionQueue?.splice(0);
+      const control=s.regionControl;if(control){control.stopped=true;control.process?.kill();control.renderTask?.cancel();for(const req of control.requests||[])req.abort();}
+      s.selection?.();this.hideRegionBadge(s);
+    };
+    app.enqueueRegionJob=function(s,job){
+      s.regionPaused=false;(s.regionQueue||=[]).push(job);
+      this.updateRegionQueueBadge(s);
+      this.pumpRegionQueue(s);
+      return {queued:(s.regionQueue||[]).length};
+    };
+    app.pumpRegionQueue=async function(s){
+      if(s.regionRunning||s.regionPaused||this.stopped)return;
+      s.regionRunning=true;
+      const alive=()=>this.graphicSessions.get(s.reader)===s&&!this.stopped;
+      let lastError='';
+      try{
+        while((s.regionQueue||[]).length&&alive()&&!s.regionPaused){
+          const job=s.regionQueue.shift();let owned=false;
+          this.updateRegionQueueBadge(s);
+          try{
+            const idle=await this.waitGraphicIdle(s,120000);
+            if(!alive()||s.regionPaused)break;
+            // A background job may acquire the session while the await resolves.
+            // Do not overwrite its control or clear its busy flag in our finally.
+            if(!idle||s.busy)throw Error('后台识别仍在运行，请稍后重新框选');
+            if(job.version&&job.version!==Array.from(job.pv.viewport.transform).join(','))throw Error('排队期间页面缩放或旋转，请重新框选');
+            if(job.canvas&&(!job.canvas.width||!job.canvas.height))throw Error('框选页面已释放，请重新框选');
+            s.lastRegionList=null;lastError='';
+            const control={stopped:false,requests:new Set()};s.regionControl=control;owned=true;
+            await this.recognizeGraphicRegion(s,job.win,job.pv,job.canvas,job.pageIndex,job.rect,{manual:true,article:job.article,control});
+            if(!alive()||control.stopped)break;
+            const list=(s.lastRegionList||[]).filter(r=>r.pageIndex===job.pageIndex);
+            (s.regionResults||=[]).push({pageIndex:job.pageIndex,at:Date.now(),rows:list});
+            if(s.regionResults.length>6)s.regionResults.splice(0,s.regionResults.length-6);
+          }catch(e){lastError=e.message||String(e);if(alive())s.message=lastError;}
+          finally{
+            if(owned){s.regionControl=null;s.busy=false;}
+            if(alive()){s.update?.();s.paint?.();}
+          }
+        }
+      }finally{
+        s.regionRunning=false;
+        if(alive()&&!s.regionPaused){
+          if(lastError)this.showRegionBadge(s,'error',{title:'框选翻译失败：'+lastError});
+          else this.updateRegionQueueBadge(s);
+        }
+      }
+    };
+    // Clear only settled sessions. Pause before mutation, preserve revisions on
+    // disk and enqueue pending prose without starting provider work.
+    app.clearTranslations=async function(reader,{all=false,pageIndex=null}={}){
+      const index=Number.isInteger(pageIndex)?pageIndex:this.graphicPageIndex(reader),at=new Date().toISOString(),epoch=crypto.randomUUID();
+      const g=this.graphicSessions.get(reader),s=this.inplace?.get(reader);
+      if(!all&&(!Number.isInteger(index)||index<0))throw Error('当前页尚未就绪');
+      if(g?.busy||g?.regionRunning||s?.workers||s?.graphicJob?.busy||s?.stage==='parsing')throw Error('请先暂停并等待当前任务结束，再清除翻译');
+      if(s){s.paused=true;s.graphicJob?.pause();}
+      let graphics=0,prose=0;const pages=new Set();
+      if(g){
+        this.pauseRegionQueue(g);
+        for(const row of g.rows){
+          if(!all&&row.pageIndex!==index)continue;
+          row.translationEpoch=epoch;row.clearedAt=at;
+          if(!row.target)continue;
+          (row.history||=[]).push({source:row.text,target:row.target,quad:row.quad,edited:!!row.edited,approved:!!row.approved,reason:'cleared-by-user',at});
+          row.target='';row.edited=false;row.approved=false;row.clearedAt=at;delete row.error;pages.add(row.pageIndex);graphics++;
+        }
+        g.regionResults=[];g.lastRegionList=null;this.hideRegionBadge?.(g);
+        g.paintedMasks?.clear?.();g.maskRevision=(g.maskRevision||0)+1;
+        g.paint();g.update();
+      }
+      if(s){
+        for(const rec of s.records.values()){
+          if(!all&&rec.layout?.pageIndex!==index)continue;
+          rec.translationEpoch=epoch;rec.clearedAt=at;
+          if(!rec.target)continue;
+          (rec.history||=[]).push({source:rec.text,target:rec.target,edited:!!rec.edited,approved:!!rec.approved,alignment:rec.alignment||null,reason:'cleared-by-user',at});
+          rec.target='';rec.status='pending';rec.edited=false;rec.approved=false;rec.clearedAt=at;delete rec.alignment;
+          s.enqueue?.(rec);s.paint(rec);prose++;
+        }
+        for(const page of pages){s.graphicJob?.completed.delete(page);s.graphicJob?.failed.delete(page);s.graphicJob?.pending.add(page);}
+        s.update();
+      }
+      // Retry must also save the already-cleared in-memory state after a failed
+      // write; zero newly changed targets does not mean the previous write worked.
+      if(g)await this.saveGraphics(g);
+      if(s)await this.saveInPlaceCheckpoint?.(s);
+      return {graphics,prose,pageIndex:index,all};
+    };
     app.finishRegionBadge=function(s,pageIndex,error){
       if(error){this.showRegionBadge(s,'error',{title:'框选翻译失败：'+String(error).slice(0,80)});return;}
       const list=(s.lastRegionList||[]).filter(r=>r.pageIndex===pageIndex);
@@ -667,7 +796,8 @@ var PaperLoomGraphics;
     };
     app.selectGraphicRegion=async function(reader){
       const s=await this.openGraphics(reader,{panel:false});
-      if(s.busy){s.message='\u6b63\u5728\u5b8c\u6210\u5f53\u524d\u9875\u8bc6\u522b\uff0c\u968f\u540e\u5f00\u59cb\u6846\u9009\u2026';s.update();await this.waitGraphicIdle(s)||(()=>{throw Error('\u540e\u53f0\u8bc6\u522b\u4ecd\u672a\u7ed3\u675f\uff0c\u8bf7\u7a0d\u5019\u518d\u6846\u9009');})();}
+      // 上一次还没跑完也不再挡着：这次的框选排进队列。
+      if(s.busy||(s.regionQueue||[]).length){s.message='上一次识别还在处理，这次的框选会排队执行。';s.update();}
       s.selection?.();
       const clean=[],covers=[];s.message='在左侧或右侧当前 PDF 页上拖框选图；Esc 取消。框选只做本地识别。';s.update();
       this.showRegionBadge(s,'armed');
@@ -692,10 +822,8 @@ var PaperLoomGraphics;
             const changed=version!==Array.from(pv.viewport.transform).join(',');finish();
             if(changed){s.message='框选期间页面缩放或旋转，请重新框选';s.update();return;}
             if(Math.abs(a[0]-end[0])<10||Math.abs(a[1]-end[1])<10)return;
-            s.lastRegionList=null;this.showRegionBadge(s,'busy');
-            this.recognizeGraphicRegion(s,win,pv,canvas,index,[Math.min(a[0],end[0]),Math.min(a[1],end[1]),Math.max(a[0],end[0]),Math.max(a[1],end[1])],{manual:true,article:this.inplace?.get(reader)})
-              .then(()=>this.finishRegionBadge(s,index))
-              .catch(e=>{s.message=e.message;s.paint();s.update();this.finishRegionBadge(s,index,e.message||String(e));});
+            s.lastRegionList=null;
+            this.enqueueRegionJob(s,{win,pv,canvas,version,pageIndex:index,rect:[Math.min(a[0],end[0]),Math.min(a[1],end[1]),Math.max(a[0],end[0]),Math.max(a[1],end[1])],article:this.inplace?.get(reader)});
           });
         }
       }
@@ -784,7 +912,7 @@ var PaperLoomGraphics;
           if(['PDF-table','PDF-text-table','PDF-caption'].includes(row.origin))row.backgroundSample={ix,iy,iw,ih,textBounds,canvasWidth:crop.width,canvasHeight:crop.height};
           if(row.origin==='OCR'&&!row.review&&row.directionVerified===true&&typeof CubeGraphicInk!=='undefined'){
             const p=project(row.quad,Array.from(pv.viewport.transform)),inv=inverse(p.matrix),scale=Math.hypot(p.matrix[0],p.matrix[1])*sx,cv=win.document.createElement('canvas');cv.width=Math.ceil(p.width*scale);cv.height=Math.ceil(p.height*scale);
-            try{const cx=cv.getContext('2d');cx.setTransform(cv.width/p.width*inv[0]/sx,cv.height/p.height*inv[1]/sx,cv.width/p.width*inv[2]/sy,cv.height/p.height*inv[3]/sy,cv.width/p.width*inv[4],cv.height/p.height*inv[5]);cx.drawImage(canvas,0,0);const sourcePixels=cx.getImageData(0,0,cv.width,cv.height),m=CubeGraphicInk.mask(sourcePixels)||CubeGraphicInk.mask(sourcePixels,{edgeDashes:true});if(m?.uniform||m?.complete){cx.setTransform(1,0,0,1,0,0);const pixels=cx.createImageData(m.width,m.height);pixels.data.set(typeof Components!=='undefined'&&Components.utils?.cloneInto?Components.utils.cloneInto(m.data,win):m.data);cx.putImageData(pixels,0,0);row.inkPatch={version:5,quad:JSON.stringify(row.quad),uniform:!!m.uniform,background:m.background,url:cv.toDataURL()};}}finally{cv.width=cv.height=0;}
+            try{const cx=cv.getContext('2d');cx.setTransform(cv.width/p.width*inv[0]/sx,cv.height/p.height*inv[1]/sx,cv.width/p.width*inv[2]/sy,cv.height/p.height*inv[3]/sy,cv.width/p.width*inv[4],cv.height/p.height*inv[5]);cx.drawImage(canvas,0,0);const sourcePixels=cx.getImageData(0,0,cv.width,cv.height),m=CubeGraphicInk.mask(sourcePixels,{flatFill:['PDF-table','PDF-text-table','PDF-caption'].includes(String(row.origin||''))})||CubeGraphicInk.mask(sourcePixels,{edgeDashes:true});if(m?.uniform||m?.complete){cx.setTransform(1,0,0,1,0,0);const pixels=cx.createImageData(m.width,m.height);pixels.data.set(typeof Components!=='undefined'&&Components.utils?.cloneInto?Components.utils.cloneInto(m.data,win):m.data);cx.putImageData(pixels,0,0);row.inkPatch={version:7,quad:JSON.stringify(row.quad),uniform:!!m.uniform,background:m.background,url:cv.toDataURL()};}}finally{cv.width=cv.height=0;}
           }
           row.id='g'+(await this.hash(s.fingerprint+'|'+pageIndex+'|'+row.quad.flat().map(x=>x.toFixed(1)).join(',')+'|'+row.text)).slice(0,20);
           Object.assign(row,{pageIndex,target:'',selected:row.selected??translatable(row.text),approved:false});
@@ -833,6 +961,7 @@ var PaperLoomGraphics;
           s.lastRegionList=owned.map(r=>({id:r.id,pageIndex:r.pageIndex,text:String(r.text||'').slice(0,200),target:String(r.target||'').slice(0,200)}));
           s.lastRegion={localTargets:selected.filter(r=>r.target).length,sessionTargets:s.rows.filter(r=>r.pageIndex===pageIndex&&r.target).length,identity:selected.every(r=>s.rows.includes(r)),selected:selected.length,pageIndex};
         }else{
+          s.lastRegionList=owned.map(r=>({id:r.id,pageIndex:r.pageIndex,text:String(r.text||'').slice(0,200),target:String(r.target||'').slice(0,200)}));
           await this.saveGraphics(s);
           s.message='识别到 '+rows.length+' 个文字块'+warning+'。'+(this.config.translateGraphics===false?'图表翻译已关闭，可在设置中开启。':'核对原文后点击“翻译勾选项”；默认保留原图，点选对照。');s.paint();s.update();
         }
@@ -850,7 +979,7 @@ var PaperLoomGraphics;
       // another location. Preserve every source identity, cancellation and warning.
       const groups=new Map();for(const r of rows){const context=r.flowNode?'翻译流程图中的完整节点，使用紧凑中文，不添加原文没有的信息，不解释。普通英文即使全大写或OCR粘连也应翻译，例如ELECTRIC为电力、GAS为天然气、OIL为石油、HURRICANE为飓风、FLOOD为洪水、intra-network为层内、inter-network为层间。保留原文数值、公式变量及真正的缩写（如ML、CLM、GTA）；不要保留普通英文词作括注。':['PDF-text-table','PDF-caption'].includes(r.origin)?'翻译表格单元格或图注的全部文字，不省略。字段名亦须翻译：Context→上下文，Passage→文段，Question或Q:→问题，Answer或A:→答案，Target Completion→目标续写。根据上下文翻译普通词（如台阶step），保持题目字母串、数值、单位、变量与专名，不添加解释。':'图表短标签。保持原有数值、单位、变量与缩写；译文简短，不作解释。';
         const protectedContext=context+(r.preserveLiterals?.length?' 以下题目字符串必须逐字保留：'+JSON.stringify(r.preserveLiterals):'');
-        const key=JSON.stringify([r.text,protectedContext]);if(!groups.has(key))groups.set(key,{source:r.text,context:protectedContext,rows:[]});groups.get(key).rows.push(r);
+        const key=JSON.stringify([r.text,protectedContext,r.translationEpoch||r.clearedAt||'']);if(!groups.has(key))groups.set(key,{source:r.text,context:protectedContext,cacheScope:r.translationEpoch||r.clearedAt||'',rows:[]});groups.get(key).rows.push(r);
       }
       const jobs=[...groups.values()];let cursor=0,done=0,failed=0,failure;
       s.phase='translate';s.activeLabels=new Map();s.progress={total:rows.length,done:0,unique:jobs.length};s.update();
@@ -858,7 +987,7 @@ var PaperLoomGraphics;
         await Promise.all(Array.from({length:Math.min(Math.max(1,cfg.concurrency||3),jobs.length)},async()=>{
           while(!stop()&&!failure){const job=jobs[cursor++];if(!job)return;
             const first=job.rows[0];s.activeLabels.set(job,{pageIndex:first.pageIndex,region:first.graphicRegion||null,text:job.source,rect:bounds(first.quad),copies:job.rows.length});s.activity={pageIndex:first.pageIndex,region:first.graphicRegion||null};s.lastLocation=s.activity;s.update();
-            try{const result=await this.translate(job.source,job.rows[0].flowNode?{...cfg,translationRole:'flow-node'}:cfg,job.context,control);if(stop())return;
+            try{const result=await this.translate(job.source,job.rows[0].flowNode?{...cfg,translationRole:'flow-node'}:cfg,job.context,control,{cacheScope:job.cacheScope});if(stop())return;
               if(!result||typeof result.text!=='string'||!result.text.trim())throw Error('图表译文为空');
               for(const r of job.rows)if(r.text===job.source&&!r.target){r.target=result.text;r.warnings=result.warnings||[];delete r.error;}
               done+=job.rows.length;s.progress.done=done;s.message='图表翻译 '+done+'/'+rows.length+' · 相同文字复用';
@@ -877,7 +1006,7 @@ var PaperLoomGraphics;
       if(article.cfg?.translateGraphics===false)return {reused:0};
       const s=await this.graphicSession(article.reader);await s.ready;let reused=0;const used=new Set(),norm=t=>t.replace(/\s+/g,' ').trim();
       for(const r of article.records.values()){
-        if(r.status!=='pending')continue;
+        if(r.status!=='pending'||r.translationEpoch||r.clearedAt)continue;
         const candidates=s.rows.filter(g=>!g.legacyLayout&&!used.has(g)&&g.pageIndex===r.layout.pageIndex&&g.target&&g.origin==='PDF-caption'&&norm(g.text)===norm(r.text)&&overlap(bounds(g.quad),r.layout.inkRect)>area(r.layout.inkRect)*.8);
         if(candidates.length!==1)continue;const g=candidates[0];used.add(g);r.target=g.target;r.edited=!!g.edited;r.status='done';r.reusedGraphicID=g.id;reused++;
       }
@@ -965,9 +1094,10 @@ var PaperLoomGraphics;
       const recheck=bind((()=>{const b=doc.createElement('button');b.type='button';return b;})(),()=>this.autoTranslateGraphics(s.reader,{force:true,translate:false,background:true}),'',advRow);recheck.textContent='重新识别当前页';recheck.title='保留已有译文和校订，重新识别位置';
       const tip=doc.createElement('p');tip.className='pl-gp-tip';tip.textContent='手动框选：点按钮后在页面左上角按住左键拖到右下角松开，松手即识别并翻译；Esc 取消。';advanced.appendChild(tip);
 const scField=doc.createElement('label');scField.className='pl-gp-field';scField.textContent='\u6846\u9009\u5feb\u6377\u952e';
-      const scInput=doc.createElement('input');scInput.type='text';scInput.value=this.readerShortcut?.()||'';scInput.placeholder='\u4f8b\u5982 Alt+R\uff1b\u7559\u7a7a\u5173\u95ed';
+      const scInput=doc.createElement('input');scInput.type='text';scInput.value=this.readerShortcut?.()||'';scInput.placeholder='例如 Ctrl+R；留空关闭';
       scInput.addEventListener('change',()=>{this.setReaderShortcut?.(scInput.value.trim());s.message='\u6846\u9009\u5feb\u6377\u952e\uff1a'+(this.readerShortcut?.()||'\u672a\u8bbe\u7f6e');s.update();});
       scField.appendChild(scInput);advanced.appendChild(scField);
+      const shortcutTip=doc.createElement('p');shortcutTip.className='pl-gp-tip';shortcutTip.textContent='默认 Ctrl+R：在 PDF 阅读器里开启框选，Esc 取消；输入框内不触发。也可点击“手动框选补漏”。';advanced.appendChild(shortcutTip);
       const pythonDetails=doc.createElement('details'),pythonSummary=doc.createElement('summary');pythonSummary.textContent='本地 Python 高精度（可选）';pythonDetails.appendChild(pythonSummary);
       const runtime=this.graphicRuntime(),inputs={};
       for(const [key,label] of [['python','Python 可执行文件'],['runtime','OCR 依赖目录'],['models','OCR 模型目录']]){const l=doc.createElement('label');l.className='pl-gp-field';l.textContent=label;const input=doc.createElement('input');input.type='text';input.value=runtime[key]||'';l.appendChild(input);pythonDetails.appendChild(l);inputs[key]=input;}

@@ -29,7 +29,7 @@ var CubeCheckpoint;
   app.clearLayoutCache=async function(){const dir=PathUtils.join(this.dir,'layout');for(const p of await IOUtils.getChildren(dir).catch(()=>[]))await IOUtils.remove(p,{ignoreAbsent:true}).catch(()=>{});};
   app.saveInPlaceCheckpoint=async function(s,{active=true}={}){
    if(!s||s.stage!=='ready'||s.checkpointDisabled)return null;
-   const records=[...s.records.values()].map(r=>({id:r.id,text:r.text,target:r.target,status:r.status==='running'?'pending':r.status,edited:!!r.edited,pageIndex:r.layout.pageIndex,inkRect:r.layout.inkRect,rect:r.layout.rect,alignment:r.alignment||null}));
+   const records=[...s.records.values()].map(r=>({id:r.id,text:r.text,target:r.target,status:r.status==='running'?'pending':r.status,edited:!!r.edited,pageIndex:r.layout.pageIndex,inkRect:r.layout.inkRect,rect:r.layout.rect,alignment:r.alignment||null,history:r.history||[],clearedAt:r.clearedAt||null,translationEpoch:r.translationEpoch||null,approved:!!r.approved}));
    // Snapshot before await: teardown may empty the Map while IO is queued.
    const snapshot={version:1,at:new Date().toISOString(),active,itemID:s.reader.itemID,paused:true,fontScale:s.fontScale,hidden:s.hidden,syncEnabled:s.syncEnabled,records,legacy:s.unmatchedRestoredRecords||[],pages:[s.reader._internalReader?._primaryView,s.reader._internalReader?._secondaryView].map(v=>{const w=v?._iframeWindow,c=w?.document?.querySelector('#viewerContainer');return {page:w?.PDFViewerApplication?.pdfViewer?.currentPageNumber||1,top:c?.scrollTop||0,left:c?.scrollLeft||0};})};
    const j=s.graphicJob;if(j)snapshot.graphicJob={version:1,engine:this.graphicEngineVersion||this.version,pages:s.pdf.numPages,completed:[...j.completed],failed:[...j.failed]};

@@ -17,13 +17,29 @@ test('pause, no graph, unmounted page and failed page never claim complete cover
 });
 test('reader menu exposes the in-place actions plus the one-click engine installer, and no workbench or popup entry',async t=>{
  const {app,C,Zotero}=await createHarness(t);I.attach(app,C,L);G.attach(app,C,L);const dom=new JSDOM('<div class="toolbar"></div>');t.after(()=>dom.window.close());const reader={itemID:5,_iframeWindow:dom.window},doc=dom.window.document;
- app.buildReaderButton(doc,reader,n=>doc.querySelector('.toolbar').appendChild(n));const menu=doc.querySelector('.pl-reader-menu');assert.equal(menu.querySelectorAll('button').length,6);assert.doesNotMatch(menu.textContent,/面板|工作台|选文|清除|导出|图表进度/);assert.match(menu.textContent,/框选翻译/);assert.match(menu.textContent,/安装 \/ 修复识别引擎/);assert.equal(doc.querySelector('.pl-auto-graphics'),null);assert.equal(doc.querySelectorAll('.pl-reader-action button').length,2);assert.equal(app.readerPopup,undefined);
+ app.buildReaderButton(doc,reader,n=>doc.querySelector('.toolbar').appendChild(n));const menu=doc.querySelector('.pl-reader-menu');assert.equal(menu.querySelectorAll('button').length,7);
+ // 清除翻译是二级菜单：父项带 ›，子项挂在 body 上单独定位（菜单本体 overflow:auto 会裁掉嵌套面板）
+ assert.match(menu.textContent,/清除翻译/);
+ const parent=[...menu.querySelectorAll('[aria-haspopup="true"]')].find(n=>n.textContent.includes('清除翻译'));
+ assert.ok(parent,'要有清除翻译父项');
+ const sub=doc.querySelector('.pl-reader-submenu');
+ assert.ok(sub,'二级菜单面板要挂出来');
+ assert.deepEqual([...sub.querySelectorAll('button')].map(n=>n.textContent),['清除当前页面翻译','清除所有页面翻译']);
+ assert.deepEqual([...sub.querySelectorAll('button')].map(n=>n.dataset.action),['clear-page','clear-all']);
+ assert.equal(sub.style.display,'none','没点之前不该显示');assert.doesNotMatch(menu.textContent,/面板|工作台|选文|导出|图表进度/);assert.ok(menu.textContent.includes('框选翻译（补漏）…  Ctrl+R'));assert.match(menu.textContent,/安装 \/ 修复识别引擎/);assert.equal(doc.querySelector('.pl-auto-graphics'),null);assert.equal(doc.querySelectorAll('.pl-reader-action button').length,2);assert.equal(app.readerPopup,undefined);
  let call=0;app.requestCurrentGraphics=r=>{assert.equal(r,reader);call++;};[...menu.children].find(n=>n.textContent==='补译当前页图表').click();assert.equal(call,1);
  app.selectGraphicRegion=async()=>{};[...menu.children].find(n=>n.textContent.startsWith('框选翻译')).click();await new Promise(r=>setTimeout(r,5));app.addWindow({document:doc});assert.equal(doc.querySelector('[id="paperloom-keyset"]'),null);for(const v of [...app.readerButtons.get(reader)])v.dispose();
 });
 test('reader shortcut setting matches modifiers exactly and ignores typing',async t=>{
  const {app,C,Zotero}=await createHarness(t);G.attach(app,C,L);
- assert.match(app.readerShortcut(),/^Alt\+R$/);
+ // The short default uses exact modifiers and does not keep Alt aliases.
+ assert.equal(app.readerShortcut(),'Ctrl+R');
+ assert.equal(app.matchShortcut(app.readerShortcut(),{altKey:true,key:'r'}),false);
+ assert.equal(app.matchShortcut(app.readerShortcut(),{ctrlKey:true,altKey:true,key:'r'}),false);
+ assert.equal(app.matchShortcut(app.readerShortcut(),{ctrlKey:true,key:'r'}),true);
+ assert.equal(app.matchShortcut(app.readerShortcut(),{altKey:true,shiftKey:true,key:'r'}),false);
+ assert.equal(app.matchShortcut(app.readerShortcut(),{altKey:true,shiftKey:true,ctrlKey:true,key:'r'}),false);
+ assert.equal(app.matchShortcut(app.readerShortcut(),{key:'r'}),false);
  assert.equal(app.matchShortcut('Alt+R',{altKey:true,key:'r'}),true);
  assert.equal(app.matchShortcut('Alt+R',{altKey:true,key:'R'}),true);
  assert.equal(app.matchShortcut('Alt+R',{altKey:true,shiftKey:true,key:'R'}),false);
@@ -49,4 +65,16 @@ test('concurrent active text and region metadata are published before requests a
 });
 test('actual nearby captions name graphics without borrowing figure numbers for a table caption',()=>{
  const app={};G.attach(app,{},L);const p=require('./layout-kong-table-math.fixture.json').pages[0],plan=app.detectGraphicRegions(p,p.operatorList);const infos=plan.regions.map((r,i)=>app.graphicRegionInfo(plan,r,i,p));assert.ok(infos.some(i=>/表\s*I/.test(i.label)));assert.ok(infos.some(i=>/图\s*5/.test(i.label)));const tableCaption=infos.find(i=>i.title.startsWith('Table I')&&/图注/.test(i.label));assert.ok(tableCaption);assert.doesNotMatch(tableCaption.label,/图\s*5/);
+});
+
+test('legacy shipped shortcuts become Ctrl+R while custom and disabled preferences survive',async t=>{
+ const {app,C,Zotero,context}=await createHarness(t);
+ require('node:vm').runInContext(require('node:fs').readFileSync(require.resolve('../addon/content/graphics.js'),'utf8'),context);
+ context.PaperLoomGraphics.attach(app,C,L);
+ const key='extensions.zotero.paperloom.reader.shortcut';
+ for(const old of ['Alt+R','Alt+R, Ctrl+Alt+R','Alt+R, Ctrl+Alt+R, Alt+Shift+R','Ctrl+Alt+R, Alt+R, Alt+Shift+R']){
+  Zotero.Prefs.set(key,old);assert.equal(app.readerShortcut(),'Ctrl+R');
+  assert.equal(Zotero.Prefs.get(key),old,'default migration must not rewrite stored preferences');
+ }
+ for(const custom of ['', 'F9','Ctrl+Shift+L','Alt+R, F9']){app.setReaderShortcut(custom);assert.equal(app.readerShortcut(),custom);}
 });

@@ -46,6 +46,12 @@ async function startup({ id, version, rootURI }) {
   appScope.CubeReaderProgress.attach(appScope.PaperLoom);
   appScope.CubeCheckpoint.attach(appScope.PaperLoom);
   appScope.CubeAlignment.attach(appScope.PaperLoom);
+  // 快捷键要在启动时挂：插件重载不会重建已打开的阅读器工具栏，
+  // 挂在 buildReaderButton 里的那份在这些情况下永远不执行。
+  try {
+    appScope.PaperLoom.installRegionKeyset();
+    appScope.PaperLoom.installRegionKeyHandler();
+  } catch (error) { appScope.PaperLoom.logError?.(error); }
   Zotero.PaperLoom = appScope.PaperLoom;
   stage='app-init';
   await Zotero.PaperLoom.init();

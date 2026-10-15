@@ -206,3 +206,70 @@ test('in-place erasure never paints a translucent patch and prefers real backgro
   assert.ok(mixed.url===undefined||/^data:image\/png/.test(String(mixed.url)),'渐变补丁要么是图，要么是不透明色');
   assert.equal(app.graphicSampleBackground(null,p,null,60,12),null);
 });
+
+// 用户报"小圆点点了就消失"：上一次显示时挂下的监听器会把新圆点当成外部点击删掉。
+test('region badge survives hide/show cycles and opens its list on a real click',async t=>{
+ const {app,C}=await createHarness(t);const L=require('../addon/content/layout.js');G.attach(app,C,L);
+ const dom=new JSDOM('<body><div class="wrap"></div></body>');t.after(()=>dom.window.close());
+ const doc=dom.window.document,reader={itemID:9,_iframeWindow:dom.window};
+ app.readerButtons=new Map([[reader,new Set([{doc,wrap:doc.querySelector('.wrap')}])]]);
+ const s={reader,doc,panel:{hidden:true},update(){},paint(){},lastRegionList:[{id:'a',pageIndex:0,text:'Shenyang',target:'沈阳'}]};
+ app.showRegionBadge(s,'armed');app.hideRegionBadge(s);app.showRegionBadge(s,'busy');app.finishRegionBadge(s,0);
+ const badge=s.badge;assert.ok(badge.root.isConnected,'圆点要显示出来');
+ badge.root.dispatchEvent(new dom.window.Event('pointerdown',{bubbles:true}));
+ assert.ok(s.badge&&s.badge.root===badge.root,'点圆点本身不能把它删掉');
+ badge.root.dispatchEvent(new dom.window.Event('click',{bubbles:true}));
+ assert.equal(badge.popover.style.display,'block','点一下要展开列表');
+ assert.match(badge.popover.textContent,/Shenyang/);assert.match(badge.popover.textContent,/沈阳/);
+ doc.body.dispatchEvent(new dom.window.Event('pointerdown',{bubbles:true}));
+ assert.equal(s.badge,null,'点面板外面才该关闭');
+});
+
+// 用户要求：框选一次之后还能马上框第二次，后面的排队处理，不能干等。
+test('region selections queue up instead of blocking the next box',async t=>{
+ const {app,C}=await createHarness(t);const L=require('../addon/content/layout.js');G.attach(app,C,L);
+ const dom=new JSDOM('<body><div class="wrap"></div></body>');t.after(()=>dom.window.close());
+ const doc=dom.window.document,reader={itemID:11,_iframeWindow:dom.window};
+ app.readerButtons=new Map([[reader,new Set([{doc,wrap:doc.querySelector('.wrap')}])]]);
+ const order=[];let release=null;
+ app.recognizeGraphicRegion=async(s,win,pv,canvas,pageIndex)=>{order.push('start'+pageIndex);await new Promise(r=>{release=r;});s.lastRegionList=[{id:'x'+pageIndex,pageIndex,text:'Shenyang',target:'沈阳'}];order.push('end'+pageIndex);};
+ const s={reader,doc,paint(){},update(){},busy:false};app.graphicSessions.set(reader,s);t.after(()=>{app.hideRegionBadge(s);app.graphicSessions.delete(reader);});
+ app.enqueueRegionJob(s,{pageIndex:3,rect:[0,0,10,10]});
+ app.enqueueRegionJob(s,{pageIndex:8,rect:[0,0,10,10]});
+ await new Promise(r=>setTimeout(r,10));
+ assert.deepEqual(order,['start3'],'第二个框选不该等第一个跑完才入队');
+ assert.equal(s.regionQueue.length,1);
+ assert.equal(s.badge.root.dataset.state,'queued');
+ assert.equal(s.badge.count.textContent,'2','圆点要显示排队数量');
+ release();await new Promise(r=>setTimeout(r,20));
+ assert.deepEqual(order,['start3','end3','start8'],'第一个结束后第二个自动接着跑');
+ release();await new Promise(r=>setTimeout(r,20));
+ assert.deepEqual(order,['start3','end3','start8','end8']);
+ assert.equal(s.regionQueue.length,0);
+ assert.equal(s.badge.root.dataset.state,'done');
+ assert.equal(s.regionResults.length,2,'两次框选的结果都要留着');
+ app.toggleRegionList(s);
+ assert.match(s.badge.popover.textContent,/Shenyang/,'列表要点开才有内容');
+});
+
+// 菜单「清除翻译」：只清指定页 / 清全部，历史留档，正文退回待译。
+test('clear translations restores originals per page and keeps a history record',async t=>{
+ const {app,C}=await createHarness(t);const L=require('../addon/content/layout.js');G.attach(app,C,L);
+ const rows=[{id:'a',pageIndex:3,text:'Cleaned coal',target:'精煤',quad:[[0,0],[10,0],[10,4],[0,4]]},{id:'b',pageIndex:8,text:'Xi an',target:'西安',quad:[[0,0],[10,0],[10,4],[0,4]]}];
+ const painted=[];let saved=0;
+ const reader={itemID:1};
+ const g={rows,reader,pageIndex:8,paint(){painted.push('paint');},update(){},regionResults:[{pageIndex:3}],lastRegionList:[{pageIndex:3}]};
+ const records=new Map([['r1',{target:'译文一',status:'done',edited:true,layout:{pageIndex:3}}],['r2',{target:'译文二',status:'done',layout:{pageIndex:8}}]]);
+ const s={stage:'ready',records,update(){},paint(r){painted.push('rec:'+r.layout.pageIndex);}};
+ app.graphicSessions.set(reader,g);app.inplace=new Map([[reader,s]]);
+ app.graphicPageIndex=()=>3;app.saveGraphics=async()=>{saved++;};app.saveInPlaceCheckpoint=async()=>{saved++;};
+ const page=await app.clearTranslations(reader,{pageIndex:3});
+ assert.deepEqual({graphics:page.graphics,prose:page.prose},{graphics:1,prose:1});
+ assert.equal(rows[0].target,'');assert.equal(rows[1].target,'西安','别的页不能动');
+ assert.equal(rows[0].history[0].target,'精煤');assert.equal(rows[0].history[0].reason,'cleared-by-user');
+ assert.equal(records.get('r1').target,'');assert.equal(records.get('r1').status,'pending');assert.equal(records.get('r2').target,'译文二');
+ assert.equal(g.regionResults.length,0);assert.ok(saved>=2);
+ const all=await app.clearTranslations(reader,{all:true});
+ assert.equal(all.graphics,1);assert.equal(all.prose,1);
+ assert.equal(rows[1].target,'');assert.equal(records.get('r2').target,'');
+});

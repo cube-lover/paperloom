@@ -10,7 +10,7 @@ async function main(){
  if(Date.now()>=session.expiresAt)throw Error('Development channel expired; reload the development build through Zotero');
  const id='job-'+crypto.randomBytes(16).toString('hex'),req={version:1,sessionId:session.sessionId,id,action,createdAt:Date.now()};
  if(['native-page','inspect-page','refresh-page','translate-page','repair-flow-page'].includes(action)){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;}
- if(['resume-article','open-reader','audit-interaction','inspect-reader-ui'].includes(action))req.itemID=Number(process.argv[3]);
+ if(['resume-article','open-reader','audit-interaction','inspect-reader-ui','selftest-interaction'].includes(action))req.itemID=Number(process.argv[3]);
  if(['region-translate','region-shortcut'].includes(action)){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;if(process.argv[5])req.rect=process.argv.slice(5,9).map(Number);}
  if(action==='ocr-install-folder')req.path=process.argv[3]||'';
  if(action==='graphics-rows'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;}
@@ -18,6 +18,12 @@ async function main(){
  if(action==='graphics-purge-page'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;req.rect=process.argv[5]||'';}
  if(action==='graphics-preview'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;req.rect=process.argv[5]||'';}
  if(action==='region-badge'){req.itemID=Number(process.argv[3]);}
+ if(action==='clear-translations'){req.itemID=Number(process.argv[3]);req.rect=process.argv[4]||'page';}
+ if(action==='key-watch'){req.itemID=Number(process.argv[3]);req.rect=process.argv[4]||'report';}
+ if(action==='menu-click'){req.itemID=Number(process.argv[3]);req.rect=process.argv[4]||'clear-page';}
+ if(action==='keyset-fire'){req.itemID=Number(process.argv[3]);}
+ if(action==='region-key-audit'){req.itemID=Number(process.argv[3]);}
+ if(action==='region-key-probe'){req.itemID=Number(process.argv[3]);}
  if(action==='region-select'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;req.rect=process.argv.slice(5).join(' ');}
  if(action==='region-badge-demo'){req.itemID=Number(process.argv[3]);req.pageIndex=Number(process.argv[4])-1;}
  validateRequest(req,session.sessionId);

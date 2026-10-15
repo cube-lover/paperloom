@@ -40,7 +40,7 @@ var PaperLoomInPlace;
     };
     app.pauseInPlace=function(reader,pause=true){const s=this.inplace?.get(reader);if(!s)return;
       if(!pause&&s.cfg?.confirmBeforeSend&&!s.graphicsConsent){if(!this.confirm('继续翻译','将论文正文及图表文字发送给所选引擎，图像仅在本地识别。继续？'))return;s.graphicsConsent=true;}
-      s.paused=pause;s.update();if(!pause){s.resumeParse?.();s.graphicJob?.retry();s.pump?.();s.graphicJob?.schedule();}else{s.graphicJob?.pause();s.settle?.();}};
+      s.paused=pause;s.update();if(!pause){s.resumeParse?.();s.graphicJob?.retry();s.pump?.();s.graphicJob?.schedule();}else{this.pauseRegionQueue?.(this.graphicSessions?.get(reader));s.graphicJob?.pause();s.settle?.();}};
     app.retryInPlace=function(reader){const s=this.inplace?.get(reader);if(!s)return;for(const r of s.records.values())if(r.status==='error'){r.status='pending';s.enqueue?.(r);}s.graphicJob?.retry();this.pauseInPlace(reader,false);s.update();};
     app.toggleInPlace=function(reader){const s=this.inplace?.get(reader);if(!s)return;s.hidden=!s.hidden;s.doc.querySelector('#viewer')?.classList.toggle('pl-hide-translations',s.hidden);const g=this.graphicSessions?.get(reader);if(g){g.hidden=s.hidden;g.paint();this.saveGraphics(g).catch(e=>{g.message=e.message;});}s.update();};
     app.resizeInPlace=function(reader,delta){const s=this.inplace?.get(reader);if(!s)return;s.fontScale=Math.min(1.6,Math.max(.8,s.fontScale+delta));s.repaint?.();s.update();};
@@ -276,7 +276,7 @@ var PaperLoomInPlace;
         // Consume each archived record once. Exact source + page/ink identity
         // prevents repeated headings on different pages from sharing corrections.
         const restored=new Map(),used=new Set();
-        for(const r of restoredRecords||[])if(r.status==='done'&&typeof r.text==='string'&&typeof r.target==='string'&&r.target.trim()){
+        for(const r of restoredRecords||[])if(typeof r.text==='string'&&((r.status==='done'&&typeof r.target==='string'&&r.target.trim())||r.clearedAt)){
           const key=r.text.replace(/\s+/g,' ').trim();if(!restored.has(key))restored.set(key,[]);restored.get(key).push(r);
         }
         for(const b of s.layout.blocks)if(!b.skipReason){
@@ -285,9 +285,9 @@ var PaperLoomInPlace;
           let candidates=samePage.length?samePage:pool.filter(r=>!Number.isInteger(r.pageIndex??r.layout?.pageIndex));
           if(candidates.length>1){const exact=candidates.filter(r=>{const q=r.inkRect||r.layout?.inkRect;return L.validRect(q)&&q.every((v,i)=>Math.abs(v-b.inkRect[i])<.5);});candidates=exact;}
           const old=candidates.length===1?candidates[0]:null;if(old)used.add(old);
-          s.records.set(b.id,{id:b.id,layout:b,text:b.text,status:old?'done':'pending',target:old?.target||'',edited:!!old?.edited,alignment:old?.alignment||null,queued:false});
+          s.records.set(b.id,{id:b.id,layout:b,text:b.text,status:old?.status==='done'&&old.target?'done':'pending',target:old?.target||'',edited:!!old?.edited,approved:!!old?.approved,alignment:old?.alignment||null,history:old?.history||[],clearedAt:old?.clearedAt||null,translationEpoch:old?.translationEpoch||old?.clearedAt||null,queued:false});
         }
-        s.unmatchedRestoredRecords=(restoredRecords||[]).filter(r=>r.status==='done'&&!used.has(r));
+        s.unmatchedRestoredRecords=(restoredRecords||[]).filter(r=>(r.status==='done'||r.clearedAt)&&!used.has(r));
         s.paused=!!startPaused;s.graphicsConsent=!startPaused;
         if(!translateBlock&&this.reuseGraphicTranslations)await this.reuseGraphicTranslations(s);
         if(!s.records.size)throw new Error('没有可翻译正文；扫描件请先进行 OCR');
@@ -307,7 +307,7 @@ var PaperLoomInPlace;
           if(this.active.get(key)===s.control)this.active.delete(key);
           for(const resolve of s.waiters.splice(0))resolve(s);
         }};
-        const translate=translateBlock||((text,config,control,context)=>this.translate(text,config,context,control));
+        const translate=translateBlock||((text,config,control,context,options)=>this.translate(text,config,context,control,options));
         s.pump=()=>{
           if(!s.alive())return;
           if(s.paused){s.settle();return;}
@@ -320,7 +320,7 @@ var PaperLoomInPlace;
             const preceding=r.layout.continuesFrom?s.records.get(r.layout.continuesFrom)?.text:'';
             const following=r.layout.continuesTo?s.records.get(r.layout.continuesTo)?.text:'';
             const context=[preceding?'[上接原文，仅供理解] '+preceding:'',following?'[下接原文，仅供理解] '+following:''].filter(Boolean).join('\n');
-            Promise.resolve().then(()=>s.alive()?translate(r.text,cfg,s.control,context):null).then(result=>{
+            Promise.resolve().then(()=>s.alive()?translate(r.text,cfg,s.control,context,{cacheScope:r.translationEpoch||r.clearedAt||''}):null).then(result=>{
               if(!s.alive())return;
               if(!result||typeof result.text!=='string'||!result.text.trim())throw new Error('Empty translation');
               r.target=result.text;r.status='done';s.paint(r);
