@@ -15,6 +15,31 @@ var PaperLoomGraphics;
     if(w<.01||h<.01)throw Error('文字定位框为空');
     return {width:w,height:h,matrix:[(p[1][0]-p[0][0])/w,(p[1][1]-p[0][1])/w,(p[3][0]-p[0][0])/h,(p[3][1]-p[0][1])/h,...p[0]]};
   }
+  // project() retains PDF-local width/height. Convert those units to raster
+  // pixels explicitly, then map the complete (possibly rotated) frame back
+  // through its inverse affine transform instead of cropping a top-left corner.
+  function maskRasterFrame(q,transform){
+    const p=project(q,transform),inv=inverse(p.matrix);
+    const width=Math.max(1,Math.ceil(p.width*Math.hypot(p.matrix[0],p.matrix[1]))),height=Math.max(1,Math.ceil(p.height*Math.hypot(p.matrix[2],p.matrix[3])));
+    const sx=width/p.width,sy=height/p.height;
+    return {width,height,transform:[sx*inv[0],sy*inv[1],sx*inv[2],sy*inv[3],sx*inv[4],sy*inv[5]]};
+  }
+  // A tight glyph bbox excludes raster antialias/overhang. Add a small local
+  // margin, bounded by every neighbouring label (including untranslated math).
+  // This is display-only geometry; never rewrite the stored source anchors.
+  function paddedGlyphQuad(row,peers=[]){
+    if(!['PDF','OCR'].includes(row.origin)||row.flowNode)return row.quad;
+    const p=project(row.quad,[1,0,0,1,0,0]),inv=inverse(p.matrix),w=p.width,h=p.height,m=Math.min(.9,h*.18);
+    const obstacles=peers.filter(r=>r!==row&&r.quad).map(r=>bounds(r.quad.map(v=>point(inv,v))));
+    let l=m,t=m,r=m,b=m;
+    for(const q of obstacles){
+      if(q[3]>-m&&q[1]<h+m){if(q[2]<=.01)l=Math.min(l,Math.max(0,-q[2]-.15));if(q[0]>=w-.01)r=Math.min(r,Math.max(0,q[0]-w-.15));}
+      if(q[2]>-m&&q[0]<w+m){if(q[3]<=.01)t=Math.min(t,Math.max(0,-q[3]-.15));if(q[1]>=h-.01)b=Math.min(b,Math.max(0,q[1]-h-.15));}
+    }
+    const rect=[-l,-t,w+r,h+b];
+    if(obstacles.some(q=>overlap(q,rect)>.01))return row.quad;
+    return [[-l,-t],[w+r,-t],[w+r,h+b],[-l,h+b]].map(v=>point(p.matrix,v));
+  }
   function pixelsToPDF(polygon,capture){return polygon.map(p=>point(inverse(capture.transform),[capture.x+p[0]/capture.sx,capture.y+p[1]/capture.sy]));}
   function translatable(text){return (/^(?:Yes|No)$/i.test(text.trim())||/[A-Za-z]{3,}/.test(text))&&!/^\s*(?:https?:|www\.)/i.test(text);}
   function nativeLabels(chars,rect){
@@ -256,23 +281,26 @@ var PaperLoomGraphics;
       s.cleanup.push(()=>{for(const win of bound)try{for(const node of win.document.querySelectorAll('.pl-graphic-anchor')){node.plDispose?.();node.remove();}}catch{}});paint();
     };
     // 在原文框内统计出现最多的颜色（=背景）与占比：地图/色块上用它做不透明补丁。
-    // 高分辨率页面缓存：整页按 ~4 倍只渲一次，之后每一行从它上面裁自己的框。
-    // 键里不含滚动/偏移，所以滚动不会触发重渲；缩放或旋转变化才失效。
+    // Cache at a fixed PDF-space resolution, independent of reader zoom. Bound
+    // the real raster area rather than an incomplete CSS-size/multiplier key.
     app.graphicHiResPage=function(s,pv,index){
-      let scale=4;while(scale>2&&(pv.viewport.width*scale)*(pv.viewport.height*scale)>12e6)scale--;
-      const key=index+'|'+scale.toFixed(2)+'|'+(pv.viewport.rotation||0);
+      const pdfArea=pv.viewport.width*pv.viewport.height/(pv.viewport.scale*pv.viewport.scale);
+      const scale=Math.min(4,Math.sqrt(12e6/pdfArea)),rotation=pv.viewport.rotation||0;
+      const key=index+'|'+scale+'|'+rotation;
       s.hiRes||=new Map();
       const hit=s.hiRes.get(key);if(hit)return hit.promise?hit.promise:null;
       const entry={canvas:null,viewport:null,promise:null};s.hiRes.set(key,entry);
       const busy=()=>{try{entry.canvas.width=entry.canvas.height=0;}catch(e){}};
-      for(const [k,v] of [...s.hiRes])if(s.hiRes.size>2&&(k!==key||v===entry)){try{v.canvas.width=v.canvas.height=0;}catch(e){}s.hiRes.delete(k);}
+      // Pending renders are still borrowed by mask builders; only evict settled
+      // pages, never a render that another caller is waiting to crop.
+      for(const [k,v] of [...s.hiRes])if(s.hiRes.size>2&&k!==key&&v.canvas){v.canvas.width=v.canvas.height=0;s.hiRes.delete(k);}
       entry.promise=(async()=>{
       const page=unwrap(pv.pdfPage||pv.page);
       if(!page?.render||!page?.getViewport)throw Error('页面还在加载，稍后重试');
       // pdf.js 只在页面自己的 realm 里认这些参数：跨 realm 传对象会丢掉 canvasContext。
       const win=pv.div?.ownerDocument?.defaultView||s.doc?.defaultView;
       const local=v=>typeof Components!=='undefined'&&Components.utils?.cloneInto?Components.utils.cloneInto(v,win,{wrapReflectors:true}):v;
-      const viewport=unwrap(page.getViewport(local({scale:pv.viewport.scale*scale}))),canvas=win.document.createElement('canvas');
+      const viewport=unwrap(page.getViewport(local({scale,rotation}))),canvas=win.document.createElement('canvas');
       canvas.width=Math.max(1,Math.ceil(viewport.width));canvas.height=Math.max(1,Math.ceil(viewport.height));
       const args=new win.Object();args.canvas=canvas;args.canvasContext=canvas.getContext('2d',{willReadFrequently:true});args.viewport=viewport;args.annotationMode=0;args.intent='print';
       const task=unwrap(page.render(args));
@@ -286,31 +314,33 @@ var PaperLoomGraphics;
       const page=pv?.pdfPage||pv?.page;
       if(!page?.render||!row?.quad)return null;
       const hi=await this.graphicHiResPage(s,pv,index);
-      const q=project(row.quad,Array.from(hi.viewport.transform));
-      const x=Math.max(0,Math.floor(q.matrix[4])),y=Math.max(0,Math.floor(q.matrix[5]));
-      const w=Math.min(hi.canvas.width-x,Math.max(1,Math.round(q.width))),h=Math.min(hi.canvas.height-y,Math.max(1,Math.round(q.height)));
-      if(w<5||h<5)return null;
-      const cv=s.doc.createElement('canvas');cv.width=w;cv.height=h;
-      const cx=cv.getContext('2d',{willReadFrequently:true});
-      cx.drawImage(hi.canvas,x,y,w,h,0,0,w,h);
-      const pixels=cx.getImageData(0,0,w,h);
-      const textFrame=['PDF-table','PDF-text-table','PDF-caption'].includes(String(row.origin||''));
-      const m=CubeGraphicInk.mask(pixels,{flatFill:textFrame})||CubeGraphicInk.mask(pixels,{edgeDashes:true});
-      let url=null,kind='none';
-      if(m?.uniform||m?.complete){
-        cx.setTransform(1,0,0,1,0,0);
-        const out=cx.createImageData(m.width,m.height);
-        out.data.set(typeof Components!=='undefined'&&Components.utils?.cloneInto?Components.utils.cloneInto(m.data,s.doc.defaultView):m.data);
-        cx.putImageData(out,0,0);kind='glyph-mask';
-      }else{
-        // 抠不出独立字形（例如文字压在彩条上）时，退成这块框里最亮的那个众数颜色，
-        // 纯色不透明地盖住原文——比四周取样的渐变干净得多，也不会留半透明灰影。
-        const flat=this.graphicFlatPaperColor(pixels);
-        if(!flat){cv.width=cv.height=0;return null;}
-        cx.setTransform(1,0,0,1,0,0);cx.fillStyle=flat;cx.fillRect(0,0,cv.width,cv.height);kind='glyph-fill';
+      const obstacles=[...(s.rows||[]).filter(r=>r!==row&&r.pageIndex===row.pageIndex&&!r.legacyLayout),...[...this.inplace?.get(s.reader)?.records?.values()||[]].filter(r=>r.layout.pageIndex===row.pageIndex).map(r=>({quad:quad(r.layout.rect)}))];
+      const padded=paddedGlyphQuad(row,obstacles),cv=s.doc.createElement('canvas');
+      let url=null,kind='none',displayQuad=row.quad;
+      for(const candidate of padded===row.quad?[row.quad]:[padded,row.quad]){
+        const frame=maskRasterFrame(candidate,Array.from(hi.viewport.transform)),w=frame.width,h=frame.height;
+        if(w<5||h<5||w*h>12e6)continue;
+        cv.width=w;cv.height=h;const cx=cv.getContext('2d',{willReadFrequently:true});
+        cx.fillStyle='#fff';cx.fillRect(0,0,w,h);
+        cx.setTransform(...frame.transform);cx.drawImage(hi.canvas,0,0);
+        const pixels=cx.getImageData(0,0,w,h);
+        const textFrame=['PDF-table','PDF-text-table','PDF-caption'].includes(String(row.origin||''));
+        const m=CubeGraphicInk.mask(pixels,{flatFill:textFrame})||CubeGraphicInk.mask(pixels,{edgeDashes:true});
+        if(m?.uniform||m?.complete){
+          cx.setTransform(1,0,0,1,0,0);const out=cx.createImageData(m.width,m.height);
+          out.data.set(typeof Components!=='undefined'&&Components.utils?.cloneInto?Components.utils.cloneInto(m.data,s.doc.defaultView):m.data);
+          cx.putImageData(out,0,0);kind='glyph-mask';
+        }else{
+          // Expanded erasure requires a successful structure-preserving mask;
+          // never extend a guessed flat background over nearby chart evidence.
+          if(candidate!==row.quad)continue;
+          const flat=this.graphicFlatPaperColor(pixels);if(!flat)continue;
+          cx.setTransform(1,0,0,1,0,0);cx.fillStyle=flat;cx.fillRect(0,0,w,h);kind='glyph-fill';
+        }
+        displayQuad=candidate;url=cv.toDataURL('image/png');break;
       }
-      url=cv.toDataURL('image/png');cv.width=cv.height=0;
-      (s.paintedMasks||=new Map()).set(maskKey,{url,kind});
+      cv.width=cv.height=0;if(!url)return null;
+      (s.paintedMasks||=new Map()).set(maskKey,{url,kind,quad:displayQuad});
       // 一次框选会同时落很多块掩膜：合并成一次重画，别每块都重排整页。
       s.maskRevision=(s.maskRevision||0)+1;
       clearTimeout(s.maskPaintTimer);
@@ -402,20 +432,20 @@ var PaperLoomGraphics;
       // well, otherwise a label near a far page edge can drift at fractional zoom.
       const canvas=pageEl.querySelector('.canvasWrapper canvas'),cw=canvas?.clientWidth,ch=canvas?.clientHeight;
       if(cw&&ch){const sx=cw/viewport.width,sy=ch/viewport.height;for(const i of [0,2,4])transform[i]*=sx;for(const i of [1,3,5])transform[i]*=sy;}
-      const p=project(row.quad,transform),box=doc.createElement('div');box.setAttribute('role','button');box.tabIndex=0;box.className='pl-graphic-anchor';box.dataset.labelId=row.id;
+      const peers=s.rows.filter(r=>r.pageIndex===row.pageIndex&&!r.legacyLayout),nativePatch=this.nativeBackgroundFor?.(s,row);
+      const maskKey=JSON.stringify([row.id,row.quad,peers.map(r=>[r.quad,r.origin]),prose.map(r=>r.layout.rect)]);
+      const cachedEntry=(s.paintedMasks||=new Map()).get(maskKey);
+      const displayQuad=!nativePatch&&cachedEntry?.quad||row.quad;
+      const p=project(displayQuad,transform),box=doc.createElement('div');box.setAttribute('role','button');box.tabIndex=0;box.className='pl-graphic-anchor';box.dataset.labelId=row.id;
       box.style.cssText='position:absolute;left:0;top:0;transform-origin:0 0;box-sizing:border-box;appearance:none;min-width:0;min-height:0;margin:0;padding:0;border:0;z-index:45;outline:none;background:transparent;color:transparent;overflow:hidden;cursor:help;display:block;text-align:left;align-content:start;';
       box.style.width=p.width+'px';box.style.height=p.height+'px';box.style.transform='matrix('+p.matrix.join(',')+')';
       box.title=row.text+' → '+row.target+' · Alt+单击打开校订';box.setAttribute('aria-label',box.title);
-      const nativePatch=this.nativeBackgroundFor?.(s,row);let mask=row.inkPatch?.version===7&&row.inkPatch?.quad===JSON.stringify(row.quad)?row.inkPatch.url:null;if(mask)box.dataset.maskResult='verified-high-resolution-mask';const peers=s.rows.filter(r=>r.pageIndex===row.pageIndex&&!r.legacyLayout);
-      // 掩膜是「抠掉墨迹、留下真实底色」的补丁，比任何平铺色都干净，所以只要有画布就做；
-      // 原先要求 1.5 倍像素密度，结果 100% 缩放下的标签全部落到半透明兜底，看着就是脏。
-      const maskKey=row.id+'|'+JSON.stringify(row.quad);
-      const cachedEntry=(s.paintedMasks||=new Map()).get(maskKey);
+      let mask=row.inkPatch?.version===7&&row.inkPatch?.quad===JSON.stringify(row.quad)?row.inkPatch.url:null;if(mask)box.dataset.maskResult='verified-high-resolution-mask';
       const cachedMask=cachedEntry&&typeof cachedEntry==='object'?cachedEntry.url:cachedEntry;
-      if(cachedMask)mask=cachedMask;
-      // 斜排/旋转的行页要给掩膜：它们以前只能靠四周取样的渐变，那条轴标签上会
-      // 留下没擦掉的英文。高清掩膜是按 quad 的包围盒裁剪的，镜像问题不存在。
-      if(!mask&&s.replace&&!nativePatch&&typeof CubeGraphicInk!=='undefined'&&(pv?.pdfPage||pv?.page)?.render&&canvas?.width){
+      if(cachedMask){mask=cachedMask;box.dataset.maskResult=cachedEntry.kind||'glyph-mask';}
+      // The inverse affine raster mapping also handles vertical/rotated labels;
+      // a screen-axis-aligned crop would mirror or truncate these labels.
+      if(!cachedMask&&s.replace&&!nativePatch&&typeof CubeGraphicInk!=='undefined'&&(pv?.pdfPage||pv?.page)?.render&&canvas?.width){
         // 屏幕像素不够：按 4 倍重绘这一页再抠墨迹，异步算好后重画一次。
         const pending=(s.pendingMasks||=new Set());
         if(pending.has(maskKey))box.dataset.maskResult='mask-pending';
@@ -1138,6 +1168,6 @@ const scField=doc.createElement('label');scField.className='pl-gp-field';scField
       };s.update();
     };
   }
-  PaperLoomGraphics={attach,point,inverse,bounds,quad,project,pixelsToPDF,nativeLabels,textTables,mergeLabels,translatable,replacementReason,plainBackground,readableLabel,normalizedText,redundant,cover};
+  PaperLoomGraphics={attach,point,inverse,bounds,quad,project,maskRasterFrame,paddedGlyphQuad,pixelsToPDF,nativeLabels,textTables,mergeLabels,translatable,replacementReason,plainBackground,readableLabel,normalizedText,redundant,cover};
   if(typeof module==='object'&&module.exports)module.exports=PaperLoomGraphics;else root.PaperLoomGraphics=PaperLoomGraphics;
 })(this);
