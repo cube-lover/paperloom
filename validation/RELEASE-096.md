@@ -35,3 +35,11 @@
 申请目标为 Zotero 中文社区插件商店：<https://zotero-chinese.com/plugins>；收录仓库：<https://github.com/zotero-chinese/zotero-plugins>。
 
 提交 Issue 或 PR 只是申请，维护者审核、合并与网站发布后才是实际收录。官方 Zotero 文档目前说明官方目录仍在计划中，中文社区目录不代表官方认证。
+
+## 公开回执
+
+- 插件 Release 已公开：<https://github.com/cube-lover/paperloom/releases/tag/v0.9.6>；XPI 与 SHA256 文件通过公开下载逐字节校验，latest stable 指向 v0.9.6。
+- 发布材料提交：`7ef3599`；更新仓库简介和主题，未改动功能代码。
+- 收录申请：<https://github.com/zotero-chinese/zotero-plugins/issues/323>，由 cube-lover 提交，状态 Open；已通过公开 API 核对正文中的下载链接、版本和 SHA256。
+- 现有仓库令牌缺少社区目标仓库的 Issue 写入权限，首次 API 请求返回 403；使用现有登录浏览器提交成功，未更改令牌或账号安全设置。
+- 当前状态：安装包已发布，社区收录待维护者审核。未创建重复申请或额外 PR。
