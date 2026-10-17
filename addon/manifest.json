@@ -13,8 +13,7 @@
     "zotero": {
       "id": "paperloom@local.research",
       "strict_min_version": "7.0",
-      "strict_max_version": "9.*",
-      "update_url": "https://paperloom.invalid/updates.json"
+      "strict_max_version": "9.*"
     }
   }
 }

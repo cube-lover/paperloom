@@ -1,19 +1,26 @@
-PaperLoom bundled OCR runtime - provenance and licenses
+PaperLoom bundled OCR models - provenance and licenses
 
-ch_PP-OCRv4_det_infer.onnx, ch_PP-OCRv4_rec_infer.onnx, ch_ppocr_mobile_v2.0_cls_infer.onnx
+ch_PP-OCRv4_det_infer.onnx, ch_PP-OCRv4_rec_infer.onnx,
+ch_ppocr_mobile_v2.0_cls_infer.onnx
   PP-OCRv4 / PP-OCRv2 mobile models, Apache License 2.0.
-  Source: rapidocr_onnxruntime 1.4.4 wheel (PyPI), which redistributes the PaddleOCR models.
-  Upstream: https://github.com/PaddlePaddle/PaddleOCR
+  Source: rapidocr_onnxruntime 1.4.4 wheel (PyPI), which redistributes
+  PaddleOCR models. Upstream: https://github.com/PaddlePaddle/PaddleOCR
+  Copyright belongs to the respective PaddleOCR model authors.
 
 keys.txt
-  PP-OCRv4 character dictionary (6623 entries), Apache License 2.0.
+  PP-OCRv4 character dictionary, Apache License 2.0.
   Source: PaddleOCR ppocr/utils/ppocr_keys_v1.txt
-  Decoding uses class 0 as CTC blank and the final class as space (6625 classes total).
+  Copyright belongs to the respective PaddleOCR dictionary authors.
 
-ort.min.js, ort-wasm-simd-threaded.wasm
-  onnxruntime-web, MIT License. (c) Microsoft Corporation.
-  Source: npm package onnxruntime-web dist/.
+These model and dictionary files are redistributed unmodified. A copy of
+Apache License 2.0 accompanies them in LICENSE-APACHE-2.0.txt.
 
-These files are redistributed unmodified. Replace or remove this folder to ship a
-build without the bundled runtime; the plugin then falls back to a locally
-configured Python OCR worker or to no image-text recognition at all.
+This directory is a model payload, not an in-plugin inference runtime.
+The one-click installer copies the models into a separately installed
+local Python OCR runtime. onnxruntime-web JavaScript and WASM binaries
+are not included in this directory or the current XPI.
+
+The original PaperLoom source is MIT-licensed; that license does not
+relicense these Apache-2.0 model and dictionary files. Other external
+software retains its respective license. See THIRD-PARTY-NATIVE.md in
+the source repository for the downloaded runtime and optional workers.

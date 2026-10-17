@@ -1,157 +1,117 @@
-# PaperLoom 译研
+# Cube 翻译 · PaperLoom
 
-独立实现的 Zotero 论文翻译插件。当前源码版本：**0.9.6 开发版**。
+[![Release](https://img.shields.io/github/v/release/cube-lover/paperloom?filter=v*)](https://github.com/cube-lover/paperloom/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## 当前阅读器入口
+面向论文阅读的 Zotero 翻译插件：在阅读器中对照原文与译文，处理正文、图表文字和框选补漏。仓库名为 **PaperLoom**，Zotero 中显示为 **Cube 翻译**。
 
-- PDF 阅读器工具栏 **Cube 翻译**：启动、暂停和恢复原位翻译。
-- **Ctrl+R**：在 PDF 页面开启补漏框选；**Esc** 取消。输入框内不触发。
-- 工具栏下拉菜单：补译图表、安装本地 OCR、清除当前页或全部翻译；清除会保留校订历史。
-- 源码构建：`npm ci && npm run verify`，生成 `dist/paperloom-0.9.6.xpi`；构建产物不提交到 Git。
-- 0.9.6 已安装：修正图表擦除掩膜的像素坐标换算，并为紧贴字形的旧框增加经验证的显示边距，改善黑点、短线残留。详见 [0.9.6 验证记录](validation/INSTALL-096.md)。
-- Ctrl+R 开启及 Esc 取消已有本机验证；清除后不复用旧缓存的隔离宿主自检通过，详见 [0.9.5 安装记录](validation/INSTALL-095.md)。
+当前版本：**0.9.6**。下载 [普通版 XPI](https://github.com/cube-lover/paperloom/releases/download/v0.9.6/paperloom-0.9.6.xpi)，或查看 [发布记录](https://github.com/cube-lover/paperloom/releases)。
 
-下文是早期工作台与可选桥接的历史说明，菜单名称和安装版本以本节及当前源码为准。
+## 主要功能
 
-## 早期工作台说明（历史）
-
-核心目标不是只把摘要翻成中文，而是让论文翻译可以逐段对照、回到原文、保持术语一致，并在失败或重启后继续处理。
-
-> 当前包含独立源码和 XPI；已完成本地单元测试、模拟 Zotero 接口测试及离线 DOM 测试。**尚未完成真实 Zotero 安装 / 阅读器验收，也未验证真实商业 API 的译文质量。** 不应将本版本描述为已与 Magic 全功能等价。逐项状态见 [FEATURE-MATRIX.md](FEATURE-MATRIX.md)。
+- **PDF 原位翻译与双语对照**：左侧保留原文，右侧显示译文；正文和图表文字使用各自的处理流程。
+- **框选补漏**：默认 **Ctrl+R** 开启框选，**Esc** 取消。松手后任务进入串行队列，小圆点显示处理进度；点击小圆点查看结果，不自动弹出大面板。
+- **图表文字识别**：支持本地 Python OCR；Windows x64 可在插件中一键下载、校验和安装独立运行时。
+- **暂停、恢复与解析缓存**：保存任务状态，按 PDF 指纹及解析器版本复用版面解析结果。
+- **清除当前页或全部译文**：保留原文与校订历史；清除后的重新翻译使用新缓存代次，不直接回填清除前的缓存。
+- **术语与人工校订**：术语表、保护标记、译文编辑及质量提示。
+- **翻译工作台**：逐段对照、文献总结、AI 文献列和双语笔记等辅助功能。
 
 ## 安装
 
-安装包：`dist/paperloom-0.2.0.xpi`。
+1. 从 [v0.9.6 Release](https://github.com/cube-lover/paperloom/releases/tag/v0.9.6) 下载 `paperloom-0.9.6.xpi`。`Source code.zip` 是源码，不是安装包；OCR 运行时也不是插件安装包。
+2. 打开 Zotero 的 **工具 → 插件**。
+3. 将 XPI 拖入插件窗口，或在插件管理页的设置菜单中选择 **从文件安装插件**。
+4. 按 Zotero 提示确认安装；如提示重启，重启后打开 PDF。
+5. 在插件设置中配置翻译服务，使用阅读器工具栏的 **Cube 翻译** 按钮启动任务。
 
-1. 使用你平时的 Zotero 窗口，打开 **工具 → 插件**。
-2. 打开插件管理页的设置菜单，选择 **从文件安装插件**，选择这个 XPI。
-3. 根据 Zotero 的安装提示确认。插件 ID 为 `paperloom@local.research`，与 Magic 不同；两个插件可以独立安装、停用和移除。
-4. 在 **工具 → PaperLoom 译研 · 翻译工作台** 打开界面，或使用 `Ctrl / Cmd + Shift + L`。
-5. **引擎与设置** 中填写接口类型、地址、模型、自己的 API Key。保存设置后使用“测试接口”，确认后才发送测试文本。
+插件 ID：`paperloom@local.research`。从开发包切换到普通包时，使用同一 ID 更新；普通版不包含开发诊断通道。
 
-插件不会自动卸载或改写其他插件，不读取 Magic 的激活信息和服务密钥。开发脚本 `npm run verify` 不会启动 Zotero。项目中 `.runtime-test` 是此前创建的独立测试目录，不是用户的文库，且不包含在交付压缩包中。
+**当前发布采用手动更新**：后续从 Releases 下载新 XPI 后安装。此版本移除了未启用的自动更新占位地址，没有配置自动更新源。
 
 ### 兼容性
 
-- 清单声明支持 Zotero 7–9；实现参考了本机 Zotero 9.0.6 的 API 定义。
-- **实际安装、主菜单、选文弹窗、列可见性、登录管理器、笔记显示均待在目标 Zotero 中验收。**
-- `visibleColumnsOnly` 使用有保护检查的宿主列接口；接口缺失时显示错误，不会悄悄生成所有列。
+| 项目 | 当前范围 |
+| --- | --- |
+| 清单声明 | Zotero 7.0–9.* |
+| 已有实际安装记录 | Windows 上的 Zotero 9.0.6 |
+| 一键 OCR 运行时 | Windows x64 |
+| Zotero 7/8、macOS、Linux | 尚未完成实际兼容性矩阵验证；OCR 可选外部 Python 路线需自行配置 |
+
+安装记录见 [0.9.6](validation/INSTALL-096.md)、[0.9.5](validation/INSTALL-095.md) 和 [快捷键验证](validation/INSTALL-093.md)。
 
 ## 快速使用
 
-### 论文全文翻译
+### 正文与图表翻译
 
-1. 先保存目标语言、学科、术语表和引擎配置。
-2. 在 Zotero 中选中文献条目或 PDF；点击“加载选中论文”。可多选，形成多个任务。
-3. 内置解析在本地提取 PDF 文本；检查多栏顺序、公式和参考文献。也可以导入 Markdown / TXT 或粘贴正文。
-4. 点击“开始 / 继续翻译”。确认框会显示服务地址及原文规模，确认后才发送内容。
-5. 在左右 / 上下对照中查看结果。点击译文可复制；“原文第 N 页”在有明确分页时回到 PDF 页。
-6. 使用“校订译文”人工修正并标记已核对。最近 5 次编辑 / 重译前的文本留在任务历史中。
-7. 导出双语 Zotero 笔记、Markdown、可打印 HTML，或使用可选桥接输出新的翻译 PDF。
+1. 配置目标语言、模型和翻译接口。
+2. 打开 PDF，点击阅读器工具栏的 **Cube 翻译**。
+3. 使用同一按钮暂停或恢复；工具栏下拉菜单提供图表补译和 OCR 安装入口。
+4. 未识别的区域可用 **Ctrl+R** 开启框选，拖动选取文字区域，松手入队；**Esc** 取消当前框选。输入框中不触发快捷键，自定义组合以设置为准。
+5. 点击小圆点查看框选结果。复杂图形、公式和低质量扫描件需要人工核对。
 
-**历史任务固定自己的引擎、语言、术语和总结模板。** 修改设置不会悄悄改变任务中途的译法。需要新配置时选择“按当前设置新建副本”。原任务和原 PDF 保持不变。
+### 清除译文并重新翻译
 
-### 翻译引擎
+工具栏下拉菜单 → **清除翻译** → **清除当前页面翻译** 或 **清除所有页面翻译**。
 
-| 接口 | 地址示例 | 说明 |
-|---|---|---|
-| OpenAI 兼容 | `https://api.openai.com/v1` | 填写服务实际支持的模型名。默认模型只是示例，不保证你的账户可用 |
-| 本地 OpenAI 兼容模型 | `http://127.0.0.1:1234/v1` | 服务需自行启动；无认证服务可留空密钥 |
-| DeepL Free | `https://api-free.deepl.com` | 仅翻译，不支持 AI 总结 / AI 列 |
-| DeepL Pro | `https://api.deepl.com` | 使用对应账户密钥 |
+清除只作用于插件译文，保留原 PDF 和历史。重新启动翻译会使用新缓存代次；服务调用可能再次计费，新译文的措辞也可能与之前相同。
 
-密钥按完整服务地址分别保存在 Zotero/Firefox 登录管理器。更换地址不会发送旧地址的密钥。历史任务继续查找历史地址对应的密钥。远程服务要求 HTTPS；本机回环地址可用 HTTP。
+### 本地 OCR
 
-开始任务时的 token 数是**字符启发式粗估**，不含全部提示词、术语映射、上下文和输出，不是账单预估。用户自配 API 可能计费。翻译失败、重试或重建缓存也可能产生费用。
+阅读器菜单 → **安装识别引擎（一键）**，或使用设置中的文件夹导入与外部 Python 配置。
 
-### 术语与质量检查
+Windows x64 独立运行时约 101 MiB，包含 Python、RapidOCR、ONNX Runtime 及模型。下载后校验 SHA256 再解包；识别在本机执行。下载与许可信息见 [OCR runtime Release](https://github.com/cube-lover/paperloom/releases/tag/ocr-runtime-1.0.0) 和 [依赖说明](THIRD-PARTY-NATIVE.md)。
 
-- JSON 导入导出、添加、修改、删除、大小写敏感选项。
-- 英文按词边界匹配，中文等无空格语言支持连续文本中的术语匹配。
-- 长术语优先；术语不会替换公式、代码或已保护的 URL。
-- LaTeX 数学块、行内数学、数字引文、DOI、URL、代码片段在识别后生成保护标记。
-- 模型丢失 / 重复保护标记时，此段记为失败，避免静默导出破损内容。
-- 提示数字缺失、输出过短、长段原文未改变；这些检查**不是翻译语义正确性的证明**。
-- DeepL 使用 XML `ignore_tags` 保护标记；仍需实际服务验收。
+OCR 的本地识别与后续翻译是两个步骤：识别后的文字会按用户配置发送给翻译服务。
 
-导入示例：`examples/glossary-materials.json`。
+### 翻译服务
 
-### AI 文献列
+| 接口 | 示例 | 说明 |
+| --- | --- | --- |
+| OpenAI 兼容 | `https://api.openai.com/v1` | 使用服务实际支持的模型与自己的 API Key |
+| 本地 OpenAI 兼容 | `http://127.0.0.1:1234/v1` | 需自行启动本地服务；无认证服务可留空密钥 |
+| DeepL Free / Pro | `https://api-free.deepl.com` / `https://api.deepl.com` | 仅翻译，不提供 AI 总结 |
 
-- 编辑每列的 `id`、`name`、`prompt`、`enabled`；导入 / 导出 JSON、复制到剪贴板。
-- 选择“标题与摘要”或“全文证据”。后者逐段取证、再合并，调用量更大。
-- 可只生成文献列表中显示的列；启用后在 Zotero 的列标题菜单中选择需要的列。
-- 生成记录保留证据范围、提示词、时间及段落编号。
-- 模型结果显示在文献条目的自定义列中。仍需人工核对，尤其是局限性、因果结论和量化结果。
+密钥按服务地址保存在 Zotero/Firefox 登录管理器。远程服务要求 HTTPS，本机回环地址可用 HTTP。翻译服务由用户配置，费用和数据处理规则以对应服务为准。
 
-### 文献总结
+## 数据与隐私
 
-- **章节 / 段落证据摘要**：按已经识别的 Markdown 章节组织；非结构化 PDF 保留段落顺序，不编造章节。
-- **关键词筛选摘要**：按章节名或段落正文的关键词筛选。
-- **分层论文综述**：逐段提取后分层合并，避免直接截掉长论文尾部。
-- 自定义总结模板；笔记附应用生成的段落编号、原文摘录以及有条件的 PDF 页链接。
-- 可以暂停。再次运行复用中间缓存；暂停时不保存半成品总结笔记。
+- 任务、译文、历史和缓存保存于 **当前 Zotero 数据目录 / `paperloom`**；插件不更改 Zotero 的数据目录。
+- 原 PDF 保持不变；清除译文不删除原 PDF。
+- 使用远程翻译或 AI 服务时，相应原文、提示词及必要上下文会发送到用户配置的服务。
+- OCR 在本机识别；运行时首次下载需要网络。
+- 缓存和任务含论文原文，未加密。不要将整个数据目录、论文或个人配置上传到公开仓库。
+- 导出的 Zotero 笔记与附件遵循 Zotero 自身的同步规则。
+- 暂停或关闭插件会请求中止网络任务，但服务端已开始的处理与费用取决于服务本身。
 
-## PDF 解析与输出
+## 当前限制
 
-内置解析适用于有文本层的 PDF。扫描件、复杂多栏、公式结构或图表信息可能需要其他解析器。
+- 复杂图形、文字与曲线重叠、扫描件、多栏顺序和公式保护仍需人工核对；0.9.6 改善了目标表格的字形黑点和短线残留，不代表所有版面已完成视觉验收。
+- 可选原生去字后台仍有已记录的源文件拒绝问题，当前已验证显示路径为浏览器掩膜。
+- 外部解析器和原生后台需要独立安装配置，不随普通 XPI 提供完整运行环境。
+- 不内置翻译服务账户、API 额度或商业服务承诺。
 
-可选桥接在 `tools/bridge.py`，使用 Python 标准库，监听本机地址，要求 Token。支持：
+问题反馈请使用 [GitHub Issues](https://github.com/cube-lover/paperloom/issues)，附 Zotero/操作系统版本、插件版本、复现步骤和脱敏截图。不要提交服务密钥或私人论文。
 
-- 本地 MinerU 或其他输出 Markdown 的解析 CLI。
-- 本地桥接访问 GROBID `processFulltextDocument`，将 TEI 转成 Markdown。
-- 本地 pdf2zh CLI 输出翻译 PDF；自定义参数数组可适配其他 CLI 版本。
+## 开发
 
-**桥接及外部解析 / PDF 翻译工具需要单独安装配置。** 桥接的 pdf2zh 自己翻译整篇 PDF，不复用工作台逐段译文和术语缓存；使用它自身的服务配置，可能另行计费。详见 [tools/README.md](tools/README.md)。
-
-## 数据、恢复和隐私
-
-- 缓存、任务和输出位于 **当前 Zotero 数据目录 / `paperloom`**。插件不更改 Zotero 的数据目录。
-- `jobs.json`：原文、译文、任务配置、人工校订记录及总结信息。
-- `jobs.json.bak` / `columns.json.bak`：上一次成功保存的快照。
-- `cache/`：按 SHA-256 缓存翻译和 AI 中间结果。
-- `exports/`：桥接输出 PDF；重复输出使用新路径，不覆盖已有链接附件。
-- `columns.json`：AI 列结果及证据信息。
-- 任务与缓存中有论文原文，属于敏感研究资料。它们不是加密档案，不要公开上传整个数据目录。
-- 笔记和导入附件可能随 Zotero 的同步设置上传；链接附件遵循 Zotero 本身的规则。
-- 缓存清理只处理 PaperLoom 自己的 `cache`；删除任务记录不会删除原 PDF、已生成笔记或附件。
-- 主要任务文件异常时，优先恢复可验证备份并保留异常文件；若备份也异常则报告错误，不用空列表覆盖原数据。
-- 关闭 / 停用插件时会请求中止网络任务；网络中止不保证服务端停止处理或停止计费。
-
-## 开发与测试
-
-需要 Node.js 20+、Python 3.10+。源码为原生 JavaScript，不依赖前端构建框架；jsdom 仅用于开发测试，不进入 XPI。
+需要 Node.js 20+ 与 Python 3.10+。
 
 ```sh
 npm ci
-npm run verify
+npm run check
+npm test
+npm run build
 ```
 
-流程：语法与 XML 检查 → JavaScript 核心/模拟宿主/离线 DOM 测试 → Python 桥接测试 → 可复现 XPI 打包。
+普通包输出至 `dist/paperloom-0.9.6.xpi`，同时生成 `.sha256`。构建不启动 Zotero，产物不提交到 Git。开发诊断通道仅在显式使用 `node scripts/build.cjs --dev` 时打包。
 
-桥接测试会短暂启动一个绑定 `127.0.0.1` 随机端口的模拟 HTTP 服务，测试结束自动关闭；不启动 Zotero、浏览器或真实模型。
+代码分工：`addon/bootstrap.js` 管理生命周期；`addon/content/` 包含阅读器、布局、翻译、OCR、持久化与界面；`tools/` 为可选 Python 集成；`tests/` 为离线回归测试。
 
-源码说明：
+0.9.6 的既有功能验证为 291 个 JavaScript 测试与 25 个 Python 测试通过。此次发布整理的检查范围见 [发布记录](validation/RELEASE-096.md)。
 
-```text
-addon/bootstrap.js            插件生命周期与 chrome 注册
-addon/content/core.js         分段、术语、保护标记、缓存材料、导出
-addon/content/providers.js    OpenAI 兼容 / DeepL 请求契约
-addon/content/app.js          Zotero 集成、持久化、任务、密钥、输出
-addon/content/ai.js           可暂停的文献总结与全文 AI 列
-addon/content/workbench.*     工作台界面
-scripts/                      校验与打包；可选宿主自测准备脚本
-examples/                     无密钥配置样例
-features / validation         见 FEATURE-MATRIX.md、VALIDATION.md
-```
+## 许可证
 
-## 已知限制
+PaperLoom 原创源码与文档采用 [MIT](LICENSE)。随 XPI 分发的 PaddleOCR 模型和字典采用 Apache-2.0，许可与来源见 [模型目录](addon/models/NOTICE.txt)。外部软件保留各自许可证，详见 [依赖说明](THIRD-PARTY-NATIVE.md)。
 
-- 尚未实现原 PDF 页内译文覆盖，以及两份 PDF 自动同步滚动。当前是独立的逐段双语工作台。
-- SimpleTex、Doc2X、MinerU 云 API、Gradio 批量网页接口待开发。
-- 图片不嵌入笔记；解析结果中的图片 Markdown 会作为文本保留。公式以源文本保留，不保证笔记中数学排版渲染。
-- 普通 PDF 内置解析不保证多栏顺序、标题层级、上下标和表格结构。
-- Zotero 7/8/9、Windows/macOS/Linux 尚未完成实际兼容性矩阵验收。
-- 不包含原 Magic 商业账户、促销、收费授权或售后服务；新插件采用用户自配引擎，没有激活门槛。
-
-后续验收清单：[VALIDATION.md](VALIDATION.md)。
+[变更日志](CHANGELOG.md) · [早期工作台文档（历史归档）](docs/README-legacy.md)
